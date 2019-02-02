@@ -14,7 +14,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="">
+<html class="theme-next gemini use-motion" lang="zh-Hans">
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -72,7 +72,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Gemini',
     version: '7.0.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
@@ -98,14 +98,14 @@
 
   <meta name="description" content="单例模式–双重检验锁真的线程安全吗单例模式是我们最熟悉不过的一种设计模式，用来保证内存中只有一个对象的实例。虽然容易，但里面的坑也有很多，比如双重检验锁模式 (double checked locking pattern) 真的是线程安全的吗？ 起因在对项目进行 PMD 静态代码检测时，遇到了这样一个问题  Partially created objects can be returned by">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Blog of Woo">
+<meta property="og:title" content="单例模式–双重检验锁真的线程安全吗">
 <meta property="og:url" content="http://yoursite.com/2019/01/22/单例模式_双重检验锁真的线程安全吗/index.html">
 <meta property="og:site_name" content="Blog of Woo">
 <meta property="og:description" content="单例模式–双重检验锁真的线程安全吗单例模式是我们最熟悉不过的一种设计模式，用来保证内存中只有一个对象的实例。虽然容易，但里面的坑也有很多，比如双重检验锁模式 (double checked locking pattern) 真的是线程安全的吗？ 起因在对项目进行 PMD 静态代码检测时，遇到了这样一个问题  Partially created objects can be returned by">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-01-22T20:32:09.779Z">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-02-02T21:19:16.384Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Blog of Woo">
+<meta name="twitter:title" content="单例模式–双重检验锁真的线程安全吗">
 <meta name="twitter:description" content="单例模式–双重检验锁真的线程安全吗单例模式是我们最熟悉不过的一种设计模式，用来保证内存中只有一个对象的实例。虽然容易，但里面的坑也有很多，比如双重检验锁模式 (double checked locking pattern) 真的是线程安全的吗？ 起因在对项目进行 PMD 静态代码检测时，遇到了这样一个问题  Partially created objects can be returned by">
 
 
@@ -123,7 +123,7 @@
   };
 </script>
 
-  <title> | Blog of Woo</title>
+  <title>单例模式–双重检验锁真的线程安全吗 | Blog of Woo</title>
   
 
 
@@ -164,7 +164,7 @@
 
 </head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
   
   
@@ -246,9 +246,6 @@
   
 
   
-    
-
-  
 
   
 </nav>
@@ -268,6 +265,9 @@
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
+            
+
           
           <div id="content" class="content">
             
@@ -305,7 +305,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h1 class="post-title" itemprop="name headline">单例模式–双重检验锁真的线程安全吗
 
               
             
@@ -331,12 +331,24 @@
                 
               
 
-              <time title="Created: 2019-01-22 21:19:41 / Modified: 21:32:09" itemprop="dateCreated datePublished" datetime="2019-01-22T21:19:41+01:00">2019-01-22</time>
+              <time title="Created: 2019-01-22 21:19:41" itemprop="dateCreated datePublished" datetime="2019-01-22T21:19:41+01:00">2019-01-22</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-02 22:19:16" itemprop="dateModified" datetime="2019-02-02T22:19:16+01:00">2019-02-02</time>
               
             
           </span>
@@ -420,8 +432,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/21/为什么匿名内部类访问局部变量必须是 final/" rel="next" title="">
-                <i class="fa fa-chevron-left"></i> 
+              <a href="/2019/01/02/面试 - AQS- CAS/" rel="next" title="谈面试时从写一个单例开始究竟能问多深及终极解决方案">
+                <i class="fa fa-chevron-left"></i> 谈面试时从写一个单例开始究竟能问多深及终极解决方案
               </a>
             
           </div>
@@ -429,10 +441,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/22/理解 B 树、B+ 树特点及使用场景/" rel="prev" title="">
-                 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -582,7 +590,7 @@
 
 
 
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.0.0</div>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
 
 
 
@@ -670,7 +678,10 @@
   
 
 
-  <script src="/js/src/schemes/muse.js?v=7.0.0"></script>
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
 
 
 

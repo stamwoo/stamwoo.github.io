@@ -98,15 +98,15 @@
 
   <meta name="description" content="类加载器加载类的开放性类加载器（ClassLoader）是 Java 语言的一项创新，也是 Java 流行的一个重要原因。在类加载的第一阶段 “加载” 过程中，需要通过一个类的全限定名来获取定义此类的二进制字节流，完成这个动作的代码块就是类加载器。这一动作是放在 Java 虚拟机外部去实现的，以便让应用程序自己决定如何获取所需的类。 虚拟机规范并没有指明二进制字节流要从一个 Class 文件获取，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Blog of Woo">
-<meta property="og:url" content="http://yoursite.com/2019/01/20/类加载器与双亲委派模型/index.html">
+<meta property="og:title" content="类加载器与双亲委派模型">
+<meta property="og:url" content="http://yoursite.com/2018/11/02/类加载器与双亲委派模型/index.html">
 <meta property="og:site_name" content="Blog of Woo">
 <meta property="og:description" content="类加载器加载类的开放性类加载器（ClassLoader）是 Java 语言的一项创新，也是 Java 流行的一个重要原因。在类加载的第一阶段 “加载” 过程中，需要通过一个类的全限定名来获取定义此类的二进制字节流，完成这个动作的代码块就是类加载器。这一动作是放在 Java 虚拟机外部去实现的，以便让应用程序自己决定如何获取所需的类。 虚拟机规范并没有指明二进制字节流要从一个 Class 文件获取，">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://img-blog.csdn.net/20160506184936657">
-<meta property="og:updated_time" content="2019-02-02T20:43:21.574Z">
+<meta property="og:updated_time" content="2019-02-02T21:19:18.935Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Blog of Woo">
+<meta name="twitter:title" content="类加载器与双亲委派模型">
 <meta name="twitter:description" content="类加载器加载类的开放性类加载器（ClassLoader）是 Java 语言的一项创新，也是 Java 流行的一个重要原因。在类加载的第一阶段 “加载” 过程中，需要通过一个类的全限定名来获取定义此类的二进制字节流，完成这个动作的代码块就是类加载器。这一动作是放在 Java 虚拟机外部去实现的，以便让应用程序自己决定如何获取所需的类。 虚拟机规范并没有指明二进制字节流要从一个 Class 文件获取，">
 <meta name="twitter:image" content="https://img-blog.csdn.net/20160506184936657">
 
@@ -115,7 +115,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/01/20/类加载器与双亲委派模型/">
+  <link rel="canonical" href="http://yoursite.com/2018/11/02/类加载器与双亲委派模型/">
 
 
 
@@ -125,7 +125,7 @@
   };
 </script>
 
-  <title> | Blog of Woo</title>
+  <title>类加载器与双亲委派模型 | Blog of Woo</title>
   
 
 
@@ -290,7 +290,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/20/类加载器与双亲委派模型/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/02/类加载器与双亲委派模型/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="woo">
@@ -307,7 +307,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h1 class="post-title" itemprop="name headline">类加载器与双亲委派模型
 
               
             
@@ -333,7 +333,7 @@
                 
               
 
-              <time title="Created: 2019-01-20 17:11:56" itemprop="dateCreated datePublished" datetime="2019-01-20T17:11:56+01:00">2019-01-20</time>
+              <time title="Created: 2018-11-02 22:11:29" itemprop="dateCreated datePublished" datetime="2018-11-02T22:11:29+01:00">2018-11-02</time>
             
 
             
@@ -350,7 +350,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-02 21:43:21" itemprop="dateModified" datetime="2019-02-02T21:43:21+01:00">2019-02-02</time>
+                <time title="Modified: 2019-02-02 22:19:18" itemprop="dateModified" datetime="2019-02-02T22:19:18+01:00">2019-02-02</time>
               
             
           </span>
@@ -450,14 +450,18 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/11/02/蓄水池抽样算法/" rel="next" title="蓄水池抽样算法（Reservoir Sampling）">
+                <i class="fa fa-chevron-left"></i> 蓄水池抽样算法（Reservoir Sampling）
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/01/21/既然Java反射可以访问和修改私有成员变量，那封装成private的意义/" rel="prev" title="">
-                 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/02/理解 B 树、B+ 树特点及使用场景/" rel="prev" title="理解B树,B+树特点及使用场景">
+                理解B树,B+树特点及使用场景 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

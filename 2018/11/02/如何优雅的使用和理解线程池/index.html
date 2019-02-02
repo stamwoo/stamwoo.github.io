@@ -98,8 +98,8 @@
 
   <meta name="description" content="前言平时接触过多线程开发的童鞋应该都或多或少了解过线程池，之前发布的《阿里巴巴 Java 手册》里也有一条：  可见线程池的重要性。 简单来说使用线程池有以下几个目的：  线程是稀缺资源，不能频繁的创建。 解耦作用；线程的创建于执行完全分开，方便维护。 应当将其放入一个池子中，可以给其他任务进行复用。  线程池原理谈到线程池就会想到池化技术，其中最核心的思想就是把宝贵的资源放到一个池子中；每次使用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Blog of Woo">
-<meta property="og:url" content="http://yoursite.com/2019/01/25/如何优雅的使用和理解线程池/index.html">
+<meta property="og:title" content="如何优雅的使用和理解线程池">
+<meta property="og:url" content="http://yoursite.com/2018/11/02/如何优雅的使用和理解线程池/index.html">
 <meta property="og:site_name" content="Blog of Woo">
 <meta property="og:description" content="前言平时接触过多线程开发的童鞋应该都或多或少了解过线程池，之前发布的《阿里巴巴 Java 手册》里也有一条：  可见线程池的重要性。 简单来说使用线程池有以下几个目的：  线程是稀缺资源，不能频繁的创建。 解耦作用；线程的创建于执行完全分开，方便维护。 应当将其放入一个池子中，可以给其他任务进行复用。  线程池原理谈到线程池就会想到池化技术，其中最核心的思想就是把宝贵的资源放到一个池子中；每次使用">
 <meta property="og:locale" content="zh-Hans">
@@ -110,9 +110,9 @@
 <meta property="og:image" content="https://segmentfault.com/img/remote/1460000015808905?w=500&h=293">
 <meta property="og:image" content="https://segmentfault.com/img/remote/1460000015808909?w=928&h=160">
 <meta property="og:image" content="https://segmentfault.com/img/remote/1460000015808910?w=1104&h=334">
-<meta property="og:updated_time" content="2019-02-02T20:45:05.585Z">
+<meta property="og:updated_time" content="2019-02-02T21:19:17.078Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Blog of Woo">
+<meta name="twitter:title" content="如何优雅的使用和理解线程池">
 <meta name="twitter:description" content="前言平时接触过多线程开发的童鞋应该都或多或少了解过线程池，之前发布的《阿里巴巴 Java 手册》里也有一条：  可见线程池的重要性。 简单来说使用线程池有以下几个目的：  线程是稀缺资源，不能频繁的创建。 解耦作用；线程的创建于执行完全分开，方便维护。 应当将其放入一个池子中，可以给其他任务进行复用。  线程池原理谈到线程池就会想到池化技术，其中最核心的思想就是把宝贵的资源放到一个池子中；每次使用">
 <meta name="twitter:image" content="https://segmentfault.com/img/remote/1460000015808901?w=766&h=136">
 
@@ -121,7 +121,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/01/25/如何优雅的使用和理解线程池/">
+  <link rel="canonical" href="http://yoursite.com/2018/11/02/如何优雅的使用和理解线程池/">
 
 
 
@@ -131,7 +131,7 @@
   };
 </script>
 
-  <title> | Blog of Woo</title>
+  <title>如何优雅的使用和理解线程池 | Blog of Woo</title>
   
 
 
@@ -296,7 +296,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/25/如何优雅的使用和理解线程池/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/02/如何优雅的使用和理解线程池/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="woo">
@@ -313,7 +313,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h1 class="post-title" itemprop="name headline">如何优雅的使用和理解线程池
 
               
             
@@ -339,7 +339,7 @@
                 
               
 
-              <time title="Created: 2019-01-25 15:24:57" itemprop="dateCreated datePublished" datetime="2019-01-25T15:24:57+01:00">2019-01-25</time>
+              <time title="Created: 2018-11-02 22:11:29" itemprop="dateCreated datePublished" datetime="2018-11-02T22:11:29+01:00">2018-11-02</time>
             
 
             
@@ -356,7 +356,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-02 21:45:05" itemprop="dateModified" datetime="2019-02-02T21:45:05+01:00">2019-02-02</time>
+                <time title="Modified: 2019-02-02 22:19:17" itemprop="dateModified" datetime="2019-02-02T22:19:17+01:00">2019-02-02</time>
               
             
           </span>
@@ -539,8 +539,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/25/线上服务 CPU100% 问题快速定位实战/" rel="next" title="">
-                <i class="fa fa-chevron-left"></i> 
+              <a href="/2018/11/02/理解 B 树、B+ 树特点及使用场景/" rel="next" title="理解B树,B+树特点及使用场景">
+                <i class="fa fa-chevron-left"></i> 理解B树,B+树特点及使用场景
               </a>
             
           </div>
@@ -549,8 +549,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/01/25/面试 - AQS- CAS/" rel="prev" title="">
-                 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/02/线上服务 CPU100% 问题快速定位实战/" rel="prev" title="线上服务CPU100%问题快速定位实践">
+                线上服务CPU100%问题快速定位实践 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

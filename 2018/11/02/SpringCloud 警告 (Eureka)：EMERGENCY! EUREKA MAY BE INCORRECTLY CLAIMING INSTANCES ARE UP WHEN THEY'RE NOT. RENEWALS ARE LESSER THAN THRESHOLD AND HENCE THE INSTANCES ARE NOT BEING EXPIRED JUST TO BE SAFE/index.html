@@ -96,32 +96,26 @@
 
 
 
-  <meta name="description" content="在 springboot 官网照着给的介绍写了个 springboot 程序 pom.xml      org.springframework.boot     spring-boot-starter-parent     1.5.2.RELEASE                org.springframework.boot         spring-boot-starter-web">
+  <meta name="description" content="警告！Eureka 可能存在维护了错误的实例列表（当它们没有启动的时候，Eureka 却把它当成启动的了）；Renews 值小于 Threshold 值，因此剩下未过期的都是安全的。 原因分析： 这个是 Eureka 的自我保护机制。Eureka Server 在运行期间，会统计心跳失败的比例在 15 分钟之内是否低于 85%，如果出现低于的情况（在单机调试的时候很容易满足，实际在生产环境上通常是">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Blog of Woo">
-<meta property="og:url" content="http://yoursite.com/2019/01/31/spring boot 扫描不到自定义 Controller/index.html">
+<meta property="og:title" content="EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY&#39;RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE">
+<meta property="og:url" content="http://yoursite.com/2018/11/02/SpringCloud 警告 (Eureka)：EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE/index.html">
 <meta property="og:site_name" content="Blog of Woo">
-<meta property="og:description" content="在 springboot 官网照着给的介绍写了个 springboot 程序 pom.xml      org.springframework.boot     spring-boot-starter-parent     1.5.2.RELEASE                org.springframework.boot         spring-boot-starter-web">
+<meta property="og:description" content="警告！Eureka 可能存在维护了错误的实例列表（当它们没有启动的时候，Eureka 却把它当成启动的了）；Renews 值小于 Threshold 值，因此剩下未过期的都是安全的。 原因分析： 这个是 Eureka 的自我保护机制。Eureka Server 在运行期间，会统计心跳失败的比例在 15 分钟之内是否低于 85%，如果出现低于的情况（在单机调试的时候很容易满足，实际在生产环境上通常是">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409005618644-1487234010.png">
-<meta property="og:image" content="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409005713894-1428437850.png">
-<meta property="og:image" content="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409005517644-1213300216.png">
-<meta property="og:image" content="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409004634847-1050076443.png">
-<meta property="og:image" content="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409010006191-38718118.png">
-<meta property="og:image" content="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409010021238-427644219.png">
-<meta property="og:image" content="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409010114410-919234476.png">
-<meta property="og:updated_time" content="2019-02-02T20:45:30.645Z">
+<meta property="og:image" content="http://img.blog.csdn.net/20170418001242248?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvenpwNDQ4NTYxNjM2/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2019-02-02T21:19:13.816Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Blog of Woo">
-<meta name="twitter:description" content="在 springboot 官网照着给的介绍写了个 springboot 程序 pom.xml      org.springframework.boot     spring-boot-starter-parent     1.5.2.RELEASE                org.springframework.boot         spring-boot-starter-web">
-<meta name="twitter:image" content="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409005618644-1487234010.png">
+<meta name="twitter:title" content="EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY&#39;RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE">
+<meta name="twitter:description" content="警告！Eureka 可能存在维护了错误的实例列表（当它们没有启动的时候，Eureka 却把它当成启动的了）；Renews 值小于 Threshold 值，因此剩下未过期的都是安全的。 原因分析： 这个是 Eureka 的自我保护机制。Eureka Server 在运行期间，会统计心跳失败的比例在 15 分钟之内是否低于 85%，如果出现低于的情况（在单机调试的时候很容易满足，实际在生产环境上通常是">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170418001242248?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvenpwNDQ4NTYxNjM2/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/01/31/spring boot 扫描不到自定义 Controller/">
+  <link rel="canonical" href="http://yoursite.com/2018/11/02/SpringCloud 警告 (Eureka)：EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE/">
 
 
 
@@ -131,7 +125,7 @@
   };
 </script>
 
-  <title> | Blog of Woo</title>
+  <title>EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE | Blog of Woo</title>
   
 
 
@@ -296,7 +290,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/31/spring boot 扫描不到自定义 Controller/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/02/SpringCloud 警告 (Eureka)：EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="woo">
@@ -313,7 +307,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h1 class="post-title" itemprop="name headline">EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE
 
               
             
@@ -339,7 +333,7 @@
                 
               
 
-              <time title="Created: 2019-01-31 16:18:20" itemprop="dateCreated datePublished" datetime="2019-01-31T16:18:20+01:00">2019-01-31</time>
+              <time title="Created: 2018-11-02 22:11:29" itemprop="dateCreated datePublished" datetime="2018-11-02T22:11:29+01:00">2018-11-02</time>
             
 
             
@@ -356,7 +350,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-02 21:45:30" itemprop="dateModified" datetime="2019-02-02T21:45:30+01:00">2019-02-02</time>
+                <time title="Modified: 2019-02-02 22:19:13" itemprop="dateModified" datetime="2019-02-02T22:19:13+01:00">2019-02-02</time>
               
             
           </span>
@@ -390,72 +384,18 @@
       
 
       
-        <p>在 springboot 官网照着给的介绍写了个 springboot 程序</p>
-<p>pom.xml</p>
-<pre><parent>
-    <groupid>org.springframework.boot</groupid>
-    <artifactid>spring-boot-starter-parent</artifactid>
-    <version>1.5.2.RELEASE</version>
-</parent>
-<dependencies>
-    <dependency>
-        <groupid>org.springframework.boot</groupid>
-        <artifactid>spring-boot-starter-web</artifactid>
-    </dependency>
-</dependencies></pre>
+        <p><strong>警告！Eureka 可能存在维护了错误的实例列表（当它们没有启动的时候，Eureka 却把它当成启动的了）；Renews 值小于 Threshold 值，因此剩下未过期的都是安全的。</strong></p>
+<p><strong>原因分析：</strong></p>
+<p>这个是 Eureka 的自我保护机制。Eureka Server 在运行期间，会统计心跳失败的比例在 15 分钟之内是否低于 85%，如果出现低于的情况（在单机调试的时候很容易满足，实际在生产环境上通常是由于网络不稳定导致），Eureka Server 会将当前的实例注册信息保护起来，同时提示这个警告。</p>
+<p>Eureka server 和 client 之间每隔 30 秒会进行一次心跳通信，告诉 server，client 还活着。由此引出两个名词：<br>Renews threshold：server 期望在每分钟中收到的心跳次数<br>Renews (last min)：上一分钟内收到的心跳次数。</p>
+<p>前文说到禁止注册 server 自己为 client，不管 server 是否禁止，阈值（threshold）是 1。client 个数为 n，阈值为 1+2<em>n（此为一个 server 且禁止自注册的情况）<br>如果是多个 server，且开启了自注册，那么就和 client 一样，是对于其他的 server 来说就是 client，是要 </em> 2 的</p>
+<p>我开了两个 server，自注册，相关数据如下<br><img src="http://img.blog.csdn.net/20170418001242248?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvenpwNDQ4NTYxNjM2/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""><br>阈值：1+2<em>1<br>renews：<br>1）自注册 2 + 2</em>1<br>2）非自注册：2*1</p>
+<p>Eurake 有一个配置参数 eureka.server.renewalPercentThreshold，定义了 renews 和 renews threshold 的比值，默认值为 0.85。当 server 在 15 分钟内，比值低于 percent，即少了 15% 的微服务心跳，server 会进入自我保护状态，Self-Preservation。在此状态下，server 不会删除注册信息，这就有可能导致在调用微服务时，实际上服务并不存在。<br>这种保护状态实际上是考虑了 client 和 server 之间的心跳是因为网络问题，而非服务本身问题，不能简单的删除注册信息</p>
+<p>stackoverflow 上，有人给出的建议是：<br>1、在生产上可以开自注册，部署两个 server<br>2、在本机器上测试的时候，可以把比值调低，比如 0.49<br>3、或者简单粗暴把自我保护模式关闭</p>
+<pre>**`eureka.server.enableSelfPreservation=false`**</pre>
 
-<p>java 文件</p>
-<pre>package hello;
-
-import org.springframework.boot.*;
-import org.springframework.boot.autoconfigure.*;
-import org.springframework.stereotype.*;
-import org.springframework.web.bind.annotation.*;
-
-@Controller
-@EnableAutoConfiguration
-public class Application{
-
-    @RequestMapping("/")
-    @ResponseBody
-    String home() {
-        return "Hello World!";
-    }
-
-    public static void main(String[] args) throws Exception {
-        SpringApplication.run(SampleController.class, args);
-    }
-}</pre>
-
-<p>然后自己写了个 Controller</p>
-<p><img src="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409005618644-1487234010.png" alt=""></p>
-<p>但是无论如何也无法扫描到自己定义的 Controller（如果用的是 idea，能明显看出来，如果扫描到会有<img src="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409005713894-1428437850.png" alt="">的图标）。访问结果结果如下：</p>
-<p><img src="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409005517644-1213300216.png" alt=""></p>
-<p>报错的原因是找不到对应的映射路径，即 Controller 没有被扫描到 ，。</p>
-<p>郁闷至极，到晚上搜的结果说的是 LoginController 方的位置不对，应该让启动类和 Controller 的包在同一级目录下，然而对我却没有效果。</p>
-<p>官方建议 application.java 放的位置：</p>
-<p><img src="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409004634847-1050076443.png" alt=""></p>
-<p>最后尝试了下修改下 Application 上的注解，<strong>我本来复制官方的代码用的是 @Controller 和 <em>@EnableAutoConfiguration，试着换成了 @</em>**</strong>SpringBootApplication<strong> </strong>注解**，出乎意外的可以扫描到 Controller </p>
-<p><img src="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409010006191-38718118.png" alt=""></p>
-<p><img src="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409010021238-427644219.png" alt=""></p>
-<p><img src="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409010114410-919234476.png" alt=""></p>
-<p>又查了下官方的文档终于找到原因了，原因是：</p>
-<p>如果使用 @Controller 和 <em>@EnableAutoConfiguration 注解还应该再加上一个注解：</em>@ComponentScan  就可以了。@Controller 和 @EnableAutoConfiguration 没有扫描注解的功能，而 @ComponentScan 是</p>
-<p> springboot 专门用来扫描 @Component, @Service, @Repository, @Controller 等注解的注解</p>
-<p>总结：</p>
-<p>使用 springboot 启动类配置扫描的两种注解配置方式：</p>
-<p>1、@Controller</p>
-<p> @EnableAutoConfiguration</p>
-<p> @ComponentScan</p>
-<p>2、@SpringBootApplication</p>
-<p>@SpringBootApplication 注解等价于 @Configuration, @EnableAutoConfiguration and @ComponentScan</p>
-<pre>另外application.java（启动类）也应该按照官方的建议放在root目录下，这样才能扫描到Service和dao，不然还会引起，扫描不到注解的问题。
-**--- 更新日期：2018-10-14 ---**
-最近用了最新的springboot 2.0.5.RELEASE 版本 多了一种新的扫描注解，新版的springboot application可以放在任意位置，只要加上</pre>
-
-<p><pre>@ComponentScan(basePackages = {“com.oskyhang”, “com.frames”})</pre></p>
-<p>注解就可以，注解指定扫描的包，就可以扫描到，更灵活方便。</p>
-<p> PS：如有疑问或错误，欢迎指教。3Q</p>
+<p><strong> 参考文档</strong></p>
+<p><a href="https://www.cnblogs.com/breath-taking/articles/7940364.html" target="_blank" rel="noopener">https://www.cnblogs.com/breath-taking/articles/7940364.html</a></p>
 
       
     </div>
@@ -486,8 +426,8 @@ public class Application{
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/31/SpringCloud 警告 (Eureka)：EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE./" rel="next" title="">
-                <i class="fa fa-chevron-left"></i> 
+              <a href="/2018/11/02/mysql explain 详解/" rel="next" title="mysql explain 详解">
+                <i class="fa fa-chevron-left"></i> mysql explain 详解
               </a>
             
           </div>
@@ -496,8 +436,8 @@ public class Application{
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/02/02/为什么你需要一个 vps/" rel="prev" title="">
-                 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/02/TCP为什么是三次握手/" rel="prev" title="TCP为什么是三次握手">
+                TCP为什么是三次握手 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
