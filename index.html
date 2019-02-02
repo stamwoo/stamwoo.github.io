@@ -277,184 +277,12 @@
   
   
   
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/22/单例模式_双重检验锁真的线程安全吗/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="woo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Woo">
-    </span>
-
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/01/22/单例模式_双重检验锁真的线程安全吗/" class="post-title-link" itemprop="url">单例模式–双重检验锁真的线程安全吗</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-01-22 21:19:41" itemprop="dateCreated datePublished" datetime="2019-01-22T21:19:41+01:00">2019-01-22</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-02-02 22:19:16" itemprop="dateModified" datetime="2019-02-02T22:19:16+01:00">2019-02-02</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="单例模式–双重检验锁真的线程安全吗"><a href="#单例模式–双重检验锁真的线程安全吗" class="headerlink" title="单例模式–双重检验锁真的线程安全吗"></a>单例模式–双重检验锁真的线程安全吗</h1><p>单例模式是我们最熟悉不过的一种设计模式，用来保证内存中只有一个对象的实例。虽然容易，但里面的坑也有很多，比如双重检验锁模式 (double checked locking pattern) 真的是线程安全的吗？</p>
-<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>在对项目进行 PMD 静态代码检测时，遇到了这样一个问题</p>
-<blockquote>
-<p>Partially created objects can be returned by the Double Checked Locking pattern when used in Java. An optimizing JRE may assign a reference to the baz variable before it calls the constructor of the object the reference points to.</p>
-<p>Note: With Java 5, you can make Double checked locking work, if you declare the variable to be volatile.</p>
-</blockquote>
-<p>大概意思是，使用双重检验锁模式，可能会返回一个部分初始化的对象。可能大家有些疑虑，什么是部分初始化的对象，我们下面继续分析</p>
-<h2 id="什么是双重检验锁模式"><a href="#什么是双重检验锁模式" class="headerlink" title="什么是双重检验锁模式"></a>什么是双重检验锁模式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public static Singleton getSingleton() &#123;</span><br><span class="line">    if (instance == null) &#123;</span><br><span class="line">        synchronized (Singleton.class) &#123;</span><br><span class="line">            if (instance == null) &#123;</span><br><span class="line">                instance = new Singleton();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们看到，在同步代码块的内部和外部都判断了 instance == null，这时因为，可能会有多个线程同时进入到同步代码块外的 if 判断中，如果在同步代码块内部不进行判空的话，可能会初始化多个实例。</p>
-<h2 id="问题所在"><a href="#问题所在" class="headerlink" title="问题所在"></a>问题所在</h2><p>这种写法看似完美无缺，但它却是有问题的，或者说它并不担保一定完美无缺。主要原因在于 instance = new Singleton(); 并不是原子性的操作。<br>创建一个对象可以分为三部：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.分配对象的内存空间</span><br><span class="line">2.初始化对象</span><br><span class="line">3.设置instance指向刚分配的内存地址,当instance指向分配地址时，instance不为空</span><br></pre></td></tr></table></figure>
-<p>但是，2、3 部之间，可能会被重排序，造成创建对象顺序变为 1-3-2. 试想一个场景：<br>线程 A 第一次创建对象 Singleton，对象创建顺序为 1-3-2；<br>当给 instance 分配完内存后，这时来了一个线程 B 调用了 getSingleton() 方法<br>这时候进行 instance == null 的判断，发现 instance 并不为 null。<br>但注意这时候 instance 并没有初始化对象，线程 B 则会将这个未初始化完成的对象返回。那 B 线程使用 instance 时就可能会出现问题，这就是双重检查锁问题所在。</p>
-<h2 id="使用-volatile"><a href="#使用-volatile" class="headerlink" title="使用 volatile"></a>使用 volatile</h2><p>对于上述的问题，我们可以通过把 instance 声明为 volatile 型来解决</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton &#123;</span><br><span class="line">    private volatile static Singleton instance;</span><br><span class="line"></span><br><span class="line">    public static Singleton getSingleton() &#123;</span><br><span class="line">        if (instance == null) &#123;</span><br><span class="line">            synchronized (Singleton.class) &#123;</span><br><span class="line">                if (instance == null) &#123;</span><br><span class="line">                    instance = new Singleton();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>有些人认为使用 volatile 的原因是可见性，也就是可以保证线程在本地不会存有 instance 的副本，每次都是去主内存中读取。但其实是不对的。使用 volatile 的主要原因是其另一个特性：禁止指令重排序优化。也就是说，在 volatile 变量的赋值操作后面会有一个内存屏障，读操作不会被重排序到内存屏障之前。比如上面的例子，取操作必须在执行完 1-2-3 之后或者 1-3-2 之后，不存在执行到 1-3 然后取到值的情况。从「先行发生原则」的角度理解的话，就是对于一个 volatile 变量的写操作都先行发生于后面对这个变量的读操作（这里的“后面”是时间上的先后顺序.   </p>
-<p>但是特别注意在 Java 5 以前的版本使用了 volatile 的双检锁还是有问题的。其原因是 Java 5 以前的 JMM （Java 内存模型）是存在缺陷的，即时将变量声明成 volatile 也不能完全避免重排序，主要是 volatile 变量前后的代码仍然存在重排序问题。这个 volatile 屏蔽重排序的问题在 Java 5 中才得以修复，所以在这之后才可以放心使用 volatile。</p>
-<p>必须在 JDK5 版本以上使用。</p>
-<h2 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton &#123;</span><br><span class="line">    private static class SingletonHolder &#123;</span><br><span class="line">        private static final Singleton INSTANCE = new Singleton();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private Singleton() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static final Singleton getInstance() &#123;</span><br><span class="line">        return SingletonHolder.INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这种写法是目前比较推荐的一种写法，采用静态内部类的方式，即实现了懒加载又不会出现线程安全问题。而且减少了 synchronized 的开销。</p>
-<h2 id="Learn-more"><a href="#Learn-more" class="headerlink" title="Learn more"></a><a href="#Learn-more" title="Learn more"></a>Learn more</h2><p><a href="http://www.infoq.com/cn/articles/double-checked-locking-with-delay-initialization" target="_blank" rel="noopener">双重检查锁定与延迟初始化</a><br><a href="https://pmd.github.io/pmd-5.5.4/pmd-java/rules/java/basic.html" target="_blank" rel="noopener">PMD-DoubleCheckedLocking</a><br><a href="http://www.javaworld.com/article/2074979/java-concurrency/double-checked-locking--clever--but-broken.html" target="_blank" rel="noopener">Double-checked locking: Clever, but broken</a></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
   
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
   
   
   
@@ -477,6 +305,10 @@
         
         
           <h1 class="post-title" itemprop="name headline">
+                
+                  <span class="post-sticky-flag" title="Sticky">
+                    <i class="fa fa-thumb-tack"></i>
+                  </span>
                 
                 
                 <a href="/2019/01/02/面试 - AQS- CAS/" class="post-title-link" itemprop="url">谈面试时从写一个单例开始究竟能问多深及终极解决方案</a>
@@ -521,7 +353,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-02 22:19:24" itemprop="dateModified" datetime="2019-02-02T22:19:24+01:00">2019-02-02</time>
+                <time title="Modified: 2019-02-02 22:24:55" itemprop="dateModified" datetime="2019-02-02T22:24:55+01:00">2019-02-02</time>
               
             
           </span>
@@ -687,10 +519,12 @@
   
   
   
+    
+  
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
   
   
   
@@ -713,6 +547,10 @@
         
         
           <h1 class="post-title" itemprop="name headline">
+                
+                  <span class="post-sticky-flag" title="Sticky">
+                    <i class="fa fa-thumb-tack"></i>
+                  </span>
                 
                 
                 <a href="/2018/11/02/TCP为什么是三次握手/" class="post-title-link" itemprop="url">TCP为什么是三次握手</a>
@@ -757,7 +595,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-02 22:19:13" itemprop="dateModified" datetime="2019-02-02T22:19:13+01:00">2019-02-02</time>
+                <time title="Modified: 2019-02-02 22:24:55" itemprop="dateModified" datetime="2019-02-02T22:24:55+01:00">2019-02-02</time>
               
             
           </span>
@@ -847,176 +685,12 @@
   
   
   
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/02/SpringCloud 警告 (Eureka)：EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="woo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Woo">
-    </span>
-
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/11/02/SpringCloud 警告 (Eureka)：EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE/" class="post-title-link" itemprop="url">EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-11-02 22:11:29" itemprop="dateCreated datePublished" datetime="2018-11-02T22:11:29+01:00">2018-11-02</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-02-02 22:19:13" itemprop="dateModified" datetime="2019-02-02T22:19:13+01:00">2019-02-02</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>警告！Eureka 可能存在维护了错误的实例列表（当它们没有启动的时候，Eureka 却把它当成启动的了）；Renews 值小于 Threshold 值，因此剩下未过期的都是安全的。</strong></p>
-<p><strong>原因分析：</strong></p>
-<p>这个是 Eureka 的自我保护机制。Eureka Server 在运行期间，会统计心跳失败的比例在 15 分钟之内是否低于 85%，如果出现低于的情况（在单机调试的时候很容易满足，实际在生产环境上通常是由于网络不稳定导致），Eureka Server 会将当前的实例注册信息保护起来，同时提示这个警告。</p>
-<p>Eureka server 和 client 之间每隔 30 秒会进行一次心跳通信，告诉 server，client 还活着。由此引出两个名词：<br>Renews threshold：server 期望在每分钟中收到的心跳次数<br>Renews (last min)：上一分钟内收到的心跳次数。</p>
-<p>前文说到禁止注册 server 自己为 client，不管 server 是否禁止，阈值（threshold）是 1。client 个数为 n，阈值为 1+2<em>n（此为一个 server 且禁止自注册的情况）<br>如果是多个 server，且开启了自注册，那么就和 client 一样，是对于其他的 server 来说就是 client，是要 </em> 2 的</p>
-<p>我开了两个 server，自注册，相关数据如下<br><img src="http://img.blog.csdn.net/20170418001242248?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvenpwNDQ4NTYxNjM2/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""><br>阈值：1+2<em>1<br>renews：<br>1）自注册 2 + 2</em>1<br>2）非自注册：2*1</p>
-<p>Eurake 有一个配置参数 eureka.server.renewalPercentThreshold，定义了 renews 和 renews threshold 的比值，默认值为 0.85。当 server 在 15 分钟内，比值低于 percent，即少了 15% 的微服务心跳，server 会进入自我保护状态，Self-Preservation。在此状态下，server 不会删除注册信息，这就有可能导致在调用微服务时，实际上服务并不存在。<br>这种保护状态实际上是考虑了 client 和 server 之间的心跳是因为网络问题，而非服务本身问题，不能简单的删除注册信息</p>
-<p>stackoverflow 上，有人给出的建议是：<br>1、在生产上可以开自注册，部署两个 server<br>2、在本机器上测试的时候，可以把比值调低，比如 0.49<br>3、或者简单粗暴把自我保护模式关闭</p>
-<pre>**`eureka.server.enableSelfPreservation=false`**</pre>
-
-<p><strong> 参考文档</strong></p>
-<p><a href="https://www.cnblogs.com/breath-taking/articles/7940364.html" target="_blank" rel="noopener">https://www.cnblogs.com/breath-taking/articles/7940364.html</a></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
   
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
   
   
   
@@ -1039,6 +713,10 @@
         
         
           <h1 class="post-title" itemprop="name headline">
+                
+                  <span class="post-sticky-flag" title="Sticky">
+                    <i class="fa fa-thumb-tack"></i>
+                  </span>
                 
                 
                 <a href="/2018/11/02/mysql explain 详解/" class="post-title-link" itemprop="url">mysql explain 详解</a>
@@ -1083,7 +761,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-02 22:19:10" itemprop="dateModified" datetime="2019-02-02T22:19:10+01:00">2019-02-02</time>
+                <time title="Modified: 2019-02-02 22:24:55" itemprop="dateModified" datetime="2019-02-02T22:24:55+01:00">2019-02-02</time>
               
             
           </span>
@@ -1205,10 +883,12 @@
   
   
   
+    
+  
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
   
   
   
@@ -1231,6 +911,10 @@
         
         
           <h1 class="post-title" itemprop="name headline">
+                
+                  <span class="post-sticky-flag" title="Sticky">
+                    <i class="fa fa-thumb-tack"></i>
+                  </span>
                 
                 
                 <a href="/2018/11/02/spring boot 扫描不到自定义 Controller/" class="post-title-link" itemprop="url">spring cloud 扫不到自定义controller</a>
@@ -1275,7 +959,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-02 22:19:12" itemprop="dateModified" datetime="2019-02-02T22:19:12+01:00">2019-02-02</time>
+                <time title="Modified: 2019-02-02 22:24:55" itemprop="dateModified" datetime="2019-02-02T22:24:55+01:00">2019-02-02</time>
               
             
           </span>
@@ -1393,10 +1077,190 @@
   
   
   
+    
+  
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/02/为什么你需要一个 vps/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="woo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Woo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                  <span class="post-sticky-flag" title="Sticky">
+                    <i class="fa fa-thumb-tack"></i>
+                  </span>
+                
+                
+                <a href="/2018/11/02/为什么你需要一个 vps/" class="post-title-link" itemprop="url">为什么你需要一个VPS</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-11-02 22:11:29" itemprop="dateCreated datePublished" datetime="2018-11-02T22:11:29+01:00">2018-11-02</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-02 22:24:55" itemprop="dateModified" datetime="2019-02-02T22:24:55+01:00">2019-02-02</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="VPS-是什么"><a href="#VPS-是什么" class="headerlink" title="VPS 是什么"></a>VPS 是什么</h1><p>VPS 是 Virtual private server 的简称，中文是 “虚拟专用服务器”，是指通过虚拟化技术在独立服务器中运行的专用服务器。每个使用 VPS 技术的虚拟独立服务器拥有各自独立的公网 IP 地址、操作系统、硬盘空间、内存空间、CPU 资源等，还可以进行安装程序、重启服务器等操作，与运行一台独立服务器基本相同。</p>
+<p>很多人有点分不清 VPS 与虚拟主机的区别，网上也有很多人说过这个。博主这里就不长篇大论了，简单说，VPS 就相当于一台真正的电脑，只不过这台电脑是放在别人家的。你可以通过 ssh 工具对它做任何事，只要你开心，你砸了它也行。<br>而虚拟主机说到底是别人家的电脑借给你用，你可以使用上面的计算资源，虚拟主机的服务商已经给你提供各种安装好的工具以及计算资源。但你对它的权限是比不上 VPS 大的。</p>
+<h1 id="VPS-可以用来做什么"><a href="#VPS-可以用来做什么" class="headerlink" title="VPS 可以用来做什么"></a>VPS 可以用来做什么</h1><h2 id="Shadowsocks"><a href="#Shadowsocks" class="headerlink" title="Shadowsocks"></a>Shadowsocks</h2><p>使用 Python、C++、C# 等语言开发、基于 Apache 许可证的开放源代码软件，用于保护网络流量、加密数据传输。Shadowsocks 使用 Socks5 代理方式。<br>Shadowsocks 分为服务器端和客户端。在使用之前，需要先将服务器端部署到服务器上面，然后通过客户端连接并创建本地代理。<br>其实关于在 vps 搭建 SS 的教程已经很多了，但是博主之前搭梯子的时候发现很多教程存在一些问题，或者是太繁琐，或者是很多重要地方过了一段时间已经发生了变化，对小白用户不太友好。</p>
+<p>因此博主决定写一篇新的教程分享出来。</p>
+<h2 id="Blog"><a href="#Blog" class="headerlink" title="Blog"></a>Blog</h2><p>搭建一个属于自己的博客，搭配上 github education 提供的工具包，还可以获得一个免费域名及 SSL 认证。博主这个博客既是使用我说的这种方案搭建的。过程十分简单，按照博主的上一篇教程：在自己的 VPS 上从零开始搭建 Hexo 博客, 半天时间即可搭建完成并上线。</p>
+<h2 id="Seafile"><a href="#Seafile" class="headerlink" title="Seafile"></a>Seafile</h2><p>一套中国国产的开源、专业、可靠的云存储项目管理软件，[解决文件集中存储、共享和跨平台访问等问题。正式发布于 2012 年 10 月。除了一般网盘所提供的云存储以及共享功能外，Seafile 还提供消息通信、群组讨论等辅助功能，帮助员工更好的围绕文件展开协同工作，已有 10 多万用户使用。</p>
+<p>作为一套比较成熟的管理软件，Seafile 的安装也十分简单。Install Seafile Client on Linux</p>
+<p>此外，你还可以在 VPS 部署更多你自己写的脚本，比如爬虫类工具，抢票程序等等。一句话，只要是你的程序有 7*24h 的服务时间需求，你都可以把它放在你的 VPS 上跑。</p>
+<h1 id="VPS-哪家强"><a href="#VPS-哪家强" class="headerlink" title="VPS 哪家强"></a>VPS 哪家强</h1><p>看了上面的内容，如果你想选择一家 VPS 提供商，那么你大概有哪些选择呢？博主也给出了当下比较流行，有口碑的 VPS 服务商供大家参考。</p>
+<h2 id="DigitalOcean"><a href="#DigitalOcean" class="headerlink" title="DigitalOcean"></a>DigitalOcean</h2><p>一家位于美国的云主机服务商，总部位于纽约，成立于 2012 年。由于价格低廉，高性能配置、灵活布置的优势，近些年来发展迅猛，成为中国站长圈们喜爱的品牌。该公司拥有多个数据中心：日本东京、美国 洛杉矶、纽约、新泽西、新加坡、英国伦敦、德国富兰克林.</p>
+<p>DigitailOcean，博主习惯称为 DO。也是博主选择的第一家 VPS 服务商，对于博主这种学生党而言，DO 是最具有性价比的一家服务商，由邀请链接注册自动赠送 $10 的优惠，再通过 paypal 充值 $5 即可使用。如果是学生用户的话使用 github education 提供的学生开发包可以再获得 $50 的优惠码。也就是说 $5 就可以使用 DO 的 1G 25gSSD 的 VPS 长达 13 个月，这性价比也是没谁了吧。</p>
+<p>我的邀请链接是：$10 邀请链接, 另外为了选择合适的机房，再贴一个测速链接：SFO2 Speedtest | DigitalOcean</p>
+<h2 id="Linode"><a href="#Linode" class="headerlink" title="Linode"></a>Linode</h2><p>一个建立于美国新泽西州加洛伟的虚拟专用服务器（VPS）提供商。它的名字是由英文中 Linux 中的 Li 和 node（即 “节点” 一词）构成的混成词。如同它的名字一样，Linode 只提供运行 Linux 的服务器，而不提供运行 Windows Server 的服务器。它的服务一向以稳定著称。</p>
+<p>知乎在发展初期使用的就是 Linode 的服务，现在口碑比较好的比较稳定的就是日本机房了，不过是要抢购，基本每每放出来都被抢完了。</p>
+<h2 id="搬瓦工"><a href="#搬瓦工" class="headerlink" title="搬瓦工"></a>搬瓦工</h2><p>隶属于加拿大 IT7 旗下的 VPS 服务品牌，主推 OPENVZ 架构方案，尤其是其中的 4 款便宜年付 VPS 深受广大用户的喜欢，支持支付宝付款，旗下有四个机房，均支持一键切换机房位置以及一键安装各类软件等功能。</p>
+<p>这家前些年应该是最火的 vps 服务商了，记得曾经有 $5 的年 vps，小内存搭个 ss 还是很够用的。后来因为 ip 资源枯竭，搬瓦工拿不到什么 ip 就停了自家的超低资费服务。不过现在还是有 $19.99 的资费可以选。</p>
+<h2 id="Vultr"><a href="#Vultr" class="headerlink" title="Vultr"></a>Vultr</h2><p>一家 2014 年刚成立的 VPS 服务商，基于 KVM，采用 SSD 硬盘，拥有大量自建机房。有日本、美国洛杉矶、Dallas、Chicago、New York、Seattle、Atlanta、英国、德国等，价格便宜，配置又高。支持 Paypal、信用卡或比特币付款。</p>
+<p>这家比较好的依然是日本主机，国内 ping 值在 100 以内，也较少抽风。另外他家的最低配置也比别家高，价格嘛，自然就水涨船高了。博主作为一个学生党目前觉得还没太必要用他家，以后说不定想试一试。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+    
+  
+
+  
+
+  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
   
   
   
@@ -1419,6 +1283,10 @@
         
         
           <h1 class="post-title" itemprop="name headline">
+                
+                  <span class="post-sticky-flag" title="Sticky">
+                    <i class="fa fa-thumb-tack"></i>
+                  </span>
                 
                 
                 <a href="/2018/11/02/为什么匿名内部类访问局部变量必须是 final/" class="post-title-link" itemprop="url">为什么匿名内部类访问局部变量必须是final?</a>
@@ -1463,7 +1331,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-02 22:19:15" itemprop="dateModified" datetime="2019-02-02T22:19:15+01:00">2019-02-02</time>
+                <time title="Modified: 2019-02-02 22:24:55" itemprop="dateModified" datetime="2019-02-02T22:24:55+01:00">2019-02-02</time>
               
             
           </span>
@@ -1585,182 +1453,12 @@
   
   
   
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/02/为什么你需要一个 vps/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="woo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Woo">
-    </span>
-
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/11/02/为什么你需要一个 vps/" class="post-title-link" itemprop="url">为什么你需要一个VPS</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-11-02 22:11:29" itemprop="dateCreated datePublished" datetime="2018-11-02T22:11:29+01:00">2018-11-02</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-02-02 22:19:14" itemprop="dateModified" datetime="2019-02-02T22:19:14+01:00">2019-02-02</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="VPS-是什么"><a href="#VPS-是什么" class="headerlink" title="VPS 是什么"></a>VPS 是什么</h1><p>VPS 是 Virtual private server 的简称，中文是 “虚拟专用服务器”，是指通过虚拟化技术在独立服务器中运行的专用服务器。每个使用 VPS 技术的虚拟独立服务器拥有各自独立的公网 IP 地址、操作系统、硬盘空间、内存空间、CPU 资源等，还可以进行安装程序、重启服务器等操作，与运行一台独立服务器基本相同。</p>
-<p>很多人有点分不清 VPS 与虚拟主机的区别，网上也有很多人说过这个。博主这里就不长篇大论了，简单说，VPS 就相当于一台真正的电脑，只不过这台电脑是放在别人家的。你可以通过 ssh 工具对它做任何事，只要你开心，你砸了它也行。<br>而虚拟主机说到底是别人家的电脑借给你用，你可以使用上面的计算资源，虚拟主机的服务商已经给你提供各种安装好的工具以及计算资源。但你对它的权限是比不上 VPS 大的。</p>
-<h1 id="VPS-可以用来做什么"><a href="#VPS-可以用来做什么" class="headerlink" title="VPS 可以用来做什么"></a>VPS 可以用来做什么</h1><h2 id="Shadowsocks"><a href="#Shadowsocks" class="headerlink" title="Shadowsocks"></a>Shadowsocks</h2><p>使用 Python、C++、C# 等语言开发、基于 Apache 许可证的开放源代码软件，用于保护网络流量、加密数据传输。Shadowsocks 使用 Socks5 代理方式。<br>Shadowsocks 分为服务器端和客户端。在使用之前，需要先将服务器端部署到服务器上面，然后通过客户端连接并创建本地代理。<br>其实关于在 vps 搭建 SS 的教程已经很多了，但是博主之前搭梯子的时候发现很多教程存在一些问题，或者是太繁琐，或者是很多重要地方过了一段时间已经发生了变化，对小白用户不太友好。</p>
-<p>因此博主决定写一篇新的教程分享出来。</p>
-<h2 id="Blog"><a href="#Blog" class="headerlink" title="Blog"></a>Blog</h2><p>搭建一个属于自己的博客，搭配上 github education 提供的工具包，还可以获得一个免费域名及 SSL 认证。博主这个博客既是使用我说的这种方案搭建的。过程十分简单，按照博主的上一篇教程：在自己的 VPS 上从零开始搭建 Hexo 博客, 半天时间即可搭建完成并上线。</p>
-<h2 id="Seafile"><a href="#Seafile" class="headerlink" title="Seafile"></a>Seafile</h2><p>一套中国国产的开源、专业、可靠的云存储项目管理软件，[解决文件集中存储、共享和跨平台访问等问题。正式发布于 2012 年 10 月。除了一般网盘所提供的云存储以及共享功能外，Seafile 还提供消息通信、群组讨论等辅助功能，帮助员工更好的围绕文件展开协同工作，已有 10 多万用户使用。</p>
-<p>作为一套比较成熟的管理软件，Seafile 的安装也十分简单。Install Seafile Client on Linux</p>
-<p>此外，你还可以在 VPS 部署更多你自己写的脚本，比如爬虫类工具，抢票程序等等。一句话，只要是你的程序有 7*24h 的服务时间需求，你都可以把它放在你的 VPS 上跑。</p>
-<h1 id="VPS-哪家强"><a href="#VPS-哪家强" class="headerlink" title="VPS 哪家强"></a>VPS 哪家强</h1><p>看了上面的内容，如果你想选择一家 VPS 提供商，那么你大概有哪些选择呢？博主也给出了当下比较流行，有口碑的 VPS 服务商供大家参考。</p>
-<h2 id="DigitalOcean"><a href="#DigitalOcean" class="headerlink" title="DigitalOcean"></a>DigitalOcean</h2><p>一家位于美国的云主机服务商，总部位于纽约，成立于 2012 年。由于价格低廉，高性能配置、灵活布置的优势，近些年来发展迅猛，成为中国站长圈们喜爱的品牌。该公司拥有多个数据中心：日本东京、美国 洛杉矶、纽约、新泽西、新加坡、英国伦敦、德国富兰克林.</p>
-<p>DigitailOcean，博主习惯称为 DO。也是博主选择的第一家 VPS 服务商，对于博主这种学生党而言，DO 是最具有性价比的一家服务商，由邀请链接注册自动赠送 $10 的优惠，再通过 paypal 充值 $5 即可使用。如果是学生用户的话使用 github education 提供的学生开发包可以再获得 $50 的优惠码。也就是说 $5 就可以使用 DO 的 1G 25gSSD 的 VPS 长达 13 个月，这性价比也是没谁了吧。</p>
-<p>我的邀请链接是：$10 邀请链接, 另外为了选择合适的机房，再贴一个测速链接：SFO2 Speedtest | DigitalOcean</p>
-<h2 id="Linode"><a href="#Linode" class="headerlink" title="Linode"></a>Linode</h2><p>一个建立于美国新泽西州加洛伟的虚拟专用服务器（VPS）提供商。它的名字是由英文中 Linux 中的 Li 和 node（即 “节点” 一词）构成的混成词。如同它的名字一样，Linode 只提供运行 Linux 的服务器，而不提供运行 Windows Server 的服务器。它的服务一向以稳定著称。</p>
-<p>知乎在发展初期使用的就是 Linode 的服务，现在口碑比较好的比较稳定的就是日本机房了，不过是要抢购，基本每每放出来都被抢完了。</p>
-<h2 id="搬瓦工"><a href="#搬瓦工" class="headerlink" title="搬瓦工"></a>搬瓦工</h2><p>隶属于加拿大 IT7 旗下的 VPS 服务品牌，主推 OPENVZ 架构方案，尤其是其中的 4 款便宜年付 VPS 深受广大用户的喜欢，支持支付宝付款，旗下有四个机房，均支持一键切换机房位置以及一键安装各类软件等功能。</p>
-<p>这家前些年应该是最火的 vps 服务商了，记得曾经有 $5 的年 vps，小内存搭个 ss 还是很够用的。后来因为 ip 资源枯竭，搬瓦工拿不到什么 ip 就停了自家的超低资费服务。不过现在还是有 $19.99 的资费可以选。</p>
-<h2 id="Vultr"><a href="#Vultr" class="headerlink" title="Vultr"></a>Vultr</h2><p>一家 2014 年刚成立的 VPS 服务商，基于 KVM，采用 SSD 硬盘，拥有大量自建机房。有日本、美国洛杉矶、Dallas、Chicago、New York、Seattle、Atlanta、英国、德国等，价格便宜，配置又高。支持 Paypal、信用卡或比特币付款。</p>
-<p>这家比较好的依然是日本主机，国内 ping 值在 100 以内，也较少抽风。另外他家的最低配置也比别家高，价格嘛，自然就水涨船高了。博主作为一个学生党目前觉得还没太必要用他家，以后说不定想试一试。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
   
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
   
   
   
@@ -1783,6 +1481,10 @@
         
         
           <h1 class="post-title" itemprop="name headline">
+                
+                  <span class="post-sticky-flag" title="Sticky">
+                    <i class="fa fa-thumb-tack"></i>
+                  </span>
                 
                 
                 <a href="/2018/11/02/既然Java反射可以访问和修改私有成员变量，那封装成private的意义/" class="post-title-link" itemprop="url">既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？</a>
@@ -1827,7 +1529,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-02 22:19:17" itemprop="dateModified" datetime="2019-02-02T22:19:17+01:00">2019-02-02</time>
+                <time title="Modified: 2019-02-02 22:24:55" itemprop="dateModified" datetime="2019-02-02T22:24:55+01:00">2019-02-02</time>
               
             
           </span>
@@ -1912,10 +1614,12 @@
   
   
   
+    
+  
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
   
   
   
@@ -1938,6 +1642,10 @@
         
         
           <h1 class="post-title" itemprop="name headline">
+                
+                  <span class="post-sticky-flag" title="Sticky">
+                    <i class="fa fa-thumb-tack"></i>
+                  </span>
                 
                 
                 <a href="/2018/11/02/线上服务 CPU100% 问题快速定位实战/" class="post-title-link" itemprop="url">线上服务CPU100%问题快速定位实践</a>
@@ -1982,7 +1690,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-02 22:19:19" itemprop="dateModified" datetime="2019-02-02T22:19:19+01:00">2019-02-02</time>
+                <time title="Modified: 2019-02-02 22:24:55" itemprop="dateModified" datetime="2019-02-02T22:24:55+01:00">2019-02-02</time>
               
             
           </span>
@@ -2069,6 +1777,503 @@
 <p>如上图，找到了耗 CPU 高的线程对应的线程名称 “AsyncLogger-1”，以及看到了该线程正在执行代码的堆栈。</p>
 <p>希望对经常进行线上 CPU 问题排查的同学有帮助，如果有更好的实践，也欢迎分享。</p>
 <p>想要印象深刻，请大家务必线上实操练习哟。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+    
+  
+
+  
+
+  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/02/如何优雅的使用和理解线程池/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="woo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Woo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                  <span class="post-sticky-flag" title="Sticky">
+                    <i class="fa fa-thumb-tack"></i>
+                  </span>
+                
+                
+                <a href="/2018/11/02/如何优雅的使用和理解线程池/" class="post-title-link" itemprop="url">如何优雅的使用和理解线程池</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-11-02 22:11:29" itemprop="dateCreated datePublished" datetime="2018-11-02T22:11:29+01:00">2018-11-02</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-02 22:24:55" itemprop="dateModified" datetime="2019-02-02T22:24:55+01:00">2019-02-02</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>平时接触过多线程开发的童鞋应该都或多或少了解过线程池，之前发布的《阿里巴巴 Java 手册》里也有一条：</p>
+<p><img src="https://segmentfault.com/img/remote/1460000015808901?w=766&amp;h=136" alt=""></p>
+<p>可见线程池的重要性。</p>
+<p>简单来说使用线程池有以下几个目的：</p>
+<ul>
+<li>线程是稀缺资源，不能频繁的创建。</li>
+<li>解耦作用；线程的创建于执行完全分开，方便维护。</li>
+<li>应当将其放入一个池子中，可以给其他任务进行复用。</li>
+</ul>
+<h2 id="线程池原理"><a href="#线程池原理" class="headerlink" title="线程池原理"></a>线程池原理</h2><p>谈到线程池就会想到池化技术，其中最核心的思想就是把宝贵的资源放到一个池子中；每次使用都从里面获取，用完之后又放回池子供其他人使用，有点吃大锅饭的意思。</p>
+<p>那在 Java 中又是如何实现的呢？</p>
+<p>在 JDK 1.5 之后推出了相关的 api，常见的创建线程池方式有以下几种：</p>
+<ul>
+<li><code>Executors.newCachedThreadPool()</code>：无限线程池。</li>
+<li><code>Executors.newFixedThreadPool(nThreads)</code>：创建固定大小的线程池。</li>
+<li><code>Executors.newSingleThreadExecutor()</code>：创建单个线程的线程池。</li>
+</ul>
+<p>其实看这三种方式创建的源码就会发现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public static ExecutorService newCachedThreadPool() &#123;</span><br><span class="line">    return new ThreadPoolExecutor(0, Integer.MAX_VALUE,</span><br><span class="line">                                  60L, TimeUnit.SECONDS,</span><br><span class="line">                                  new SynchronousQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实际上还是利用 <code>ThreadPoolExecutor</code> 类实现的。</p>
+<p>所以我们重点来看下 <code>ThreadPoolExecutor</code> 是怎么玩的。</p>
+<p>首先是创建线程的 api：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue&lt;Runnable&gt; workQueue, RejectedExecutionHandler handler)</span><br></pre></td></tr></table></figure>
+<p>这几个核心参数的作用：</p>
+<ul>
+<li><code>corePoolSize</code> 为线程池的基本大小。</li>
+<li><code>maximumPoolSize</code> 为线程池最大线程大小。</li>
+<li><code>keepAliveTime</code> 和 <code>unit</code> 则是线程空闲后的存活时间。</li>
+<li><code>workQueue</code> 用于存放任务的阻塞队列。</li>
+<li><code>handler</code> 当队列和最大线程池都满了之后的饱和策略。</li>
+</ul>
+<p>了解了这几个参数再来看看实际的运用。</p>
+<p>通常我们都是使用:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">threadPool.execute(new Job());</span><br></pre></td></tr></table></figure>
+<p>这样的方式来提交一个任务到线程池中，所以核心的逻辑就是 <code>execute()</code> 函数了。</p>
+<p>在具体分析之前先了解下线程池中所定义的状态，这些状态都和线程的执行密切相关：</p>
+<p><img src="https://segmentfault.com/img/remote/1460000015808902?w=707&amp;h=126" alt=""></p>
+<ul>
+<li><code>RUNNING</code> 自然是运行状态，指可以接受任务执行队列里的任务</li>
+<li><code>SHUTDOWN</code> 指调用了 <code>shutdown()</code> 方法，不再接受新任务了，但是队列里的任务得执行完毕。</li>
+<li><code>STOP</code> 指调用了 <code>shutdownNow()</code> 方法，不再接受新任务，同时抛弃阻塞队列里的所有任务并中断所有正在执行任务。</li>
+<li><code>TIDYING</code> 所有任务都执行完毕，在调用 <code>shutdown()/shutdownNow()</code> 中都会尝试更新为这个状态。</li>
+<li><code>TERMINATED</code> 终止状态，当执行 <code>terminated()</code> 后会更新为这个状态。</li>
+</ul>
+<p>用图表示为：</p>
+<p><img src="https://segmentfault.com/img/remote/1460000015808903?w=1033&amp;h=406" alt=""></p>
+<p>然后看看 <code>execute()</code> 方法是如何处理的：</p>
+<p><img src="https://segmentfault.com/img/remote/1460000015808904?w=754&amp;h=310" alt=""></p>
+<ol>
+<li>获取当前线程池的状态。</li>
+<li>当前线程数量小于 coreSize 时创建一个新的线程运行。</li>
+<li>如果当前线程处于运行状态，并且写入阻塞队列成功。</li>
+<li>双重检查，再次获取线程状态；如果线程状态变了（非运行状态）就需要从阻塞队列移除任务，并尝试判断线程是否全部执行完毕。同时执行拒绝策略。</li>
+<li>如果当前线程池为空就新创建一个线程并执行。</li>
+<li>如果在第三步的判断为非运行状态，尝试新建线程，如果失败则执行拒绝策略。</li>
+</ol>
+<p>这里借助《聊聊并发》的一张图来描述这个流程：</p>
+<p><img src="https://segmentfault.com/img/remote/1460000015808905?w=500&amp;h=293" alt=""></p>
+<h3 id="如何配置线程"><a href="#如何配置线程" class="headerlink" title="如何配置线程"></a>如何配置线程</h3><p>流程聊完了再来看看上文提到了几个核心参数应该如何配置呢？</p>
+<p>有一点是肯定的，线程池肯定是不是越大越好。</p>
+<p>通常我们是需要根据这批任务执行的性质来确定的。</p>
+<ul>
+<li>IO 密集型任务：由于线程并不是一直在运行，所以可以尽可能的多配置线程，比如 CPU 个数 * 2</li>
+<li>CPU 密集型任务（大量复杂的运算）应当分配较少的线程，比如 CPU 个数相当的大小。</li>
+</ul>
+<p>当然这些都是经验值，最好的方式还是根据实际情况测试得出最佳配置。</p>
+<h3 id="优雅的关闭线程池"><a href="#优雅的关闭线程池" class="headerlink" title="优雅的关闭线程池"></a>优雅的关闭线程池</h3><p>有运行任务自然也有关闭任务，从上文提到的 5 个状态就能看出如何来关闭线程池。</p>
+<p>其实无非就是两个方法 <code>shutdown()/shutdownNow()</code>。</p>
+<p>但他们有着重要的区别：</p>
+<ul>
+<li><code>shutdown()</code> 执行后停止接受新任务，会把队列的任务执行完毕。</li>
+<li><code>shutdownNow()</code> 也是停止接受新任务，但会中断所有的任务，将线程池状态变为 stop。</li>
+</ul>
+<blockquote>
+<p>两个方法都会中断线程，用户可自行判断是否需要响应中断。</p>
+</blockquote>
+<p><code>shutdownNow()</code> 要更简单粗暴，可以根据实际场景选择不同的方法。</p>
+<p>我通常是按照以下方式关闭线程池的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">long start = System.currentTimeMillis();</span><br><span class="line">for (int i = 0; i &lt;= 5; i++) &#123;</span><br><span class="line">    pool.execute(new Job());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">pool.shutdown();</span><br><span class="line"></span><br><span class="line">while (!pool.awaitTermination(1, TimeUnit.SECONDS)) &#123;</span><br><span class="line">    LOGGER.info(&quot;线程还在执行。。。&quot;);</span><br><span class="line">&#125;</span><br><span class="line">long end = System.currentTimeMillis();</span><br><span class="line">LOGGER.info(&quot;一共处理了【&#123;&#125;】&quot;, (end - start));</span><br></pre></td></tr></table></figure>
+<p><code>pool.awaitTermination(1, TimeUnit.SECONDS)</code> 会每隔一秒钟检查一次是否执行完毕（状态为 <code>TERMINATED</code>），当从 while 循环退出时就表明线程池已经完全终止了。</p>
+<h2 id="线程池隔离"><a href="#线程池隔离" class="headerlink" title="线程池隔离"></a>线程池隔离</h2><blockquote>
+<p>线程池看似很美好，但也会带来一些问题。</p>
+</blockquote>
+<p>如果我们很多业务都依赖于同一个线程池, 当其中一个业务因为各种不可控的原因消耗了所有的线程，导致线程池全部占满。</p>
+<p>这样其他的业务也就不能正常运转了，这对系统的打击是巨大的。</p>
+<p>比如我们 Tomcat 接受请求的线程池，假设其中一些响应特别慢，线程资源得不到回收释放；线程池慢慢被占满，最坏的情况就是整个应用都不能提供服务。</p>
+<p>所以我们需要将线程池<strong>进行隔离</strong>。</p>
+<p>通常的做法是按照业务进行划分：</p>
+<blockquote>
+<p>比如下单的任务用一个线程池，获取数据的任务用另一个线程池。这样即使其中一个出现问题把线程池耗尽，那也不会影响其他的任务运行。</p>
+</blockquote>
+<h3 id="hystrix-隔离"><a href="#hystrix-隔离" class="headerlink" title="hystrix 隔离"></a>hystrix 隔离</h3><p>这样的需求 <a href="https://github.com/Netflix/Hystrix" target="_blank" rel="noopener">Hystrix</a> 已经帮我们实现了。</p>
+<blockquote>
+<p>Hystrix 是一款开源的容错插件，具有依赖隔离、系统容错降级等功能。</p>
+</blockquote>
+<p>下面来看看 <code>Hystrix</code> 简单的应用：</p>
+<p>首先需要定义两个线程池，分别用于执行订单、处理用户。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Function:订单服务</span><br><span class="line"> *</span><br><span class="line"> * @author crossoverJie</span><br><span class="line"> *         Date: 2018/7/28 16:43</span><br><span class="line"> * @since JDK 1.8</span><br><span class="line"> */</span><br><span class="line">public class CommandOrder extends HystrixCommand&lt;String&gt; &#123;</span><br><span class="line"></span><br><span class="line">    private final static Logger LOGGER = LoggerFactory.getLogger(CommandOrder.class);</span><br><span class="line"></span><br><span class="line">    private String orderName;</span><br><span class="line"></span><br><span class="line">    public CommandOrder(String orderName) &#123;</span><br><span class="line"></span><br><span class="line">        super(Setter.withGroupKey(</span><br><span class="line">                //服务分组</span><br><span class="line">                HystrixCommandGroupKey.Factory.asKey(&quot;OrderGroup&quot;))</span><br><span class="line">                //线程分组</span><br><span class="line">                .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey(&quot;OrderPool&quot;))</span><br><span class="line"></span><br><span class="line">                //线程池配置</span><br><span class="line">                .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter()</span><br><span class="line">                        .withCoreSize(10)</span><br><span class="line">                        .withKeepAliveTimeMinutes(5)</span><br><span class="line">                        .withMaxQueueSize(10)</span><br><span class="line">                        .withQueueSizeRejectionThreshold(10000))</span><br><span class="line"></span><br><span class="line">                .andCommandPropertiesDefaults(</span><br><span class="line">                        HystrixCommandProperties.Setter()</span><br><span class="line">                                .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.THREAD))</span><br><span class="line">        )</span><br><span class="line">        ;</span><br><span class="line">        this.orderName = orderName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String run() throws Exception &#123;</span><br><span class="line"></span><br><span class="line">        LOGGER.info(&quot;orderName=[&#123;&#125;]&quot;, orderName);</span><br><span class="line"></span><br><span class="line">        TimeUnit.MILLISECONDS.sleep(100);</span><br><span class="line">        return &quot;OrderName=&quot; + orderName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Function:用户服务</span><br><span class="line"> *</span><br><span class="line"> * @author crossoverJie</span><br><span class="line"> *         Date: 2018/7/28 16:43</span><br><span class="line"> * @since JDK 1.8</span><br><span class="line"> */</span><br><span class="line">public class CommandUser extends HystrixCommand&lt;String&gt; &#123;</span><br><span class="line"></span><br><span class="line">    private final static Logger LOGGER = LoggerFactory.getLogger(CommandUser.class);</span><br><span class="line"></span><br><span class="line">    private String userName;</span><br><span class="line"></span><br><span class="line">    public CommandUser(String userName) &#123;</span><br><span class="line"></span><br><span class="line">        super(Setter.withGroupKey(</span><br><span class="line">                //服务分组</span><br><span class="line">                HystrixCommandGroupKey.Factory.asKey(&quot;UserGroup&quot;))</span><br><span class="line">                //线程分组</span><br><span class="line">                .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey(&quot;UserPool&quot;))</span><br><span class="line"></span><br><span class="line">                //线程池配置</span><br><span class="line">                .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter()</span><br><span class="line">                        .withCoreSize(10)</span><br><span class="line">                        .withKeepAliveTimeMinutes(5)</span><br><span class="line">                        .withMaxQueueSize(10)</span><br><span class="line">                        .withQueueSizeRejectionThreshold(10000))</span><br><span class="line"></span><br><span class="line">                //线程池隔离</span><br><span class="line">                .andCommandPropertiesDefaults(</span><br><span class="line">                        HystrixCommandProperties.Setter()</span><br><span class="line">                                .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.THREAD))</span><br><span class="line">        )</span><br><span class="line">        ;</span><br><span class="line">        this.userName = userName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String run() throws Exception &#123;</span><br><span class="line"></span><br><span class="line">        LOGGER.info(&quot;userName=[&#123;&#125;]&quot;, userName);</span><br><span class="line"></span><br><span class="line">        TimeUnit.MILLISECONDS.sleep(100);</span><br><span class="line">        return &quot;userName=&quot; + userName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><code>api</code> 特别简洁易懂，具体详情请查看官方文档。</p>
+<p>然后模拟运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) throws Exception &#123;</span><br><span class="line">    CommandOrder commandPhone = new CommandOrder(&quot;手机&quot;);</span><br><span class="line">    CommandOrder command = new CommandOrder(&quot;电视&quot;);</span><br><span class="line"></span><br><span class="line">    //阻塞方式执行</span><br><span class="line">    String execute = commandPhone.execute();</span><br><span class="line">    LOGGER.info(&quot;execute=[&#123;&#125;]&quot;, execute);</span><br><span class="line"></span><br><span class="line">    //异步非阻塞方式</span><br><span class="line">    Future&lt;String&gt; queue = command.queue();</span><br><span class="line">    String value = queue.get(200, TimeUnit.MILLISECONDS);</span><br><span class="line">    LOGGER.info(&quot;value=[&#123;&#125;]&quot;, value);</span><br><span class="line"></span><br><span class="line">    CommandUser commandUser = new CommandUser(&quot;张三&quot;);</span><br><span class="line">    String name = commandUser.execute();</span><br><span class="line">    LOGGER.info(&quot;name=[&#123;&#125;]&quot;, name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>运行结果：</p>
+<p><img src="https://segmentfault.com/img/remote/1460000015808909?w=928&amp;h=160" alt=""></p>
+<p>可以看到两个任务分成了两个线程池运行，他们之间互不干扰。</p>
+<p>获取任务任务结果支持同步阻塞和异步非阻塞方式，可自行选择。</p>
+<p>它的实现原理其实容易猜到：</p>
+<blockquote>
+<p>利用一个 Map 来存放不同业务对应的线程池。</p>
+</blockquote>
+<p>通过刚才的构造函数也能证明：</p>
+<p><img src="https://segmentfault.com/img/remote/1460000015808910?w=1104&amp;h=334" alt=""></p>
+<p>还要注意的一点是：</p>
+<blockquote>
+<p>自定义的 Command 并不是一个单例，每次执行需要 new 一个实例，不然会报 <code>This instance can only be executed once. Please instantiate a new instance.</code> 异常。</p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>池化技术确实在平时应用广泛，熟练掌握能提高不少效率。</p>
+<p>文末的 hystrix 源码：<br><a href="https://github.com/crossoverJie/Java-Interview/tree/master/src/main/java/com/crossoverjie/hystrix" target="_blank" rel="noopener">https://github.com/crossoverJie/Java-Interview/tree/master/src/main/java/com/crossoverjie/hystrix</a></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+    
+  
+
+  
+
+  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/02/蓄水池抽样算法/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="woo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Woo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                  <span class="post-sticky-flag" title="Sticky">
+                    <i class="fa fa-thumb-tack"></i>
+                  </span>
+                
+                
+                <a href="/2018/11/02/蓄水池抽样算法/" class="post-title-link" itemprop="url">蓄水池抽样算法（Reservoir Sampling）</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-11-02 22:11:29" itemprop="dateCreated datePublished" datetime="2018-11-02T22:11:29+01:00">2018-11-02</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-02 22:24:55" itemprop="dateModified" datetime="2019-02-02T22:24:55+01:00">2019-02-02</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="蓄水池抽样算法（Reservoir-Sampling）"><a href="#蓄水池抽样算法（Reservoir-Sampling）" class="headerlink" title="蓄水池抽样算法（Reservoir Sampling）"></a>蓄水池抽样算法（Reservoir Sampling）</h1><p>许多年以后，当听说蓄水池抽样算法时,将会想起，那个小学数学老师带他做 “小明对水池边加水边放水，求何时能加满水” 应用题的下午。</p>
+<h2 id="一、问题"><a href="#一、问题" class="headerlink" title="一、问题"></a>一、问题</h2><p>我是在一次失败的面试经历中听说蓄水池算法的。之后上网搜了搜，知道是一个数据抽样算法，寥寥几行，却暗藏玄机。主要用来解决如下问题。</p>
+<p><strong>给定一个数据流，数据流长度 N 很大，且 N 直到处理完所有数据之前都不可知，请问如何在只遍历一遍数据（O(N)）的情况下，能够随机选取出 m 个不重复的数据。</strong></p>
+<p>这个场景强调了 3 件事：</p>
+<ol>
+<li>数据流长度 N 很大且不可知，所以不能一次性存入内存。</li>
+<li>时间复杂度为 O(N)。</li>
+<li>随机选取 m 个数，每个数被选中的概率为 m/N。</li>
+</ol>
+<p>第 1 点限制了不能直接取 N 内的 m 个随机数，然后按索引取出数据。第 2 点限制了不能先遍历一遍，然后分块存储数据，再随机选取。第 3 点是数据选取绝对随机的保证。讲真，在不知道蓄水池算法前，我想破脑袋也不知道该题做何解。</p>
+<h2 id="二、核心代码及原理"><a href="#二、核心代码及原理" class="headerlink" title="二、核心代码及原理"></a>二、核心代码及原理</h2><p>蓄水池抽样算法的核心如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">int[] reservoir = new int[m];</span><br><span class="line"></span><br><span class="line">// init</span><br><span class="line">for (int i = 0; i &lt; reservoir.length; i++)</span><br><span class="line">&#123;</span><br><span class="line">    reservoir[i] = dataStream[i];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">for (int i = m; i &lt; dataStream.length; i++)</span><br><span class="line">&#123;</span><br><span class="line">    // 随机获得一个[0, i]内的随机整数</span><br><span class="line">    int d = rand.nextInt(i + 1);</span><br><span class="line">    // 如果随机整数落在[0, m-1]范围内，则替换蓄水池中的元素</span><br><span class="line">    if (d &lt; m)</span><br><span class="line">    &#123;</span><br><span class="line">        reservoir[d] = dataStream[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong>这里使用已知长度的数组 dataStream 来表示未知长度的数据流，并假设数据流长度大于蓄水池容量 m。</p>
+<p>算法思路大致如下：</p>
+<ol>
+<li>如果接收的数据量小于 m，则依次放入蓄水池。</li>
+<li>当接收到第 i 个数据时，i &gt;= m，在 [0, i] 范围内取以随机数 d，若 d 的落在 [0, m-1] 范围内，则用接收到的第 i 个数据替换蓄水池中的第 d 个数据。</li>
+<li>重复步骤 2。</li>
+</ol>
+<p>算法的精妙之处在于：<strong>当处理完所有的数据时，蓄水池中的每个数据都是以 m/N 的概率获得的。</strong></p>
+<p>下面用白话文推导验证该算法。假设数据开始编号为 1.</p>
+<p><strong>第 i 个接收到的数据最后能够留在蓄水池中的概率</strong> = <strong>第 i 个数据进入过蓄水池的概率</strong> * <strong>之后第 i 个数据不被替换的概率</strong>（第 i+1 到第 N 次处理数据都不会被替换）。</p>
+<ol>
+<li>当 i&lt;=m 时，数据直接放进蓄水池，所以<strong>第 i 个数据进入过蓄水池的概率 = 1</strong>。</li>
+<li>当 i&gt;m 时，在 [1,i] 内选取随机数 d，如果 d&lt;=m，则使用第 i 个数据替换蓄水池中第 d 个数据，因此<strong>第 i 个数据进入过蓄水池的概率 = m/i</strong>。</li>
+<li>当 i&lt;=m 时，程序从接收到第 m+1 个数据时开始执行替换操作，第 m+1 次处理会替换池中数据的为 m/(m+1)，会替换掉第 i 个数据的概率为 1/m，则第 m+1 次处理替换掉第 i 个数据的概率为 (m/(m+1))<em>(1/m)=1/(m+1)，不被替换的概率为 1-1/(m+1)=m/(m+1)。依次，第 m+2 次处理不替换掉第 i 个数据概率为 (m+1)/(m+2)… 第 N 次处理不替换掉第 i 个数据的概率为 (N-1)/N。所以，之后**第 i 个数据不被替换的概率 = m/(m+1)</em>(m+1)/(m+2)<em>…</em>(N-1)/N=m/N**。</li>
+<li>当 i&gt;m 时，程序从接收到第 i+1 个数据时开始有可能替换第 i 个数据。则参考上述第 3 点，<strong>之后第 i 个数据不被替换的概率 = i/N</strong>。</li>
+<li>结合第 1 点和第 3 点可知，当 i&lt;=m 时，第 i 个接收到的数据最后留在蓄水池中的概率 = 1<em>m/N=m/N。结合第 2 点和第 4 点可知，当 i&gt;m 时，第 i 个接收到的数据留在蓄水池中的概率 = m/i</em>i/N=m/N。综上可知，<strong>每个数据最后被选中留在蓄水池中的概率为 m/N</strong>。</li>
+</ol>
+<p>这个算法建立在统计学基础上，很巧妙地获得了 “m/N” 这个概率。</p>
+<h2 id="三、深入一些——分布式蓄水池抽样（Distributed-Parallel-Reservoir-Sampling）"><a href="#三、深入一些——分布式蓄水池抽样（Distributed-Parallel-Reservoir-Sampling）" class="headerlink" title="三、深入一些——分布式蓄水池抽样（Distributed/Parallel Reservoir Sampling）"></a>三、深入一些——分布式蓄水池抽样（Distributed/Parallel Reservoir Sampling）</h2><p>一块 CPU 的计算能力再强，也总有内存和磁盘 IO 拖他的后腿。因此为提高数据吞吐量，分布式的硬件搭配软件是现在的主流。</p>
+<p>如果遇到超大的数据量，即使是 O(N) 的时间复杂度，蓄水池抽样程序完成抽样任务也将耗时很久。因此分布式的蓄水池抽样算法应运而生。运作原理如下：</p>
+<ol>
+<li>假设有 K 台机器，将大数据集分成 K 个数据流，每台机器使用单机版蓄水池抽样处理一个数据流，抽样 m 个数据，并最后记录处理的数据量为 N1, N2, …, Nk, …, NK(假设 m&lt;Nk)。N1+N2+…+NK=N。</li>
+<li>取 [1, N] 一个随机数 d，若 d&lt;N1，则在第一台机器的蓄水池中等概率不放回地（1/m）选取一个数据；若 N1&lt;=d&lt;(N1+N2)，则在第二台机器的蓄水池中等概率不放回地选取一个数据；一次类推，重复 m 次，则最终从 N 大数据集中选出 m 个数据。</li>
+</ol>
+<p>m/N 的概率验证如下：</p>
+<ol>
+<li>第 k 台机器中的蓄水池数据被选取的概率为 m/Nk。</li>
+<li>从第 k 台机器的蓄水池中选取一个数据放进最终蓄水池的概率为 Nk/N。</li>
+<li>第 k 台机器蓄水池的一个数据被选中的概率为 1/m。（不放回选取时等概率的）</li>
+<li>重复 m 次选取，则每个数据被选中的概率为 <strong>m<em>(m/Nk</em>Nk/N*1/m)=m/N</strong>。</li>
+</ol>
+<h2 id="四、算法验证"><a href="#四、算法验证" class="headerlink" title="四、算法验证"></a>四、算法验证</h2><p>写一份完整的代码，用来验证蓄水池抽样的随机性。数据集大小为 1000，蓄水池容量为 10，做 10_0000 次抽样。如果程序正确，那么每个数被抽中的次数接近 1000 次。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br></pre></td><td class="code"><pre><span class="line">package cn.edu.njupt.qyz;</span><br><span class="line"></span><br><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.Arrays;</span><br><span class="line">import java.util.LinkedList;</span><br><span class="line">import java.util.List;</span><br><span class="line">import java.util.Random;</span><br><span class="line">import java.util.Set;</span><br><span class="line">import java.util.TreeSet;</span><br><span class="line">import java.util.concurrent.Callable;</span><br><span class="line">import java.util.concurrent.ExecutionException;</span><br><span class="line">import java.util.concurrent.ExecutorService;</span><br><span class="line">import java.util.concurrent.Executors;</span><br><span class="line">import java.util.concurrent.Future;</span><br><span class="line"></span><br><span class="line">public class ReservoirSampling &#123;</span><br><span class="line"></span><br><span class="line">    static ExecutorService exec = Executors.newFixedThreadPool(4);</span><br><span class="line"></span><br><span class="line">    // 抽样任务，用作模拟并行抽样</span><br><span class="line">    private static class SampleTask implements Callable&lt;int[]&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        // 输入该任务的数据</span><br><span class="line">        private int[] innerData;</span><br><span class="line">        // 蓄水池容量</span><br><span class="line">        private int m;</span><br><span class="line"></span><br><span class="line">        SampleTask (int m, int[] innerData)</span><br><span class="line">        &#123;</span><br><span class="line">            this.innerData = innerData;</span><br><span class="line">            this.m = m;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public int[] call() throws Exception</span><br><span class="line">        &#123;</span><br><span class="line">            int[] reservoir = sample(this.m, this.innerData);</span><br><span class="line">            return reservoir;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 并行抽样</span><br><span class="line">    public static int[] mutiSample(int m, int[] dataStream) throws InterruptedException, ExecutionException</span><br><span class="line">    &#123;</span><br><span class="line">        Random rand = new Random();</span><br><span class="line"></span><br><span class="line">        int[] reservoir = initReservoir(m, dataStream);</span><br><span class="line"></span><br><span class="line">        // 生成3个范围内随机数，将数据切成4份</span><br><span class="line">        List&lt;Integer&gt; list = getRandInt(rand, dataStream.length); </span><br><span class="line">        int s1 = list.get(0);</span><br><span class="line">        int s2 = list.get(1);</span><br><span class="line">        int s3 = list.get(2);</span><br><span class="line">        // 每个任务处理的数据量</span><br><span class="line">        double n1 = s1 - 0;</span><br><span class="line">        double n2 = s2 - s1;</span><br><span class="line">        double n3 = s3 - s2;</span><br><span class="line">        double n4 = dataStream.length - s3;</span><br><span class="line"></span><br><span class="line">        // 并行抽样</span><br><span class="line">        Future&lt;int[]&gt; f1 = exec.submit(new SampleTask(m, Arrays.copyOfRange(dataStream, 0, s1)));</span><br><span class="line">        Future&lt;int[]&gt; f2 = exec.submit(new SampleTask(m, Arrays.copyOfRange(dataStream, s1, s2)));</span><br><span class="line">        Future&lt;int[]&gt; f3 = exec.submit(new SampleTask(m, Arrays.copyOfRange(dataStream, s2, s3)));</span><br><span class="line">        Future&lt;int[]&gt; f4 = exec.submit(new SampleTask(m, Arrays.copyOfRange(dataStream, s3, dataStream.length)));</span><br><span class="line">        List&lt;Integer&gt; r1 = getList(f1.get());</span><br><span class="line">        List&lt;Integer&gt; r2 = getList(f2.get());</span><br><span class="line">        List&lt;Integer&gt; r3 = getList(f3.get());</span><br><span class="line">        List&lt;Integer&gt; r4 = getList(f4.get());</span><br><span class="line"></span><br><span class="line">        // 进行m次抽样</span><br><span class="line">        for (int i = 0; i &lt; m; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            int p = rand.nextInt(dataStream.length);</span><br><span class="line">            // 根据随机数落在的范围选择元素</span><br><span class="line">            if (p &lt; s1)</span><br><span class="line">            &#123;</span><br><span class="line">                reservoir[i] = getRandEle(r1, rand.nextInt(r1.size()));</span><br><span class="line">            &#125;</span><br><span class="line">            else if (p &lt; s2)</span><br><span class="line">            &#123;</span><br><span class="line">                reservoir[i] = getRandEle(r2, rand.nextInt(r2.size()));</span><br><span class="line">            &#125;</span><br><span class="line">            else if (p &lt; s3)</span><br><span class="line">            &#123;</span><br><span class="line">                reservoir[i] = getRandEle(r3, rand.nextInt(r3.size()));</span><br><span class="line">            &#125;</span><br><span class="line">            else</span><br><span class="line">            &#123;</span><br><span class="line">                reservoir[i] = getRandEle(r4, rand.nextInt(r4.size()));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return reservoir;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 根据输入返回随机位置的元素，并且删除该元素，模拟不放回</span><br><span class="line">    private static int getRandEle(List&lt;Integer&gt; list, int idx)</span><br><span class="line">    &#123;</span><br><span class="line">        return list.remove(idx);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 获取bound范围内的3个随机数，用来分割数据集</span><br><span class="line">    private static List&lt;Integer&gt; getRandInt(Random rand, int bound)</span><br><span class="line">    &#123;</span><br><span class="line">        Set&lt;Integer&gt; set = new TreeSet&lt;&gt;();</span><br><span class="line">        List&lt;Integer&gt; list = new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        while (set.size() &lt; 3)</span><br><span class="line">        &#123;</span><br><span class="line">            set.add(rand.nextInt(bound));</span><br><span class="line">        &#125;</span><br><span class="line">        for (int e: set)</span><br><span class="line">        &#123;</span><br><span class="line">            list.add(e);</span><br><span class="line">        &#125;</span><br><span class="line">        return list;</span><br><span class="line">    &#125;</span><br><span class="line">    // 数据转换成List</span><br><span class="line">    private static List&lt;Integer&gt; getList(int[] arr)</span><br><span class="line">    &#123;</span><br><span class="line">        List&lt;Integer&gt; list = new LinkedList&lt;&gt;();</span><br><span class="line">        for (int a : arr)</span><br><span class="line">        &#123;</span><br><span class="line">            list.add(a);</span><br><span class="line">        &#125;</span><br><span class="line">        return list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 单机版蓄水池抽样</span><br><span class="line">    public static int[] sample(int m, int[] dataStream)</span><br><span class="line">    &#123;</span><br><span class="line">        // 随机数生成器，以系统当前nano时间作为种子</span><br><span class="line">        Random rand = new Random();</span><br><span class="line"></span><br><span class="line">        int[] reservoir = initReservoir(m, dataStream);</span><br><span class="line"></span><br><span class="line">        // init</span><br><span class="line">        for (int i = 0; i &lt; reservoir.length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            reservoir[i] = dataStream[i];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        for (int i = m; i &lt; dataStream.length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            // 随机获得一个[0, i]内的随机整数</span><br><span class="line">            int d = rand.nextInt(i + 1);</span><br><span class="line">            // 如果随机整数在[0, m-1]范围内，则替换蓄水池中的元素</span><br><span class="line">            if (d &lt; m)</span><br><span class="line">            &#123;</span><br><span class="line">                reservoir[d] = dataStream[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return reservoir;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static int[] initReservoir (int m, int[] dataStream)</span><br><span class="line">    &#123;</span><br><span class="line">        int[] reservoir;</span><br><span class="line"></span><br><span class="line">        if (m &gt; dataStream.length)</span><br><span class="line">        &#123;</span><br><span class="line">            reservoir = new int[dataStream.length];</span><br><span class="line">        &#125;</span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">            reservoir = new int[m];</span><br><span class="line">        &#125;</span><br><span class="line">        return reservoir;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 单机版测试</span><br><span class="line">    public void test()</span><br><span class="line">    &#123;</span><br><span class="line">        // 样本长度</span><br><span class="line">        int len = 1000;</span><br><span class="line">        // 蓄水池容量</span><br><span class="line">        int m = 10;</span><br><span class="line">        // 抽样次数，用作验证抽样的随机性</span><br><span class="line">        int iterTime = 100000;</span><br><span class="line">        // 每个数字被抽到的次数</span><br><span class="line">        int[] freq = new int[len];</span><br><span class="line">        // 样本</span><br><span class="line">        int[] dataStream = new int[len];</span><br><span class="line"></span><br><span class="line">        // init dataStream</span><br><span class="line">        for (int i = 0; i &lt; dataStream.length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            dataStream[i] = i;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // count freq</span><br><span class="line">        for (int k = 0; k &lt; iterTime; k++)</span><br><span class="line">        &#123;</span><br><span class="line">            // 进行抽样</span><br><span class="line">            int[] reservoir = sample(m, dataStream);</span><br><span class="line">            // 计算出现次数</span><br><span class="line">            for (int i = 0; i &lt; reservoir.length; i++)</span><br><span class="line">            &#123;</span><br><span class="line">                int ele = reservoir[i];</span><br><span class="line">                freq[ele] += 1; </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        printStaticInfo(freq);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 测试并行抽样</span><br><span class="line">    public void mutiTest() throws InterruptedException, ExecutionException</span><br><span class="line">    &#123;</span><br><span class="line">        // 样本长度</span><br><span class="line">        int len = 1000;</span><br><span class="line">        // 蓄水池容量</span><br><span class="line">        int m = 10;</span><br><span class="line">        // 抽样次数，用作验证抽样的随机性</span><br><span class="line">        int iterTime = 10_0000;</span><br><span class="line">        // 每个数字被抽到的次数</span><br><span class="line">        int[] freq = new int[len];</span><br><span class="line">        // 样本</span><br><span class="line">        int[] dataStream = new int[len];</span><br><span class="line"></span><br><span class="line">        // init dataStream</span><br><span class="line">        for (int i = 0; i &lt; dataStream.length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            dataStream[i] = i;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // count freq</span><br><span class="line">        for (int k = 0; k &lt; iterTime; k++)</span><br><span class="line">        &#123;</span><br><span class="line">            // 进行抽样</span><br><span class="line">            int[] reservoir = mutiSample(m, dataStream);</span><br><span class="line">            // 计算出现次数</span><br><span class="line">            for (int i = 0; i &lt; reservoir.length; i++)</span><br><span class="line">            &#123;</span><br><span class="line">                int ele = reservoir[i];</span><br><span class="line">                freq[ele] += 1; </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        printStaticInfo(freq);</span><br><span class="line">    &#125;</span><br><span class="line">    // 打印统计信息</span><br><span class="line">    private void printStaticInfo (int[] freq)</span><br><span class="line">    &#123;</span><br><span class="line">        // 期望、方差和标准差</span><br><span class="line">        double avg = 0;</span><br><span class="line">        double var = 0;</span><br><span class="line">        double sigma = 0;</span><br><span class="line">        // print</span><br><span class="line">        for (int i = 0; i &lt; freq.length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            if (i % 10 == 9) System.out.println();</span><br><span class="line">            System.out.print(freq[i] + &quot;, &quot;);</span><br><span class="line">            avg += ((double)(freq[i]) / freq.length);</span><br><span class="line">            var += (double)(freq[i] * freq[i]) / freq.length;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 输出统计信息</span><br><span class="line">        System.out.println(&quot;\n===============================&quot;);</span><br><span class="line">        var = var - avg * avg;</span><br><span class="line">        sigma = Math.sqrt(var);</span><br><span class="line">        System.out.println(&quot;Average: &quot; + avg);</span><br><span class="line">        System.out.println(&quot;Variance: &quot; + var);</span><br><span class="line">        System.out.println(&quot;Standard deviation: &quot; + sigma);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main (String[] args) throws InterruptedException, ExecutionException</span><br><span class="line">    &#123;</span><br><span class="line">        ReservoirSampling rs = new ReservoirSampling();</span><br><span class="line">        rs.mutiTest();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>单机版输出和并行版的输出类似，截取片段如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">948, 1006, 1014, 1019, 1033, 1040, 948, 1014, 1000, 951, </span><br><span class="line">1014, 987, 1049, 1043, 1034, 983, 1006, 974, 1060, 1009, </span><br><span class="line">986, 1021, 1024, 963, 1041, 1028, 988, 1011, 975, 980, </span><br><span class="line">1055, 1017, 1010, 1018, 1013, 983, 942, 1056, 1003, 1063, </span><br><span class="line">1004, 1004, 999, 976, 957, 935, 1061, 1018, 1002, 1018, </span><br><span class="line">1019, 946, 985, 1057, 1012, 965, 978, 1040, 1026, 1064, </span><br><span class="line">1026, 1018, 980, 996, 1025, 1028, 1006, 944, 986, 981, </span><br><span class="line">923, 1015, 991, 1019, 1024, 1143, 989, 985, 1022, 1019, </span><br><span class="line">1004, 1000, 989, 972, 1041, 988, 1050, 932, 975, 1037, </span><br><span class="line">1016, 983, 1051, 1003, 983, 986, 1017, 1009, 936, 993, </span><br><span class="line">965, 976, 1001, 1000, 988, 1030, 1050, 1024, 981, 985, </span><br><span class="line">935, 1023, 996, 1007, 1013, 1046, 1003, 1006, 973, 989, </span><br><span class="line">943, </span><br><span class="line">===============================</span><br><span class="line">Average: 1000.0000000000002</span><br><span class="line">Variance: 1011.8799999983748</span><br><span class="line">Standard deviation: 31.81006130139291</span><br></pre></td></tr></table></figure>
+<p>此外，为了对比单机版与并行版（4 线程）的性能差异，使用 10_0000 大小的数据集，蓄水池容量 10，进行 100_0000 次重复抽样，对比两者的运行时间。结果如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">---------单机版----------</span><br><span class="line"></span><br><span class="line">===============================</span><br><span class="line">Average: 100.00000000000125</span><br><span class="line">Variance: 100.31497999751264</span><br><span class="line">Standard deviation: 10.015736617818613</span><br><span class="line">---------并行版----------</span><br><span class="line"></span><br><span class="line">===============================</span><br><span class="line">Average: 100.00000000000169</span><br><span class="line">Variance: 100.63045999737915</span><br><span class="line">Standard deviation: 10.031473470900432</span><br><span class="line">单机版耗时：2006s</span><br><span class="line">并行版耗时：1265s</span><br></pre></td></tr></table></figure>
+<p>从输出结果可以看出，算法保证了数据选取的随机性。且并行版算法能够有效提高数据吞吐量。</p>
+<h2 id="五、应用场景"><a href="#五、应用场景" class="headerlink" title="五、应用场景"></a>五、应用场景</h2><p>蓄水池抽样的 O(N) 时间复杂度，O(m) 空间复杂度令其适用于对流数据、大数据集的等概率抽样。比如一个大文本数据，随机输出其中的几行。</p>
+<h2 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h2><p>象征性总结：优雅巧妙的算法——蓄水池抽样。</p>
+<h2 id="七、参考文献"><a href="#七、参考文献" class="headerlink" title="七、参考文献"></a>七、参考文献</h2><ol>
+<li><a href="https://link.jianshu.com?t=http%3A%2F%2Fblog.jobbole.com%2F42550%2F" target="_blank" rel="noopener">数据工程师必知算法：蓄水池抽样</a></li>
+<li><a href="https://link.jianshu.com?t=http%3A%2F%2Fwww.cnblogs.com%2Fpython27%2Fp%2FReservoir_Sampling_Algorithm.html" target="_blank" rel="noopener">【算法 34】蓄水池抽样算法 (Reservoir Sampling Algorithm)</a></li>
+<li><a href="https://www.jianshu.com/p/eea05fb27e3f" target="_blank" rel="noopener">分布式 / 并行蓄水池抽样 (Distributed/Parallel Reservoir Sampling)</a></li>
+<li><a href="https://link.jianshu.com?t=https%3A%2F%2Fballsandbins.wordpress.com%2F2014%2F04%2F13%2Fdistributedparallel-reservoir-sampling%2F" target="_blank" rel="noopener">Distributed/Parallel Reservoir Sampling</a></li>
+</ol>
 
           
         
