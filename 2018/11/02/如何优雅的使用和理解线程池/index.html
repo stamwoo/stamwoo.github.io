@@ -28,6 +28,9 @@
 
 
 
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
 
 
 
@@ -74,7 +77,7 @@
     root: '/',
     scheme: 'Gemini',
     version: '7.0.0',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
     fastclick: false,
     lazyload: false,
@@ -103,18 +106,18 @@
 <meta property="og:site_name" content="Blog of Woo">
 <meta property="og:description" content="前言平时接触过多线程开发的童鞋应该都或多或少了解过线程池，之前发布的《阿里巴巴 Java 手册》里也有一条：  可见线程池的重要性。 简单来说使用线程池有以下几个目的：  线程是稀缺资源，不能频繁的创建。 解耦作用；线程的创建于执行完全分开，方便维护。 应当将其放入一个池子中，可以给其他任务进行复用。  线程池原理谈到线程池就会想到池化技术，其中最核心的思想就是把宝贵的资源放到一个池子中；每次使用">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://segmentfault.com/img/remote/1460000015808901?w=766&h=136">
-<meta property="og:image" content="https://segmentfault.com/img/remote/1460000015808902?w=707&h=126">
-<meta property="og:image" content="https://segmentfault.com/img/remote/1460000015808903?w=1033&h=406">
-<meta property="og:image" content="https://segmentfault.com/img/remote/1460000015808904?w=754&h=310">
-<meta property="og:image" content="https://segmentfault.com/img/remote/1460000015808905?w=500&h=293">
-<meta property="og:image" content="https://segmentfault.com/img/remote/1460000015808909?w=928&h=160">
-<meta property="og:image" content="https://segmentfault.com/img/remote/1460000015808910?w=1104&h=334">
-<meta property="og:updated_time" content="2019-02-02T21:24:55.662Z">
+<meta property="og:image" content="http://yoursite.com/img/alibaba_thread_waring.jpeg">
+<meta property="og:image" content="http://yoursite.com/img/threadpool_state.jpeg">
+<meta property="og:image" content="http://yoursite.com/img/threadpool_state_map.jpeg">
+<meta property="og:image" content="http://yoursite.com/img/threadpool_execute.jpeg">
+<meta property="og:image" content="http://yoursite.com/img/thread_main_processing.jpeg">
+<meta property="og:image" content="http://yoursite.com/img/thread_result1.jpeg">
+<meta property="og:image" content="http://yoursite.com/img/thread_result2.jpeg">
+<meta property="og:updated_time" content="2019-02-02T21:57:08.289Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何优雅的使用和理解线程池">
 <meta name="twitter:description" content="前言平时接触过多线程开发的童鞋应该都或多或少了解过线程池，之前发布的《阿里巴巴 Java 手册》里也有一条：  可见线程池的重要性。 简单来说使用线程池有以下几个目的：  线程是稀缺资源，不能频繁的创建。 解耦作用；线程的创建于执行完全分开，方便维护。 应当将其放入一个池子中，可以给其他任务进行复用。  线程池原理谈到线程池就会想到池化技术，其中最核心的思想就是把宝贵的资源放到一个池子中；每次使用">
-<meta name="twitter:image" content="https://segmentfault.com/img/remote/1460000015808901?w=766&h=136">
+<meta name="twitter:image" content="http://yoursite.com/img/alibaba_thread_waring.jpeg">
 
 
 
@@ -179,7 +182,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -227,7 +230,24 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+    <a href="/archives" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
 
   </li>
         
@@ -358,7 +378,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-02 22:24:55" itemprop="dateModified" datetime="2019-02-02T22:24:55+01:00">2019-02-02</time>
+                <time title="Modified: 2019-02-02 22:57:08" itemprop="dateModified" datetime="2019-02-02T22:57:08+01:00">2019-02-02</time>
               
             
           </span>
@@ -393,7 +413,7 @@
 
       
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>平时接触过多线程开发的童鞋应该都或多或少了解过线程池，之前发布的《阿里巴巴 Java 手册》里也有一条：</p>
-<p><img src="https://segmentfault.com/img/remote/1460000015808901?w=766&amp;h=136" alt=""></p>
+<p><img src="/img/alibaba_thread_waring.jpeg" alt=""></p>
 <p>可见线程池的重要性。</p>
 <p>简单来说使用线程池有以下几个目的：</p>
 <ul>
@@ -428,7 +448,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">threadPool.execute(new Job());</span><br></pre></td></tr></table></figure>
 <p>这样的方式来提交一个任务到线程池中，所以核心的逻辑就是 <code>execute()</code> 函数了。</p>
 <p>在具体分析之前先了解下线程池中所定义的状态，这些状态都和线程的执行密切相关：</p>
-<p><img src="https://segmentfault.com/img/remote/1460000015808902?w=707&amp;h=126" alt=""></p>
+<p><img src="/img/threadpool_state.jpeg" alt=""></p>
 <ul>
 <li><code>RUNNING</code> 自然是运行状态，指可以接受任务执行队列里的任务</li>
 <li><code>SHUTDOWN</code> 指调用了 <code>shutdown()</code> 方法，不再接受新任务了，但是队列里的任务得执行完毕。</li>
@@ -437,9 +457,9 @@
 <li><code>TERMINATED</code> 终止状态，当执行 <code>terminated()</code> 后会更新为这个状态。</li>
 </ul>
 <p>用图表示为：</p>
-<p><img src="https://segmentfault.com/img/remote/1460000015808903?w=1033&amp;h=406" alt=""></p>
+<p><img src="/img/threadpool_state_map.jpeg" alt=""></p>
 <p>然后看看 <code>execute()</code> 方法是如何处理的：</p>
-<p><img src="https://segmentfault.com/img/remote/1460000015808904?w=754&amp;h=310" alt=""></p>
+<p><img src="/img/threadpool_execute.jpeg" alt=""></p>
 <ol>
 <li>获取当前线程池的状态。</li>
 <li>当前线程数量小于 coreSize 时创建一个新的线程运行。</li>
@@ -449,7 +469,7 @@
 <li>如果在第三步的判断为非运行状态，尝试新建线程，如果失败则执行拒绝策略。</li>
 </ol>
 <p>这里借助《聊聊并发》的一张图来描述这个流程：</p>
-<p><img src="https://segmentfault.com/img/remote/1460000015808905?w=500&amp;h=293" alt=""></p>
+<p><img src="/img/thread_main_processing.jpeg" alt=""></p>
 <h3 id="如何配置线程"><a href="#如何配置线程" class="headerlink" title="如何配置线程"></a>如何配置线程</h3><p>流程聊完了再来看看上文提到了几个核心参数应该如何配置呢？</p>
 <p>有一点是肯定的，线程池肯定是不是越大越好。</p>
 <p>通常我们是需要根据这批任务执行的性质来确定的。</p>
@@ -489,14 +509,14 @@
 </blockquote>
 <p>下面来看看 <code>Hystrix</code> 简单的应用：</p>
 <p>首先需要定义两个线程池，分别用于执行订单、处理用户。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Function:订单服务</span><br><span class="line"> *</span><br><span class="line"> * @author crossoverJie</span><br><span class="line"> *         Date: 2018/7/28 16:43</span><br><span class="line"> * @since JDK 1.8</span><br><span class="line"> */</span><br><span class="line">public class CommandOrder extends HystrixCommand&lt;String&gt; &#123;</span><br><span class="line"></span><br><span class="line">    private final static Logger LOGGER = LoggerFactory.getLogger(CommandOrder.class);</span><br><span class="line"></span><br><span class="line">    private String orderName;</span><br><span class="line"></span><br><span class="line">    public CommandOrder(String orderName) &#123;</span><br><span class="line"></span><br><span class="line">        super(Setter.withGroupKey(</span><br><span class="line">                //服务分组</span><br><span class="line">                HystrixCommandGroupKey.Factory.asKey(&quot;OrderGroup&quot;))</span><br><span class="line">                //线程分组</span><br><span class="line">                .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey(&quot;OrderPool&quot;))</span><br><span class="line"></span><br><span class="line">                //线程池配置</span><br><span class="line">                .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter()</span><br><span class="line">                        .withCoreSize(10)</span><br><span class="line">                        .withKeepAliveTimeMinutes(5)</span><br><span class="line">                        .withMaxQueueSize(10)</span><br><span class="line">                        .withQueueSizeRejectionThreshold(10000))</span><br><span class="line"></span><br><span class="line">                .andCommandPropertiesDefaults(</span><br><span class="line">                        HystrixCommandProperties.Setter()</span><br><span class="line">                                .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.THREAD))</span><br><span class="line">        )</span><br><span class="line">        ;</span><br><span class="line">        this.orderName = orderName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String run() throws Exception &#123;</span><br><span class="line"></span><br><span class="line">        LOGGER.info(&quot;orderName=[&#123;&#125;]&quot;, orderName);</span><br><span class="line"></span><br><span class="line">        TimeUnit.MILLISECONDS.sleep(100);</span><br><span class="line">        return &quot;OrderName=&quot; + orderName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Function:用户服务</span><br><span class="line"> *</span><br><span class="line"> * @author crossoverJie</span><br><span class="line"> *         Date: 2018/7/28 16:43</span><br><span class="line"> * @since JDK 1.8</span><br><span class="line"> */</span><br><span class="line">public class CommandUser extends HystrixCommand&lt;String&gt; &#123;</span><br><span class="line"></span><br><span class="line">    private final static Logger LOGGER = LoggerFactory.getLogger(CommandUser.class);</span><br><span class="line"></span><br><span class="line">    private String userName;</span><br><span class="line"></span><br><span class="line">    public CommandUser(String userName) &#123;</span><br><span class="line"></span><br><span class="line">        super(Setter.withGroupKey(</span><br><span class="line">                //服务分组</span><br><span class="line">                HystrixCommandGroupKey.Factory.asKey(&quot;UserGroup&quot;))</span><br><span class="line">                //线程分组</span><br><span class="line">                .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey(&quot;UserPool&quot;))</span><br><span class="line"></span><br><span class="line">                //线程池配置</span><br><span class="line">                .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter()</span><br><span class="line">                        .withCoreSize(10)</span><br><span class="line">                        .withKeepAliveTimeMinutes(5)</span><br><span class="line">                        .withMaxQueueSize(10)</span><br><span class="line">                        .withQueueSizeRejectionThreshold(10000))</span><br><span class="line"></span><br><span class="line">                //线程池隔离</span><br><span class="line">                .andCommandPropertiesDefaults(</span><br><span class="line">                        HystrixCommandProperties.Setter()</span><br><span class="line">                                .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.THREAD))</span><br><span class="line">        )</span><br><span class="line">        ;</span><br><span class="line">        this.userName = userName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String run() throws Exception &#123;</span><br><span class="line"></span><br><span class="line">        LOGGER.info(&quot;userName=[&#123;&#125;]&quot;, userName);</span><br><span class="line"></span><br><span class="line">        TimeUnit.MILLISECONDS.sleep(100);</span><br><span class="line">        return &quot;userName=&quot; + userName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Function:订单服务</span><br><span class="line"> *</span><br><span class="line"> */</span><br><span class="line">public class CommandOrder extends HystrixCommand&lt;String&gt; &#123;</span><br><span class="line"></span><br><span class="line">    private final static Logger LOGGER = LoggerFactory.getLogger(CommandOrder.class);</span><br><span class="line"></span><br><span class="line">    private String orderName;</span><br><span class="line"></span><br><span class="line">    public CommandOrder(String orderName) &#123;</span><br><span class="line"></span><br><span class="line">        super(Setter.withGroupKey(</span><br><span class="line">                //服务分组</span><br><span class="line">                HystrixCommandGroupKey.Factory.asKey(&quot;OrderGroup&quot;))</span><br><span class="line">                //线程分组</span><br><span class="line">                .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey(&quot;OrderPool&quot;))</span><br><span class="line"></span><br><span class="line">                //线程池配置</span><br><span class="line">                .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter()</span><br><span class="line">                        .withCoreSize(10)</span><br><span class="line">                        .withKeepAliveTimeMinutes(5)</span><br><span class="line">                        .withMaxQueueSize(10)</span><br><span class="line">                        .withQueueSizeRejectionThreshold(10000))</span><br><span class="line"></span><br><span class="line">                .andCommandPropertiesDefaults(</span><br><span class="line">                        HystrixCommandProperties.Setter()</span><br><span class="line">                                .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.THREAD))</span><br><span class="line">        )</span><br><span class="line">        ;</span><br><span class="line">        this.orderName = orderName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String run() throws Exception &#123;</span><br><span class="line"></span><br><span class="line">        LOGGER.info(&quot;orderName=[&#123;&#125;]&quot;, orderName);</span><br><span class="line"></span><br><span class="line">        TimeUnit.MILLISECONDS.sleep(100);</span><br><span class="line">        return &quot;OrderName=&quot; + orderName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Function:用户服务</span><br><span class="line"> */</span><br><span class="line">public class CommandUser extends HystrixCommand&lt;String&gt; &#123;</span><br><span class="line"></span><br><span class="line">    private final static Logger LOGGER = LoggerFactory.getLogger(CommandUser.class);</span><br><span class="line"></span><br><span class="line">    private String userName;</span><br><span class="line"></span><br><span class="line">    public CommandUser(String userName) &#123;</span><br><span class="line"></span><br><span class="line">        super(Setter.withGroupKey(</span><br><span class="line">                //服务分组</span><br><span class="line">                HystrixCommandGroupKey.Factory.asKey(&quot;UserGroup&quot;))</span><br><span class="line">                //线程分组</span><br><span class="line">                .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey(&quot;UserPool&quot;))</span><br><span class="line"></span><br><span class="line">                //线程池配置</span><br><span class="line">                .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter()</span><br><span class="line">                        .withCoreSize(10)</span><br><span class="line">                        .withKeepAliveTimeMinutes(5)</span><br><span class="line">                        .withMaxQueueSize(10)</span><br><span class="line">                        .withQueueSizeRejectionThreshold(10000))</span><br><span class="line"></span><br><span class="line">                //线程池隔离</span><br><span class="line">                .andCommandPropertiesDefaults(</span><br><span class="line">                        HystrixCommandProperties.Setter()</span><br><span class="line">                                .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.THREAD))</span><br><span class="line">        )</span><br><span class="line">        ;</span><br><span class="line">        this.userName = userName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String run() throws Exception &#123;</span><br><span class="line"></span><br><span class="line">        LOGGER.info(&quot;userName=[&#123;&#125;]&quot;, userName);</span><br><span class="line"></span><br><span class="line">        TimeUnit.MILLISECONDS.sleep(100);</span><br><span class="line">        return &quot;userName=&quot; + userName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <hr>
 <p><code>api</code> 特别简洁易懂，具体详情请查看官方文档。</p>
 <p>然后模拟运行：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) throws Exception &#123;</span><br><span class="line">    CommandOrder commandPhone = new CommandOrder(&quot;手机&quot;);</span><br><span class="line">    CommandOrder command = new CommandOrder(&quot;电视&quot;);</span><br><span class="line"></span><br><span class="line">    //阻塞方式执行</span><br><span class="line">    String execute = commandPhone.execute();</span><br><span class="line">    LOGGER.info(&quot;execute=[&#123;&#125;]&quot;, execute);</span><br><span class="line"></span><br><span class="line">    //异步非阻塞方式</span><br><span class="line">    Future&lt;String&gt; queue = command.queue();</span><br><span class="line">    String value = queue.get(200, TimeUnit.MILLISECONDS);</span><br><span class="line">    LOGGER.info(&quot;value=[&#123;&#125;]&quot;, value);</span><br><span class="line"></span><br><span class="line">    CommandUser commandUser = new CommandUser(&quot;张三&quot;);</span><br><span class="line">    String name = commandUser.execute();</span><br><span class="line">    LOGGER.info(&quot;name=[&#123;&#125;]&quot;, name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <hr>
 <p>运行结果：</p>
-<p><img src="https://segmentfault.com/img/remote/1460000015808909?w=928&amp;h=160" alt=""></p>
+<p><img src="/img/thread_result1.jpeg" alt=""></p>
 <p>可以看到两个任务分成了两个线程池运行，他们之间互不干扰。</p>
 <p>获取任务任务结果支持同步阻塞和异步非阻塞方式，可自行选择。</p>
 <p>它的实现原理其实容易猜到：</p>
@@ -504,13 +524,12 @@
 <p>利用一个 Map 来存放不同业务对应的线程池。</p>
 </blockquote>
 <p>通过刚才的构造函数也能证明：</p>
-<p><img src="https://segmentfault.com/img/remote/1460000015808910?w=1104&amp;h=334" alt=""></p>
+<p><img src="/img/thread_result2.jpeg" alt=""></p>
 <p>还要注意的一点是：</p>
 <blockquote>
 <p>自定义的 Command 并不是一个单例，每次执行需要 new 一个实例，不然会报 <code>This instance can only be executed once. Please instantiate a new instance.</code> 异常。</p>
 </blockquote>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>池化技术确实在平时应用广泛，熟练掌握能提高不少效率。</p>
-<p>文末的 hystrix 源码：<br><a href="https://github.com/crossoverJie/Java-Interview/tree/master/src/main/java/com/crossoverjie/hystrix" target="_blank" rel="noopener">https://github.com/crossoverJie/Java-Interview/tree/master/src/main/java/com/crossoverjie/hystrix</a></p>
 
       
     </div>
@@ -541,8 +560,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/02/蓄水池抽样算法/" rel="next" title="蓄水池抽样算法（Reservoir Sampling）">
-                <i class="fa fa-chevron-left"></i> 蓄水池抽样算法（Reservoir Sampling）
+              <a href="/2018/11/02/理解 B 树、B+ 树特点及使用场景/" rel="next" title="理解B树,B+树特点及使用场景">
+                <i class="fa fa-chevron-left"></i> 理解B树,B+树特点及使用场景
               </a>
             
           </div>

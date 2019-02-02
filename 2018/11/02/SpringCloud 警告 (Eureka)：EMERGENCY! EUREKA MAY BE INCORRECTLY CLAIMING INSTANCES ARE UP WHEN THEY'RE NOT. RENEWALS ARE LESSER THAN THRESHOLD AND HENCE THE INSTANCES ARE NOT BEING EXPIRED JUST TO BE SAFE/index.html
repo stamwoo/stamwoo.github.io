@@ -28,6 +28,9 @@
 
 
 
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
 
 
 
@@ -74,7 +77,7 @@
     root: '/',
     scheme: 'Gemini',
     version: '7.0.0',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
     fastclick: false,
     lazyload: false,
@@ -103,12 +106,12 @@
 <meta property="og:site_name" content="Blog of Woo">
 <meta property="og:description" content="警告！Eureka 可能存在维护了错误的实例列表（当它们没有启动的时候，Eureka 却把它当成启动的了）；Renews 值小于 Threshold 值，因此剩下未过期的都是安全的。 原因分析： 这个是 Eureka 的自我保护机制。Eureka Server 在运行期间，会统计心跳失败的比例在 15 分钟之内是否低于 85%，如果出现低于的情况（在单机调试的时候很容易满足，实际在生产环境上通常是">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.blog.csdn.net/20170418001242248?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvenpwNDQ4NTYxNjM2/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:updated_time" content="2019-02-02T21:24:55.709Z">
+<meta property="og:image" content="http://yoursite.com/img/spring_cloud_waring.png">
+<meta property="og:updated_time" content="2019-02-02T21:51:27.158Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY&#39;RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE">
 <meta name="twitter:description" content="警告！Eureka 可能存在维护了错误的实例列表（当它们没有启动的时候，Eureka 却把它当成启动的了）；Renews 值小于 Threshold 值，因此剩下未过期的都是安全的。 原因分析： 这个是 Eureka 的自我保护机制。Eureka Server 在运行期间，会统计心跳失败的比例在 15 分钟之内是否低于 85%，如果出现低于的情况（在单机调试的时候很容易满足，实际在生产环境上通常是">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20170418001242248?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvenpwNDQ4NTYxNjM2/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta name="twitter:image" content="http://yoursite.com/img/spring_cloud_waring.png">
 
 
 
@@ -173,7 +176,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -221,7 +224,24 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+    <a href="/archives" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
 
   </li>
         
@@ -352,7 +372,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-02 22:24:55" itemprop="dateModified" datetime="2019-02-02T22:24:55+01:00">2019-02-02</time>
+                <time title="Modified: 2019-02-02 22:51:27" itemprop="dateModified" datetime="2019-02-02T22:51:27+01:00">2019-02-02</time>
               
             
           </span>
@@ -391,7 +411,7 @@
 <p>这个是 Eureka 的自我保护机制。Eureka Server 在运行期间，会统计心跳失败的比例在 15 分钟之内是否低于 85%，如果出现低于的情况（在单机调试的时候很容易满足，实际在生产环境上通常是由于网络不稳定导致），Eureka Server 会将当前的实例注册信息保护起来，同时提示这个警告。</p>
 <p>Eureka server 和 client 之间每隔 30 秒会进行一次心跳通信，告诉 server，client 还活着。由此引出两个名词：<br>Renews threshold：server 期望在每分钟中收到的心跳次数<br>Renews (last min)：上一分钟内收到的心跳次数。</p>
 <p>前文说到禁止注册 server 自己为 client，不管 server 是否禁止，阈值（threshold）是 1。client 个数为 n，阈值为 1+2<em>n（此为一个 server 且禁止自注册的情况）<br>如果是多个 server，且开启了自注册，那么就和 client 一样，是对于其他的 server 来说就是 client，是要 </em> 2 的</p>
-<p>我开了两个 server，自注册，相关数据如下<br><img src="http://img.blog.csdn.net/20170418001242248?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvenpwNDQ4NTYxNjM2/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""><br>阈值：1+2<em>1<br>renews：<br>1）自注册 2 + 2</em>1<br>2）非自注册：2*1</p>
+<p>我开了两个 server，自注册，相关数据如下<br><img src="/img/spring_cloud_waring.png" alt=""><br>阈值：1+2<em>1<br>renews：<br>1）自注册 2 + 2</em>1<br>2）非自注册：2*1</p>
 <p>Eurake 有一个配置参数 eureka.server.renewalPercentThreshold，定义了 renews 和 renews threshold 的比值，默认值为 0.85。当 server 在 15 分钟内，比值低于 percent，即少了 15% 的微服务心跳，server 会进入自我保护状态，Self-Preservation。在此状态下，server 不会删除注册信息，这就有可能导致在调用微服务时，实际上服务并不存在。<br>这种保护状态实际上是考虑了 client 和 server 之间的心跳是因为网络问题，而非服务本身问题，不能简单的删除注册信息</p>
 <p>stackoverflow 上，有人给出的建议是：<br>1、在生产上可以开自注册，部署两个 server<br>2、在本机器上测试的时候，可以把比值调低，比如 0.49<br>3、或者简单粗暴把自我保护模式关闭</p>
 <pre>**`eureka.server.enableSelfPreservation=false`**</pre>
@@ -428,8 +448,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/02/单例模式_双重检验锁真的线程安全吗/" rel="next" title="单例模式–双重检验锁真的线程安全吗">
-                <i class="fa fa-chevron-left"></i> 单例模式–双重检验锁真的线程安全吗
+              <a href="/2018/11/02/为什么你需要一个 vps/" rel="next" title="为什么你需要一个VPS">
+                <i class="fa fa-chevron-left"></i> 为什么你需要一个VPS
               </a>
             
           </div>
@@ -438,8 +458,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/02/理解 B 树、B+ 树特点及使用场景/" rel="prev" title="理解B树,B+树特点及使用场景">
-                理解B树,B+树特点及使用场景 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/02/mysql explain 详解/" rel="prev" title="mysql explain 详解">
+                mysql explain 详解 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

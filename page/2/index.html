@@ -28,6 +28,9 @@
 
 
 
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
 
 
 
@@ -74,7 +77,7 @@
     root: '/',
     scheme: 'Gemini',
     version: '7.0.0',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
     fastclick: false,
     lazyload: false,
@@ -167,7 +170,7 @@
     
   
 
-  <div class="container sidebar-position-left 
+  <div class="container sidebar-position-right 
   page-home">
     <div class="headband"></div>
 
@@ -216,7 +219,24 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+    <a href="/archives" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
 
   </li>
         
@@ -269,6 +289,314 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+    
+  
+
+  
+
+  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/02/理解 B 树、B+ 树特点及使用场景/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="woo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Woo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                  <span class="post-sticky-flag" title="Sticky">
+                    <i class="fa fa-thumb-tack"></i>
+                  </span>
+                
+                
+                <a href="/2018/11/02/理解 B 树、B+ 树特点及使用场景/" class="post-title-link" itemprop="url">理解B树,B+树特点及使用场景</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-11-02 22:11:29" itemprop="dateCreated datePublished" datetime="2018-11-02T22:11:29+01:00">2018-11-02</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-02 23:01:56" itemprop="dateModified" datetime="2019-02-02T23:01:56+01:00">2019-02-02</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>读完本文你将了解：</p>
+<ul>
+<li><a href="#b-树">B 树</a><ul>
+<li><a href="#对比平衡二叉树和-b-树">对比平衡二叉树和 B 树</a></li>
+<li><a href="#b-树中如何查找数据">B 树中如何查找数据</a></li>
+<li><a href="#b-树如何保证平衡">B 树如何保证平衡</a></li>
+<li><a href="#使用场景">使用场景</a></li>
+</ul>
+</li>
+<li><a href="#b-树-1">B+ 树</a></li>
+<li><a href="#thanks">Thanks</a></li>
+</ul>
+<p>大家好，前面那篇文章<a href="https://link.juejin.im?target=https%3A%2F%2Fmp.weixin.qq.com%2Fs%2FK_oGI2rl3epTirxkST5LVQ" target="_blank" rel="noopener">《3 分钟理解完全二叉树、平衡二叉树、二叉查找树》</a>中我们了解了几种特殊的二叉树的功能及特点，知道了它们在进行查找数据时可以提高效率，但需要注意的是，这是指在内存中进行查找。如果有海量的数据，不可能一次性读取到内存中，这时候就要考虑的是，如何在磁盘中快速找到需要的数据。</p>
+<p>今天这篇文章中要介绍的 “B 树、B+ 树”，他们的使用场景是：查找磁盘中的大量数据。</p>
+<h1 id="B-树"><a href="#B-树" class="headerlink" title="B 树"></a>B 树</h1><p>B 树就是常说的 “B 减树（B- 树）”，又名平衡多路（即不止两个子树）查找树，它和平衡二叉树的不同有这么几点：</p>
+<ol>
+<li>平衡二叉树节点最多有两个子树，而 B 树每个节点可以有多个子树，<strong>M 阶 B 树表示该树每个节点最多有 M 个子树</strong></li>
+<li>平衡二叉树每个节点只有一个数据和两个指向孩子的指针，而 B 树每个<strong>中间节点</strong>有 k-1 个关键字（可以理解为数据）和 k 个子树（ **k 介于阶数 M 和 M/2 之间，M/2 向上取整）</li>
+<li>B 树的所有叶子节点都在同一层，并且叶子节点只有关键字，指向孩子的指针为 null</li>
+</ol>
+<p>和平衡二叉树相同的点在于：B 树的节点数据大小也是按照左小右大，子树与节点的大小比较决定了子树指针所处位置。</p>
+<p>看着概念可能有点难理解，来看看图对比下平衡二叉树和 B 树。</p>
+<h2 id="对比平衡二叉树和-B-树"><a href="#对比平衡二叉树和-B-树" class="headerlink" title="对比平衡二叉树和 B 树"></a>对比平衡二叉树和 B 树</h2><p>首先是节点， 平衡二叉树的节点如下图所示，每个节点有一个数据和最多两个子树：</p>
+<p><img src="/img/AVL.jpeg" alt=""></p>
+<p>B 树中的每个节点由两部分组成：</p>
+<ol>
+<li>关键字（可以理解为数据）</li>
+<li>指向孩子节点的指针</li>
+</ol>
+<p>B 树的节点如下图所示，每个节点可以有不只一个数据，同时拥有<strong>数据数加一</strong>个子树，同时每个节点左子树的数据比当前节点都小、右子树的数据都比当前节点的数据大：</p>
+<p><img src="/img/B-tree.jpeg" alt=""></p>
+<blockquote>
+<p>上图是为了方便读者理解 B 树每个节点的内容，实际绘制图形还是以圆表示每个节点。</p>
+</blockquote>
+<p>了解了节点的差异后，来看看 B 树的定义，<strong>一棵 B 树必须满足以下条件</strong>：</p>
+<ol>
+<li>若根结点不是终端结点，则至少有 2 棵子树</li>
+<li>除根节点以外的所有非叶结点至少有 M/2 棵子树，至多有 M 个子树（关键字数为子树减一）</li>
+<li>所有的叶子结点都位于同一层</li>
+</ol>
+<p>用一张图对比平衡二叉树和 B 树：</p>
+<p><img src="/img/AVL&amp;B_tree.jpeg" alt=""></p>
+<p>可以看到，<strong>B 树的每个节点可以表示的信息更多，因此整个树更加 “矮胖”，这在从磁盘中查找数据（先读取到内存、后查找）的过程中，可以减少磁盘 IO 的次数，从而提升查找速度。</strong></p>
+<h2 id="B-树中如何查找数据"><a href="#B-树中如何查找数据" class="headerlink" title="B 树中如何查找数据"></a>B 树中如何查找数据</h2><p>因为 B 树的子树大小排序规则，因此在 B 树中查找数据时，一般需要这样：</p>
+<ol>
+<li>从根节点开始，如果查找的数据比根节点小，就去左子树找，否则去右子树</li>
+<li>和子树的多个关键字进行比较，找到它所处的范围，然后去范围对应的子树中继续查找</li>
+<li>以此循环，直到找到或者到叶子节点还没找到为止</li>
+</ol>
+<h2 id="B-树如何保证平衡"><a href="#B-树如何保证平衡" class="headerlink" title="B 树如何保证平衡"></a>B 树如何保证平衡</h2><p>我们知道，平衡的树之所以能够加快查找速度，是因为在添加、删除的时候做了某些操作以保证平衡。</p>
+<p>平衡二叉树的平衡条件是：<strong>左右子树的高度差不大于 1</strong>；而 B 树的平衡条件则有三点：</p>
+<ol>
+<li>叶子节点都在同一层</li>
+<li>每个节点的关键字数为子树个数减一（子树个数 k 介于树的阶 M 和它的二分之一</li>
+<li>子树的关键字保证左小右大的顺序</li>
+</ol>
+<p>也就是说，一棵 3 阶的 B 树（即节点最多有三个子树），每个节点的关键字数最少为 1，最多为 2，如果要添加数据的子树的关键字数已经是最多，就需要<strong>拆分节点，调整树的结构。</strong></p>
+<p>网上找到一张很不错的动图，我们来根据它分析下 B 树添加元素时如何保证平衡。</p>
+<p>这个图用以表示往 4 阶 B 树中依次插入下面这组数据的过程：</p>
+<p>6 10 4 14 5 11 15 3 2 12 1 7 8 8 6 3 6 21 5 15 15 6 32 23 45 65 7 8 6 5 4</p>
+<p><img src="/img/BInsert.gif" alt=""></p>
+<p><strong>建议放大图查看</strong>。</p>
+<p>由于我比较懒，我们来根据前几步分析下 B 树的添加流程：</p>
+<ol>
+<li>首先明确：<strong>4 阶 B 树表示每个节点最多有 4 个子树、3 个关键字，最少有 2 个子树、一个关键字</strong></li>
+<li>添加 6，第一个节点，没什么好说的</li>
+<li>添加 10，根节点最多能放三个关键字，按顺序添到根节点中</li>
+<li>添加 4，还能放到根节点中</li>
+<li>添加 14，这时超出了关键字最大限制，需要把 14 添加为子树，同时为了保证 “所有叶子节点在同一层”，就需要拆几个关键字作为子树：</li>
+</ol>
+<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a8432fdb64b?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""> 拆为：<img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a8433e01546?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
+<p>这个拆的过程比较复杂，首先要确定根节点保留几个关键字，由于 <strong>“非叶子节点的根节点至少有 2 棵子树”</strong> 的限制，那就至少需要两个关键字分出去，又因为 <strong>“子树数是关键字数 + 1”</strong>，如果根节点有两个关键字，就得有三个子树，无法满足，所以只好把除 6 以外的三个关键字都拆为子树。</p>
+<p>谁和谁在一个子树上呢，根据 <strong>“左子树比关键字小、右子树比关键字大”</strong> 的规律，4 在左子树，10 和 14 在右子树。</p>
+<p>继续添加 ：</p>
+<ol>
+<li>添加 5，放到 4 所在的子树上</li>
+<li>添加 11，放在 10 和 14 所在的右子树上</li>
+<li>添加 15，按大小应该放到 10、11 和 14 所在的子树上，但因为超过了关键字数限制，又得拆分</li>
+</ol>
+<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a843f1656c8?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
+<p>因为 <strong>“根节点必须都在同一层”</strong>，因此我们不能给现有的左右子树添加子树，只能添加给 6 了；但是如果 6 有三个子树，就必须得有 2 个关键字，提升谁做关键字好呢，这得看谁做 6 中间的子树，因为右子树的所有关键字都得比父节点的关键字大，所以这个提升的关键字只能比未来右子树中的关键字都小，那就只有 10 和 11 可以考虑了。</p>
+<p>提升 10 吧，没有比它小的做子树，那就只能提升 11 了：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a8449e5305e?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
+<p>再添加元素也是类似的逻辑：</p>
+<ol>
+<li>首先考虑要插入的子树是否已经超出了关键字数的限制</li>
+<li>超出的话，如果要插入的位置是叶子节点，就只能拆一个关键字添加到要插入位置的父节点</li>
+<li>如果非叶子节点，就得从其他子树拆子树给新插入的元素做孩子</li>
+</ol>
+<p>删除也是一样的，要考虑删除孩子后，父节点是否还满足子树 k 介于 M/2 和 M 的条件，不满足就得从别的节点拆子树甚至修改相关子树结构来保持平衡。</p>
+<p>总之添加、删除的过程很复杂，要考虑的条件很多，具体实现就不细追究了，这里我们有个基本认识即可。</p>
+<p>正是这个复杂的保持平衡操作，使得平衡后的 B 树能够发挥出磁盘中快速查找的作用。</p>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><blockquote>
+<p>这部分摘自：<a href="https://link.juejin.im?target=http%3A%2F%2Fblog.jobbole.com%2F79311%2F" target="_blank" rel="noopener">浅谈算法和数据结构：平衡查找树之 B 树</a></p>
+</blockquote>
+<p>文件系统和数据库系统中常用的 B/B+ 树，他通过对每个节点存储个数的扩展，使得对连续的数据能够进行较快的定位和访问，能够有效减少查找时间，提高存储的空间局部性从而减少 IO 操作。他广泛用于文件系统及数据库中，如：</p>
+<ul>
+<li><p>Windows：HPFS 文件系统</p>
+</li>
+<li><p>Mac：HFS，HFS+ 文件系统</p>
+</li>
+<li><p>Linux：ResiserFS，XFS，Ext3FS，JFS 文件系统</p>
+</li>
+<li><p>数据库：ORACLE，MYSQL，SQLSERVER 等中</p>
+</li>
+<li><p>数据库：ORACLE，MYSQL，SQLSERVER 等中</p>
+</li>
+</ul>
+<h1 id="B-树-1"><a href="#B-树-1" class="headerlink" title="B+ 树"></a>B+ 树</h1><blockquote>
+<p>这部分主要学习自 “程序员小灰” 的 <a href="https://link.juejin.im?target=https%3A%2F%2Fmp.weixin.qq.com%2Fs%2FjRZMMONW3QP43dsDKIV9VQ" target="_blank" rel="noopener">漫画：什么是 B + 树？</a></p>
+</blockquote>
+<p>了解了 B 树后再来了解下它的变形版：B+ 树，它比 B 树的查询性能更高。</p>
+<p>一棵 B+ 树需要满足以下条件：</p>
+<ol>
+<li>节点的子树数和关键字数相同（B 树是关键字数比子树数少一）</li>
+<li>节点的关键字表示的是子树中的最大数，在子树中同样含有这个数据</li>
+<li>叶子节点包含了全部数据，同时符合左小右大的顺序</li>
+</ol>
+<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a844c9a40b6?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
+<p>简单概括下 B+ 树的三个特点：</p>
+<ol>
+<li>关键字数和子树相同</li>
+<li>非叶子节点仅用作索引，它的关键字和子节点有重复元素</li>
+<li>叶子节点用指针连在一起</li>
+</ol>
+<p>首先第一点不用特别介绍了，在 B 树中，节点的关键字用于在查询时确定查询区间，因此关键字数比子树数少一；而在 B+ 树中，节点的关键字代表子树的最大值，因此关键字数等于子树数。</p>
+<p>第二点，除叶子节点外的所有节点的关键字，都在它的下一级子树中同样存在，最后所有数据都存储在叶子节点中。</p>
+<blockquote>
+<p>根节点的最大关键字其实就表示整个 B+ 树的最大元素。</p>
+</blockquote>
+<p>第三点，叶子节点包含了全部的数据，并且按顺序排列，B+ 树使用一个链表将它们排列起来，这样在查询时效率更快。</p>
+<p>由于 B+ 树的中间节点不含有实际数据，只有子树的最大数据和子树指针，因此磁盘页中可以容纳更多节点元素，也就是说同样数据情况下，B+ 树会 B 树更加 “矮胖”，因此查询效率更快。</p>
+<p>B+ 树的查找必会查到叶子节点，更加稳定。</p>
+<p>有时候需要查询某个范围内的数据，由于 B+ 树的叶子节点是一个有序链表，只需在叶子节点上遍历即可，不用像 B 树那样挨个中序遍历比较大小。</p>
+<p>B+ 树的三个优点：</p>
+<ol>
+<li>层级更低，IO 次数更少</li>
+<li>每次都需要查询到叶子节点，查询性能稳定</li>
+<li>叶子节点形成有序链表，范围查询方便</li>
+</ol>
+<p>添加过程就不深入研究了，后面用到再看吧，这里先贴一个 B+ 树动态添加元素图：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a844ffb91f5?imageslim" alt=""></p>
+<h1 id="Thanks"><a href="#Thanks" class="headerlink" title="Thanks"></a>Thanks</h1><ul>
+<li><a href="https://link.juejin.im?target=https%3A%2F%2Fwww.zhihu.com%2Fquestion%2F30527705" target="_blank" rel="noopener">www.zhihu.com/question/30…</a></li>
+<li><a href="https://link.juejin.im?target=https%3A%2F%2Fzhuanlan.zhihu.com%2Fp%2F27700617" target="_blank" rel="noopener">zhuanlan.zhihu.com/p/27700617</a></li>
+<li><a href="https://link.juejin.im?target=https%3A%2F%2Fmp.weixin.qq.com%2Fs%2FjRZMMONW3QP43dsDKIV9VQ" target="_blank" rel="noopener">mp.weixin.qq.com/s/jRZMMONW3…</a></li>
+<li><a href="https://link.juejin.im?target=http%3A%2F%2Fblog.jobbole.com%2F79311%2F" target="_blank" rel="noopener">blog.jobbole.com/79311/</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -483,7 +811,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/02/理解 B 树、B+ 树特点及使用场景/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/02/蓄水池抽样算法/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="woo">
@@ -507,7 +835,7 @@
                   </span>
                 
                 
-                <a href="/2018/11/02/理解 B 树、B+ 树特点及使用场景/" class="post-title-link" itemprop="url">理解B树,B+树特点及使用场景</a>
+                <a href="/2018/11/02/蓄水池抽样算法/" class="post-title-link" itemprop="url">蓄水池抽样算法（Reservoir Sampling）</a>
               
             
           </h1>
@@ -585,326 +913,64 @@
       
         
           
-            <p>读完本文你将了解：</p>
-<ul>
-<li><a href="#b-树">B 树</a><ul>
-<li><a href="#对比平衡二叉树和-b-树">对比平衡二叉树和 B 树</a></li>
-<li><a href="#b-树中如何查找数据">B 树中如何查找数据</a></li>
-<li><a href="#b-树如何保证平衡">B 树如何保证平衡</a></li>
-<li><a href="#使用场景">使用场景</a></li>
-</ul>
-</li>
-<li><a href="#b-树-1">B+ 树</a></li>
-<li><a href="#thanks">Thanks</a></li>
-</ul>
-<p>大家好，前面那篇文章<a href="https://link.juejin.im?target=https%3A%2F%2Fmp.weixin.qq.com%2Fs%2FK_oGI2rl3epTirxkST5LVQ" target="_blank" rel="noopener">《3 分钟理解完全二叉树、平衡二叉树、二叉查找树》</a>中我们了解了几种特殊的二叉树的功能及特点，知道了它们在进行查找数据时可以提高效率，但需要注意的是，这是指在内存中进行查找。如果有海量的数据，不可能一次性读取到内存中，这时候就要考虑的是，如何在磁盘中快速找到需要的数据。</p>
-<p>今天这篇文章中要介绍的 “B 树、B+ 树”，他们的使用场景是：查找磁盘中的大量数据。</p>
-<h1 id="B-树"><a href="#B-树" class="headerlink" title="B 树"></a>B 树</h1><p>B 树就是常说的 “B 减树（B- 树）”，又名平衡多路（即不止两个子树）查找树，它和平衡二叉树的不同有这么几点：</p>
+            <h1 id="蓄水池抽样算法（Reservoir-Sampling）"><a href="#蓄水池抽样算法（Reservoir-Sampling）" class="headerlink" title="蓄水池抽样算法（Reservoir Sampling）"></a>蓄水池抽样算法（Reservoir Sampling）</h1><p>许多年以后，当听说蓄水池抽样算法时,将会想起，那个小学数学老师带他做 “小明对水池边加水边放水，求何时能加满水” 应用题的下午。</p>
+<h2 id="一、问题"><a href="#一、问题" class="headerlink" title="一、问题"></a>一、问题</h2><p>我是在一次失败的面试经历中听说蓄水池算法的。之后上网搜了搜，知道是一个数据抽样算法，寥寥几行，却暗藏玄机。主要用来解决如下问题。</p>
+<p><strong>给定一个数据流，数据流长度 N 很大，且 N 直到处理完所有数据之前都不可知，请问如何在只遍历一遍数据（O(N)）的情况下，能够随机选取出 m 个不重复的数据。</strong></p>
+<p>这个场景强调了 3 件事：</p>
 <ol>
-<li>平衡二叉树节点最多有两个子树，而 B 树每个节点可以有多个子树，<strong>M 阶 B 树表示该树每个节点最多有 M 个子树</strong></li>
-<li>平衡二叉树每个节点只有一个数据和两个指向孩子的指针，而 B 树每个<strong>中间节点</strong>有 k-1 个关键字（可以理解为数据）和 k 个子树（ **k 介于阶数 M 和 M/2 之间，M/2 向上取整）</li>
-<li>B 树的所有叶子节点都在同一层，并且叶子节点只有关键字，指向孩子的指针为 null</li>
+<li>数据流长度 N 很大且不可知，所以不能一次性存入内存。</li>
+<li>时间复杂度为 O(N)。</li>
+<li>随机选取 m 个数，每个数被选中的概率为 m/N。</li>
 </ol>
-<p>和平衡二叉树相同的点在于：B 树的节点数据大小也是按照左小右大，子树与节点的大小比较决定了子树指针所处位置。</p>
-<p>看着概念可能有点难理解，来看看图对比下平衡二叉树和 B 树。</p>
-<h2 id="对比平衡二叉树和-B-树"><a href="#对比平衡二叉树和-B-树" class="headerlink" title="对比平衡二叉树和 B 树"></a>对比平衡二叉树和 B 树</h2><p>首先是节点， 平衡二叉树的节点如下图所示，每个节点有一个数据和最多两个子树：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a83c2850cba?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
-<p>B 树中的每个节点由两部分组成：</p>
+<p>第 1 点限制了不能直接取 N 内的 m 个随机数，然后按索引取出数据。第 2 点限制了不能先遍历一遍，然后分块存储数据，再随机选取。第 3 点是数据选取绝对随机的保证。讲真，在不知道蓄水池算法前，我想破脑袋也不知道该题做何解。</p>
+<h2 id="二、核心代码及原理"><a href="#二、核心代码及原理" class="headerlink" title="二、核心代码及原理"></a>二、核心代码及原理</h2><p>蓄水池抽样算法的核心如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">int[] reservoir = new int[m];</span><br><span class="line"></span><br><span class="line">// init</span><br><span class="line">for (int i = 0; i &lt; reservoir.length; i++)</span><br><span class="line">&#123;</span><br><span class="line">    reservoir[i] = dataStream[i];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">for (int i = m; i &lt; dataStream.length; i++)</span><br><span class="line">&#123;</span><br><span class="line">    // 随机获得一个[0, i]内的随机整数</span><br><span class="line">    int d = rand.nextInt(i + 1);</span><br><span class="line">    // 如果随机整数落在[0, m-1]范围内，则替换蓄水池中的元素</span><br><span class="line">    if (d &lt; m)</span><br><span class="line">    &#123;</span><br><span class="line">        reservoir[d] = dataStream[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong>这里使用已知长度的数组 dataStream 来表示未知长度的数据流，并假设数据流长度大于蓄水池容量 m。</p>
+<p>算法思路大致如下：</p>
 <ol>
-<li>关键字（可以理解为数据）</li>
-<li>指向孩子节点的指针</li>
+<li>如果接收的数据量小于 m，则依次放入蓄水池。</li>
+<li>当接收到第 i 个数据时，i &gt;= m，在 [0, i] 范围内取以随机数 d，若 d 的落在 [0, m-1] 范围内，则用接收到的第 i 个数据替换蓄水池中的第 d 个数据。</li>
+<li>重复步骤 2。</li>
 </ol>
-<p>B 树的节点如下图所示，每个节点可以有不只一个数据，同时拥有<strong>数据数加一</strong>个子树，同时每个节点左子树的数据比当前节点都小、右子树的数据都比当前节点的数据大：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a83c2c6d53b?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
-<blockquote>
-<p>上图是为了方便读者理解 B 树每个节点的内容，实际绘制图形还是以圆表示每个节点。</p>
-</blockquote>
-<p>了解了节点的差异后，来看看 B 树的定义，<strong>一棵 B 树必须满足以下条件</strong>：</p>
+<p>算法的精妙之处在于：<strong>当处理完所有的数据时，蓄水池中的每个数据都是以 m/N 的概率获得的。</strong></p>
+<p>下面用白话文推导验证该算法。假设数据开始编号为 1.</p>
+<p><strong>第 i 个接收到的数据最后能够留在蓄水池中的概率</strong> = <strong>第 i 个数据进入过蓄水池的概率</strong> * <strong>之后第 i 个数据不被替换的概率</strong>（第 i+1 到第 N 次处理数据都不会被替换）。</p>
 <ol>
-<li>若根结点不是终端结点，则至少有 2 棵子树</li>
-<li>除根节点以外的所有非叶结点至少有 M/2 棵子树，至多有 M 个子树（关键字数为子树减一）</li>
-<li>所有的叶子结点都位于同一层</li>
+<li>当 i&lt;=m 时，数据直接放进蓄水池，所以<strong>第 i 个数据进入过蓄水池的概率 = 1</strong>。</li>
+<li>当 i&gt;m 时，在 [1,i] 内选取随机数 d，如果 d&lt;=m，则使用第 i 个数据替换蓄水池中第 d 个数据，因此<strong>第 i 个数据进入过蓄水池的概率 = m/i</strong>。</li>
+<li>当 i&lt;=m 时，程序从接收到第 m+1 个数据时开始执行替换操作，第 m+1 次处理会替换池中数据的为 m/(m+1)，会替换掉第 i 个数据的概率为 1/m，则第 m+1 次处理替换掉第 i 个数据的概率为 (m/(m+1))<em>(1/m)=1/(m+1)，不被替换的概率为 1-1/(m+1)=m/(m+1)。依次，第 m+2 次处理不替换掉第 i 个数据概率为 (m+1)/(m+2)… 第 N 次处理不替换掉第 i 个数据的概率为 (N-1)/N。所以，之后**第 i 个数据不被替换的概率 = m/(m+1)</em>(m+1)/(m+2)<em>…</em>(N-1)/N=m/N**。</li>
+<li>当 i&gt;m 时，程序从接收到第 i+1 个数据时开始有可能替换第 i 个数据。则参考上述第 3 点，<strong>之后第 i 个数据不被替换的概率 = i/N</strong>。</li>
+<li>结合第 1 点和第 3 点可知，当 i&lt;=m 时，第 i 个接收到的数据最后留在蓄水池中的概率 = 1<em>m/N=m/N。结合第 2 点和第 4 点可知，当 i&gt;m 时，第 i 个接收到的数据留在蓄水池中的概率 = m/i</em>i/N=m/N。综上可知，<strong>每个数据最后被选中留在蓄水池中的概率为 m/N</strong>。</li>
 </ol>
-<p>用一张图对比平衡二叉树和 B 树：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a83c2bc8726?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
-<p>可以看到，<strong>B 树的每个节点可以表示的信息更多，因此整个树更加 “矮胖”，这在从磁盘中查找数据（先读取到内存、后查找）的过程中，可以减少磁盘 IO 的次数，从而提升查找速度。</strong></p>
-<h2 id="B-树中如何查找数据"><a href="#B-树中如何查找数据" class="headerlink" title="B 树中如何查找数据"></a>B 树中如何查找数据</h2><p>因为 B 树的子树大小排序规则，因此在 B 树中查找数据时，一般需要这样：</p>
+<p>这个算法建立在统计学基础上，很巧妙地获得了 “m/N” 这个概率。</p>
+<h2 id="三、深入一些——分布式蓄水池抽样（Distributed-Parallel-Reservoir-Sampling）"><a href="#三、深入一些——分布式蓄水池抽样（Distributed-Parallel-Reservoir-Sampling）" class="headerlink" title="三、深入一些——分布式蓄水池抽样（Distributed/Parallel Reservoir Sampling）"></a>三、深入一些——分布式蓄水池抽样（Distributed/Parallel Reservoir Sampling）</h2><p>一块 CPU 的计算能力再强，也总有内存和磁盘 IO 拖他的后腿。因此为提高数据吞吐量，分布式的硬件搭配软件是现在的主流。</p>
+<p>如果遇到超大的数据量，即使是 O(N) 的时间复杂度，蓄水池抽样程序完成抽样任务也将耗时很久。因此分布式的蓄水池抽样算法应运而生。运作原理如下：</p>
 <ol>
-<li>从根节点开始，如果查找的数据比根节点小，就去左子树找，否则去右子树</li>
-<li>和子树的多个关键字进行比较，找到它所处的范围，然后去范围对应的子树中继续查找</li>
-<li>以此循环，直到找到或者到叶子节点还没找到为止</li>
+<li>假设有 K 台机器，将大数据集分成 K 个数据流，每台机器使用单机版蓄水池抽样处理一个数据流，抽样 m 个数据，并最后记录处理的数据量为 N1, N2, …, Nk, …, NK(假设 m&lt;Nk)。N1+N2+…+NK=N。</li>
+<li>取 [1, N] 一个随机数 d，若 d&lt;N1，则在第一台机器的蓄水池中等概率不放回地（1/m）选取一个数据；若 N1&lt;=d&lt;(N1+N2)，则在第二台机器的蓄水池中等概率不放回地选取一个数据；一次类推，重复 m 次，则最终从 N 大数据集中选出 m 个数据。</li>
 </ol>
-<h2 id="B-树如何保证平衡"><a href="#B-树如何保证平衡" class="headerlink" title="B 树如何保证平衡"></a>B 树如何保证平衡</h2><p>我们知道，平衡的树之所以能够加快查找速度，是因为在添加、删除的时候做了某些操作以保证平衡。</p>
-<p>平衡二叉树的平衡条件是：<strong>左右子树的高度差不大于 1</strong>；而 B 树的平衡条件则有三点：</p>
+<p>m/N 的概率验证如下：</p>
 <ol>
-<li>叶子节点都在同一层</li>
-<li>每个节点的关键字数为子树个数减一（子树个数 k 介于树的阶 M 和它的二分之一</li>
-<li>子树的关键字保证左小右大的顺序</li>
+<li>第 k 台机器中的蓄水池数据被选取的概率为 m/Nk。</li>
+<li>从第 k 台机器的蓄水池中选取一个数据放进最终蓄水池的概率为 Nk/N。</li>
+<li>第 k 台机器蓄水池的一个数据被选中的概率为 1/m。（不放回选取时等概率的）</li>
+<li>重复 m 次选取，则每个数据被选中的概率为 <strong>m<em>(m/Nk</em>Nk/N*1/m)=m/N</strong>。</li>
 </ol>
-<p>也就是说，一棵 3 阶的 B 树（即节点最多有三个子树），每个节点的关键字数最少为 1，最多为 2，如果要添加数据的子树的关键字数已经是最多，就需要<strong>拆分节点，调整树的结构。</strong></p>
-<p>网上找到一张很不错的动图，我们来根据它分析下 B 树添加元素时如何保证平衡。</p>
-<p>这个图用以表示往 4 阶 B 树中依次插入下面这组数据的过程：</p>
-<p>6 10 4 14 5 11 15 3 2 12 1 7 8 8 6 3 6 21 5 15 15 6 32 23 45 65 7 8 6 5 4</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a83c2de95ba?imageslim" alt=""></p>
-<p><strong>建议放大图查看</strong>。</p>
-<p>由于我比较懒，我们来根据前几步分析下 B 树的添加流程：</p>
-<ol>
-<li>首先明确：<strong>4 阶 B 树表示每个节点最多有 4 个子树、3 个关键字，最少有 2 个子树、一个关键字</strong></li>
-<li>添加 6，第一个节点，没什么好说的</li>
-<li>添加 10，根节点最多能放三个关键字，按顺序添到根节点中</li>
-<li>添加 4，还能放到根节点中</li>
-<li>添加 14，这时超出了关键字最大限制，需要把 14 添加为子树，同时为了保证 “所有叶子节点在同一层”，就需要拆几个关键字作为子树：</li>
+<h2 id="四、算法验证"><a href="#四、算法验证" class="headerlink" title="四、算法验证"></a>四、算法验证</h2><p>写一份完整的代码，用来验证蓄水池抽样的随机性。数据集大小为 1000，蓄水池容量为 10，做 10_0000 次抽样。如果程序正确，那么每个数被抽中的次数接近 1000 次。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br></pre></td><td class="code"><pre><span class="line">package cn.edu.njupt.qyz;</span><br><span class="line"></span><br><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.Arrays;</span><br><span class="line">import java.util.LinkedList;</span><br><span class="line">import java.util.List;</span><br><span class="line">import java.util.Random;</span><br><span class="line">import java.util.Set;</span><br><span class="line">import java.util.TreeSet;</span><br><span class="line">import java.util.concurrent.Callable;</span><br><span class="line">import java.util.concurrent.ExecutionException;</span><br><span class="line">import java.util.concurrent.ExecutorService;</span><br><span class="line">import java.util.concurrent.Executors;</span><br><span class="line">import java.util.concurrent.Future;</span><br><span class="line"></span><br><span class="line">public class ReservoirSampling &#123;</span><br><span class="line"></span><br><span class="line">    static ExecutorService exec = Executors.newFixedThreadPool(4);</span><br><span class="line"></span><br><span class="line">    // 抽样任务，用作模拟并行抽样</span><br><span class="line">    private static class SampleTask implements Callable&lt;int[]&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        // 输入该任务的数据</span><br><span class="line">        private int[] innerData;</span><br><span class="line">        // 蓄水池容量</span><br><span class="line">        private int m;</span><br><span class="line"></span><br><span class="line">        SampleTask (int m, int[] innerData)</span><br><span class="line">        &#123;</span><br><span class="line">            this.innerData = innerData;</span><br><span class="line">            this.m = m;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public int[] call() throws Exception</span><br><span class="line">        &#123;</span><br><span class="line">            int[] reservoir = sample(this.m, this.innerData);</span><br><span class="line">            return reservoir;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 并行抽样</span><br><span class="line">    public static int[] mutiSample(int m, int[] dataStream) throws InterruptedException, ExecutionException</span><br><span class="line">    &#123;</span><br><span class="line">        Random rand = new Random();</span><br><span class="line"></span><br><span class="line">        int[] reservoir = initReservoir(m, dataStream);</span><br><span class="line"></span><br><span class="line">        // 生成3个范围内随机数，将数据切成4份</span><br><span class="line">        List&lt;Integer&gt; list = getRandInt(rand, dataStream.length); </span><br><span class="line">        int s1 = list.get(0);</span><br><span class="line">        int s2 = list.get(1);</span><br><span class="line">        int s3 = list.get(2);</span><br><span class="line">        // 每个任务处理的数据量</span><br><span class="line">        double n1 = s1 - 0;</span><br><span class="line">        double n2 = s2 - s1;</span><br><span class="line">        double n3 = s3 - s2;</span><br><span class="line">        double n4 = dataStream.length - s3;</span><br><span class="line"></span><br><span class="line">        // 并行抽样</span><br><span class="line">        Future&lt;int[]&gt; f1 = exec.submit(new SampleTask(m, Arrays.copyOfRange(dataStream, 0, s1)));</span><br><span class="line">        Future&lt;int[]&gt; f2 = exec.submit(new SampleTask(m, Arrays.copyOfRange(dataStream, s1, s2)));</span><br><span class="line">        Future&lt;int[]&gt; f3 = exec.submit(new SampleTask(m, Arrays.copyOfRange(dataStream, s2, s3)));</span><br><span class="line">        Future&lt;int[]&gt; f4 = exec.submit(new SampleTask(m, Arrays.copyOfRange(dataStream, s3, dataStream.length)));</span><br><span class="line">        List&lt;Integer&gt; r1 = getList(f1.get());</span><br><span class="line">        List&lt;Integer&gt; r2 = getList(f2.get());</span><br><span class="line">        List&lt;Integer&gt; r3 = getList(f3.get());</span><br><span class="line">        List&lt;Integer&gt; r4 = getList(f4.get());</span><br><span class="line"></span><br><span class="line">        // 进行m次抽样</span><br><span class="line">        for (int i = 0; i &lt; m; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            int p = rand.nextInt(dataStream.length);</span><br><span class="line">            // 根据随机数落在的范围选择元素</span><br><span class="line">            if (p &lt; s1)</span><br><span class="line">            &#123;</span><br><span class="line">                reservoir[i] = getRandEle(r1, rand.nextInt(r1.size()));</span><br><span class="line">            &#125;</span><br><span class="line">            else if (p &lt; s2)</span><br><span class="line">            &#123;</span><br><span class="line">                reservoir[i] = getRandEle(r2, rand.nextInt(r2.size()));</span><br><span class="line">            &#125;</span><br><span class="line">            else if (p &lt; s3)</span><br><span class="line">            &#123;</span><br><span class="line">                reservoir[i] = getRandEle(r3, rand.nextInt(r3.size()));</span><br><span class="line">            &#125;</span><br><span class="line">            else</span><br><span class="line">            &#123;</span><br><span class="line">                reservoir[i] = getRandEle(r4, rand.nextInt(r4.size()));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return reservoir;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 根据输入返回随机位置的元素，并且删除该元素，模拟不放回</span><br><span class="line">    private static int getRandEle(List&lt;Integer&gt; list, int idx)</span><br><span class="line">    &#123;</span><br><span class="line">        return list.remove(idx);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 获取bound范围内的3个随机数，用来分割数据集</span><br><span class="line">    private static List&lt;Integer&gt; getRandInt(Random rand, int bound)</span><br><span class="line">    &#123;</span><br><span class="line">        Set&lt;Integer&gt; set = new TreeSet&lt;&gt;();</span><br><span class="line">        List&lt;Integer&gt; list = new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        while (set.size() &lt; 3)</span><br><span class="line">        &#123;</span><br><span class="line">            set.add(rand.nextInt(bound));</span><br><span class="line">        &#125;</span><br><span class="line">        for (int e: set)</span><br><span class="line">        &#123;</span><br><span class="line">            list.add(e);</span><br><span class="line">        &#125;</span><br><span class="line">        return list;</span><br><span class="line">    &#125;</span><br><span class="line">    // 数据转换成List</span><br><span class="line">    private static List&lt;Integer&gt; getList(int[] arr)</span><br><span class="line">    &#123;</span><br><span class="line">        List&lt;Integer&gt; list = new LinkedList&lt;&gt;();</span><br><span class="line">        for (int a : arr)</span><br><span class="line">        &#123;</span><br><span class="line">            list.add(a);</span><br><span class="line">        &#125;</span><br><span class="line">        return list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 单机版蓄水池抽样</span><br><span class="line">    public static int[] sample(int m, int[] dataStream)</span><br><span class="line">    &#123;</span><br><span class="line">        // 随机数生成器，以系统当前nano时间作为种子</span><br><span class="line">        Random rand = new Random();</span><br><span class="line"></span><br><span class="line">        int[] reservoir = initReservoir(m, dataStream);</span><br><span class="line"></span><br><span class="line">        // init</span><br><span class="line">        for (int i = 0; i &lt; reservoir.length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            reservoir[i] = dataStream[i];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        for (int i = m; i &lt; dataStream.length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            // 随机获得一个[0, i]内的随机整数</span><br><span class="line">            int d = rand.nextInt(i + 1);</span><br><span class="line">            // 如果随机整数在[0, m-1]范围内，则替换蓄水池中的元素</span><br><span class="line">            if (d &lt; m)</span><br><span class="line">            &#123;</span><br><span class="line">                reservoir[d] = dataStream[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return reservoir;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static int[] initReservoir (int m, int[] dataStream)</span><br><span class="line">    &#123;</span><br><span class="line">        int[] reservoir;</span><br><span class="line"></span><br><span class="line">        if (m &gt; dataStream.length)</span><br><span class="line">        &#123;</span><br><span class="line">            reservoir = new int[dataStream.length];</span><br><span class="line">        &#125;</span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">            reservoir = new int[m];</span><br><span class="line">        &#125;</span><br><span class="line">        return reservoir;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 单机版测试</span><br><span class="line">    public void test()</span><br><span class="line">    &#123;</span><br><span class="line">        // 样本长度</span><br><span class="line">        int len = 1000;</span><br><span class="line">        // 蓄水池容量</span><br><span class="line">        int m = 10;</span><br><span class="line">        // 抽样次数，用作验证抽样的随机性</span><br><span class="line">        int iterTime = 100000;</span><br><span class="line">        // 每个数字被抽到的次数</span><br><span class="line">        int[] freq = new int[len];</span><br><span class="line">        // 样本</span><br><span class="line">        int[] dataStream = new int[len];</span><br><span class="line"></span><br><span class="line">        // init dataStream</span><br><span class="line">        for (int i = 0; i &lt; dataStream.length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            dataStream[i] = i;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // count freq</span><br><span class="line">        for (int k = 0; k &lt; iterTime; k++)</span><br><span class="line">        &#123;</span><br><span class="line">            // 进行抽样</span><br><span class="line">            int[] reservoir = sample(m, dataStream);</span><br><span class="line">            // 计算出现次数</span><br><span class="line">            for (int i = 0; i &lt; reservoir.length; i++)</span><br><span class="line">            &#123;</span><br><span class="line">                int ele = reservoir[i];</span><br><span class="line">                freq[ele] += 1; </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        printStaticInfo(freq);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 测试并行抽样</span><br><span class="line">    public void mutiTest() throws InterruptedException, ExecutionException</span><br><span class="line">    &#123;</span><br><span class="line">        // 样本长度</span><br><span class="line">        int len = 1000;</span><br><span class="line">        // 蓄水池容量</span><br><span class="line">        int m = 10;</span><br><span class="line">        // 抽样次数，用作验证抽样的随机性</span><br><span class="line">        int iterTime = 10_0000;</span><br><span class="line">        // 每个数字被抽到的次数</span><br><span class="line">        int[] freq = new int[len];</span><br><span class="line">        // 样本</span><br><span class="line">        int[] dataStream = new int[len];</span><br><span class="line"></span><br><span class="line">        // init dataStream</span><br><span class="line">        for (int i = 0; i &lt; dataStream.length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            dataStream[i] = i;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // count freq</span><br><span class="line">        for (int k = 0; k &lt; iterTime; k++)</span><br><span class="line">        &#123;</span><br><span class="line">            // 进行抽样</span><br><span class="line">            int[] reservoir = mutiSample(m, dataStream);</span><br><span class="line">            // 计算出现次数</span><br><span class="line">            for (int i = 0; i &lt; reservoir.length; i++)</span><br><span class="line">            &#123;</span><br><span class="line">                int ele = reservoir[i];</span><br><span class="line">                freq[ele] += 1; </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        printStaticInfo(freq);</span><br><span class="line">    &#125;</span><br><span class="line">    // 打印统计信息</span><br><span class="line">    private void printStaticInfo (int[] freq)</span><br><span class="line">    &#123;</span><br><span class="line">        // 期望、方差和标准差</span><br><span class="line">        double avg = 0;</span><br><span class="line">        double var = 0;</span><br><span class="line">        double sigma = 0;</span><br><span class="line">        // print</span><br><span class="line">        for (int i = 0; i &lt; freq.length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            if (i % 10 == 9) System.out.println();</span><br><span class="line">            System.out.print(freq[i] + &quot;, &quot;);</span><br><span class="line">            avg += ((double)(freq[i]) / freq.length);</span><br><span class="line">            var += (double)(freq[i] * freq[i]) / freq.length;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 输出统计信息</span><br><span class="line">        System.out.println(&quot;\n===============================&quot;);</span><br><span class="line">        var = var - avg * avg;</span><br><span class="line">        sigma = Math.sqrt(var);</span><br><span class="line">        System.out.println(&quot;Average: &quot; + avg);</span><br><span class="line">        System.out.println(&quot;Variance: &quot; + var);</span><br><span class="line">        System.out.println(&quot;Standard deviation: &quot; + sigma);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main (String[] args) throws InterruptedException, ExecutionException</span><br><span class="line">    &#123;</span><br><span class="line">        ReservoirSampling rs = new ReservoirSampling();</span><br><span class="line">        rs.mutiTest();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>单机版输出和并行版的输出类似，截取片段如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">948, 1006, 1014, 1019, 1033, 1040, 948, 1014, 1000, 951, </span><br><span class="line">1014, 987, 1049, 1043, 1034, 983, 1006, 974, 1060, 1009, </span><br><span class="line">986, 1021, 1024, 963, 1041, 1028, 988, 1011, 975, 980, </span><br><span class="line">1055, 1017, 1010, 1018, 1013, 983, 942, 1056, 1003, 1063, </span><br><span class="line">1004, 1004, 999, 976, 957, 935, 1061, 1018, 1002, 1018, </span><br><span class="line">1019, 946, 985, 1057, 1012, 965, 978, 1040, 1026, 1064, </span><br><span class="line">1026, 1018, 980, 996, 1025, 1028, 1006, 944, 986, 981, </span><br><span class="line">923, 1015, 991, 1019, 1024, 1143, 989, 985, 1022, 1019, </span><br><span class="line">1004, 1000, 989, 972, 1041, 988, 1050, 932, 975, 1037, </span><br><span class="line">1016, 983, 1051, 1003, 983, 986, 1017, 1009, 936, 993, </span><br><span class="line">965, 976, 1001, 1000, 988, 1030, 1050, 1024, 981, 985, </span><br><span class="line">935, 1023, 996, 1007, 1013, 1046, 1003, 1006, 973, 989, </span><br><span class="line">943, </span><br><span class="line">===============================</span><br><span class="line">Average: 1000.0000000000002</span><br><span class="line">Variance: 1011.8799999983748</span><br><span class="line">Standard deviation: 31.81006130139291</span><br></pre></td></tr></table></figure>
+<p>此外，为了对比单机版与并行版（4 线程）的性能差异，使用 10_0000 大小的数据集，蓄水池容量 10，进行 100_0000 次重复抽样，对比两者的运行时间。结果如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">---------单机版----------</span><br><span class="line"></span><br><span class="line">===============================</span><br><span class="line">Average: 100.00000000000125</span><br><span class="line">Variance: 100.31497999751264</span><br><span class="line">Standard deviation: 10.015736617818613</span><br><span class="line">---------并行版----------</span><br><span class="line"></span><br><span class="line">===============================</span><br><span class="line">Average: 100.00000000000169</span><br><span class="line">Variance: 100.63045999737915</span><br><span class="line">Standard deviation: 10.031473470900432</span><br><span class="line">单机版耗时：2006s</span><br><span class="line">并行版耗时：1265s</span><br></pre></td></tr></table></figure>
+<p>从输出结果可以看出，算法保证了数据选取的随机性。且并行版算法能够有效提高数据吞吐量。</p>
+<h2 id="五、应用场景"><a href="#五、应用场景" class="headerlink" title="五、应用场景"></a>五、应用场景</h2><p>蓄水池抽样的 O(N) 时间复杂度，O(m) 空间复杂度令其适用于对流数据、大数据集的等概率抽样。比如一个大文本数据，随机输出其中的几行。</p>
+<h2 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h2><p>象征性总结：优雅巧妙的算法——蓄水池抽样。</p>
+<h2 id="七、参考文献"><a href="#七、参考文献" class="headerlink" title="七、参考文献"></a>七、参考文献</h2><ol>
+<li><a href="https://link.jianshu.com?t=http%3A%2F%2Fblog.jobbole.com%2F42550%2F" target="_blank" rel="noopener">数据工程师必知算法：蓄水池抽样</a></li>
+<li><a href="https://link.jianshu.com?t=http%3A%2F%2Fwww.cnblogs.com%2Fpython27%2Fp%2FReservoir_Sampling_Algorithm.html" target="_blank" rel="noopener">【算法 34】蓄水池抽样算法 (Reservoir Sampling Algorithm)</a></li>
+<li><a href="https://www.jianshu.com/p/eea05fb27e3f" target="_blank" rel="noopener">分布式 / 并行蓄水池抽样 (Distributed/Parallel Reservoir Sampling)</a></li>
+<li><a href="https://link.jianshu.com?t=https%3A%2F%2Fballsandbins.wordpress.com%2F2014%2F04%2F13%2Fdistributedparallel-reservoir-sampling%2F" target="_blank" rel="noopener">Distributed/Parallel Reservoir Sampling</a></li>
 </ol>
-<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a8432fdb64b?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""> 拆为：<img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a8433e01546?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
-<p>这个拆的过程比较复杂，首先要确定根节点保留几个关键字，由于 <strong>“非叶子节点的根节点至少有 2 棵子树”</strong> 的限制，那就至少需要两个关键字分出去，又因为 <strong>“子树数是关键字数 + 1”</strong>，如果根节点有两个关键字，就得有三个子树，无法满足，所以只好把除 6 以外的三个关键字都拆为子树。</p>
-<p>谁和谁在一个子树上呢，根据 <strong>“左子树比关键字小、右子树比关键字大”</strong> 的规律，4 在左子树，10 和 14 在右子树。</p>
-<p>继续添加 ：</p>
-<ol>
-<li>添加 5，放到 4 所在的子树上</li>
-<li>添加 11，放在 10 和 14 所在的右子树上</li>
-<li>添加 15，按大小应该放到 10、11 和 14 所在的子树上，但因为超过了关键字数限制，又得拆分</li>
-</ol>
-<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a843f1656c8?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
-<p>因为 <strong>“根节点必须都在同一层”</strong>，因此我们不能给现有的左右子树添加子树，只能添加给 6 了；但是如果 6 有三个子树，就必须得有 2 个关键字，提升谁做关键字好呢，这得看谁做 6 中间的子树，因为右子树的所有关键字都得比父节点的关键字大，所以这个提升的关键字只能比未来右子树中的关键字都小，那就只有 10 和 11 可以考虑了。</p>
-<p>提升 10 吧，没有比它小的做子树，那就只能提升 11 了：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a8449e5305e?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
-<p>再添加元素也是类似的逻辑：</p>
-<ol>
-<li>首先考虑要插入的子树是否已经超出了关键字数的限制</li>
-<li>超出的话，如果要插入的位置是叶子节点，就只能拆一个关键字添加到要插入位置的父节点</li>
-<li>如果非叶子节点，就得从其他子树拆子树给新插入的元素做孩子</li>
-</ol>
-<p>删除也是一样的，要考虑删除孩子后，父节点是否还满足子树 k 介于 M/2 和 M 的条件，不满足就得从别的节点拆子树甚至修改相关子树结构来保持平衡。</p>
-<p>总之添加、删除的过程很复杂，要考虑的条件很多，具体实现就不细追究了，这里我们有个基本认识即可。</p>
-<p>正是这个复杂的保持平衡操作，使得平衡后的 B 树能够发挥出磁盘中快速查找的作用。</p>
-<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><blockquote>
-<p>这部分摘自：<a href="https://link.juejin.im?target=http%3A%2F%2Fblog.jobbole.com%2F79311%2F" target="_blank" rel="noopener">浅谈算法和数据结构：平衡查找树之 B 树</a></p>
-</blockquote>
-<p>文件系统和数据库系统中常用的 B/B+ 树，他通过对每个节点存储个数的扩展，使得对连续的数据能够进行较快的定位和访问，能够有效减少查找时间，提高存储的空间局部性从而减少 IO 操作。他广泛用于文件系统及数据库中，如：</p>
-<ul>
-<li><p>Windows：HPFS 文件系统</p>
-</li>
-<li><p>Mac：HFS，HFS+ 文件系统</p>
-</li>
-<li><p>Linux：ResiserFS，XFS，Ext3FS，JFS 文件系统</p>
-</li>
-<li><p>数据库：ORACLE，MYSQL，SQLSERVER 等中</p>
-</li>
-<li><p>数据库：ORACLE，MYSQL，SQLSERVER 等中</p>
-</li>
-</ul>
-<h1 id="B-树-1"><a href="#B-树-1" class="headerlink" title="B+ 树"></a>B+ 树</h1><blockquote>
-<p>这部分主要学习自 “程序员小灰” 的 <a href="https://link.juejin.im?target=https%3A%2F%2Fmp.weixin.qq.com%2Fs%2FjRZMMONW3QP43dsDKIV9VQ" target="_blank" rel="noopener">漫画：什么是 B + 树？</a></p>
-</blockquote>
-<p>了解了 B 树后再来了解下它的变形版：B+ 树，它比 B 树的查询性能更高。</p>
-<p>一棵 B+ 树需要满足以下条件：</p>
-<ol>
-<li>节点的子树数和关键字数相同（B 树是关键字数比子树数少一）</li>
-<li>节点的关键字表示的是子树中的最大数，在子树中同样含有这个数据</li>
-<li>叶子节点包含了全部数据，同时符合左小右大的顺序</li>
-</ol>
-<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a844c9a40b6?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
-<p>简单概括下 B+ 树的三个特点：</p>
-<ol>
-<li>关键字数和子树相同</li>
-<li>非叶子节点仅用作索引，它的关键字和子节点有重复元素</li>
-<li>叶子节点用指针连在一起</li>
-</ol>
-<p>首先第一点不用特别介绍了，在 B 树中，节点的关键字用于在查询时确定查询区间，因此关键字数比子树数少一；而在 B+ 树中，节点的关键字代表子树的最大值，因此关键字数等于子树数。</p>
-<p>第二点，除叶子节点外的所有节点的关键字，都在它的下一级子树中同样存在，最后所有数据都存储在叶子节点中。</p>
-<blockquote>
-<p>根节点的最大关键字其实就表示整个 B+ 树的最大元素。</p>
-</blockquote>
-<p>第三点，叶子节点包含了全部的数据，并且按顺序排列，B+ 树使用一个链表将它们排列起来，这样在查询时效率更快。</p>
-<p>由于 B+ 树的中间节点不含有实际数据，只有子树的最大数据和子树指针，因此磁盘页中可以容纳更多节点元素，也就是说同样数据情况下，B+ 树会 B 树更加 “矮胖”，因此查询效率更快。</p>
-<p>B+ 树的查找必会查到叶子节点，更加稳定。</p>
-<p>有时候需要查询某个范围内的数据，由于 B+ 树的叶子节点是一个有序链表，只需在叶子节点上遍历即可，不用像 B 树那样挨个中序遍历比较大小。</p>
-<p>B+ 树的三个优点：</p>
-<ol>
-<li>层级更低，IO 次数更少</li>
-<li>每次都需要查询到叶子节点，查询性能稳定</li>
-<li>叶子节点形成有序链表，范围查询方便</li>
-</ol>
-<p>添加过程就不深入研究了，后面用到再看吧，这里先贴一个 B+ 树动态添加元素图：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a844ffb91f5?imageslim" alt=""></p>
-<h1 id="Thanks"><a href="#Thanks" class="headerlink" title="Thanks"></a>Thanks</h1><ul>
-<li><a href="https://link.juejin.im?target=https%3A%2F%2Fwww.zhihu.com%2Fquestion%2F30527705" target="_blank" rel="noopener">www.zhihu.com/question/30…</a></li>
-<li><a href="https://link.juejin.im?target=https%3A%2F%2Fzhuanlan.zhihu.com%2Fp%2F27700617" target="_blank" rel="noopener">zhuanlan.zhihu.com/p/27700617</a></li>
-<li><a href="https://link.juejin.im?target=https%3A%2F%2Fmp.weixin.qq.com%2Fs%2FjRZMMONW3QP43dsDKIV9VQ" target="_blank" rel="noopener">mp.weixin.qq.com/s/jRZMMONW3…</a></li>
-<li><a href="https://link.juejin.im?target=http%3A%2F%2Fblog.jobbole.com%2F79311%2F" target="_blank" rel="noopener">blog.jobbole.com/79311/</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-    
-  
-
-  
-
-  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/02/SpringCloud 警告 (Eureka)：EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="woo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Woo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                  <span class="post-sticky-flag" title="Sticky">
-                    <i class="fa fa-thumb-tack"></i>
-                  </span>
-                
-                
-                <a href="/2018/11/02/SpringCloud 警告 (Eureka)：EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE/" class="post-title-link" itemprop="url">EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-11-02 22:11:29" itemprop="dateCreated datePublished" datetime="2018-11-02T22:11:29+01:00">2018-11-02</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-02-02 22:24:55" itemprop="dateModified" datetime="2019-02-02T22:24:55+01:00">2019-02-02</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>警告！Eureka 可能存在维护了错误的实例列表（当它们没有启动的时候，Eureka 却把它当成启动的了）；Renews 值小于 Threshold 值，因此剩下未过期的都是安全的。</strong></p>
-<p><strong>原因分析：</strong></p>
-<p>这个是 Eureka 的自我保护机制。Eureka Server 在运行期间，会统计心跳失败的比例在 15 分钟之内是否低于 85%，如果出现低于的情况（在单机调试的时候很容易满足，实际在生产环境上通常是由于网络不稳定导致），Eureka Server 会将当前的实例注册信息保护起来，同时提示这个警告。</p>
-<p>Eureka server 和 client 之间每隔 30 秒会进行一次心跳通信，告诉 server，client 还活着。由此引出两个名词：<br>Renews threshold：server 期望在每分钟中收到的心跳次数<br>Renews (last min)：上一分钟内收到的心跳次数。</p>
-<p>前文说到禁止注册 server 自己为 client，不管 server 是否禁止，阈值（threshold）是 1。client 个数为 n，阈值为 1+2<em>n（此为一个 server 且禁止自注册的情况）<br>如果是多个 server，且开启了自注册，那么就和 client 一样，是对于其他的 server 来说就是 client，是要 </em> 2 的</p>
-<p>我开了两个 server，自注册，相关数据如下<br><img src="http://img.blog.csdn.net/20170418001242248?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvenpwNDQ4NTYxNjM2/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""><br>阈值：1+2<em>1<br>renews：<br>1）自注册 2 + 2</em>1<br>2）非自注册：2*1</p>
-<p>Eurake 有一个配置参数 eureka.server.renewalPercentThreshold，定义了 renews 和 renews threshold 的比值，默认值为 0.85。当 server 在 15 分钟内，比值低于 percent，即少了 15% 的微服务心跳，server 会进入自我保护状态，Self-Preservation。在此状态下，server 不会删除注册信息，这就有可能导致在调用微服务时，实际上服务并不存在。<br>这种保护状态实际上是考虑了 client 和 server 之间的心跳是因为网络问题，而非服务本身问题，不能简单的删除注册信息</p>
-<p>stackoverflow 上，有人给出的建议是：<br>1、在生产上可以开自注册，部署两个 server<br>2、在本机器上测试的时候，可以把比值调低，比如 0.49<br>3、或者简单粗暴把自我保护模式关闭</p>
-<pre>**`eureka.server.enableSelfPreservation=false`**</pre>
-
-<p><strong> 参考文档</strong></p>
-<p><a href="https://www.cnblogs.com/breath-taking/articles/7940364.html" target="_blank" rel="noopener">https://www.cnblogs.com/breath-taking/articles/7940364.html</a></p>
 
           
         

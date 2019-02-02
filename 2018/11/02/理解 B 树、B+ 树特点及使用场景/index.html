@@ -28,6 +28,9 @@
 
 
 
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
 
 
 
@@ -74,7 +77,7 @@
     root: '/',
     scheme: 'Gemini',
     version: '7.0.0',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
     fastclick: false,
     lazyload: false,
@@ -103,21 +106,21 @@
 <meta property="og:site_name" content="Blog of Woo">
 <meta property="og:description" content="读完本文你将了解：  B 树 对比平衡二叉树和 B 树 B 树中如何查找数据 B 树如何保证平衡 使用场景   B+ 树 Thanks  大家好，前面那篇文章《3 分钟理解完全二叉树、平衡二叉树、二叉查找树》中我们了解了几种特殊的二叉树的功能及特点，知道了它们在进行查找数据时可以提高效率，但需要注意的是，这是指在内存中进行查找。如果有海量的数据，不可能一次性读取到内存中，这时候就要考虑的是，如何在">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/5/29/163a9a83c2850cba?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
-<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/5/29/163a9a83c2c6d53b?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
-<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/5/29/163a9a83c2bc8726?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
-<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/5/29/163a9a83c2de95ba?imageslim">
+<meta property="og:image" content="http://yoursite.com/img/AVL.jpeg">
+<meta property="og:image" content="http://yoursite.com/img/B-tree.jpeg">
+<meta property="og:image" content="http://yoursite.com/img/AVL&B_tree.jpeg">
+<meta property="og:image" content="http://yoursite.com/img/BInsert.gif">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/5/29/163a9a8432fdb64b?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/5/29/163a9a8433e01546?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/5/29/163a9a843f1656c8?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/5/29/163a9a8449e5305e?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/5/29/163a9a844c9a40b6?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/5/29/163a9a844ffb91f5?imageslim">
-<meta property="og:updated_time" content="2019-02-02T21:24:55.662Z">
+<meta property="og:updated_time" content="2019-02-02T22:01:56.838Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="理解B树,B+树特点及使用场景">
 <meta name="twitter:description" content="读完本文你将了解：  B 树 对比平衡二叉树和 B 树 B 树中如何查找数据 B 树如何保证平衡 使用场景   B+ 树 Thanks  大家好，前面那篇文章《3 分钟理解完全二叉树、平衡二叉树、二叉查找树》中我们了解了几种特殊的二叉树的功能及特点，知道了它们在进行查找数据时可以提高效率，但需要注意的是，这是指在内存中进行查找。如果有海量的数据，不可能一次性读取到内存中，这时候就要考虑的是，如何在">
-<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/5/29/163a9a83c2850cba?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+<meta name="twitter:image" content="http://yoursite.com/img/AVL.jpeg">
 
 
 
@@ -182,7 +185,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -230,7 +233,24 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+    <a href="/archives" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
 
   </li>
         
@@ -361,7 +381,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-02 22:24:55" itemprop="dateModified" datetime="2019-02-02T22:24:55+01:00">2019-02-02</time>
+                <time title="Modified: 2019-02-02 23:01:56" itemprop="dateModified" datetime="2019-02-02T23:01:56+01:00">2019-02-02</time>
               
             
           </span>
@@ -418,14 +438,14 @@
 <p>和平衡二叉树相同的点在于：B 树的节点数据大小也是按照左小右大，子树与节点的大小比较决定了子树指针所处位置。</p>
 <p>看着概念可能有点难理解，来看看图对比下平衡二叉树和 B 树。</p>
 <h2 id="对比平衡二叉树和-B-树"><a href="#对比平衡二叉树和-B-树" class="headerlink" title="对比平衡二叉树和 B 树"></a>对比平衡二叉树和 B 树</h2><p>首先是节点， 平衡二叉树的节点如下图所示，每个节点有一个数据和最多两个子树：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a83c2850cba?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
+<p><img src="/img/AVL.jpeg" alt=""></p>
 <p>B 树中的每个节点由两部分组成：</p>
 <ol>
 <li>关键字（可以理解为数据）</li>
 <li>指向孩子节点的指针</li>
 </ol>
 <p>B 树的节点如下图所示，每个节点可以有不只一个数据，同时拥有<strong>数据数加一</strong>个子树，同时每个节点左子树的数据比当前节点都小、右子树的数据都比当前节点的数据大：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a83c2c6d53b?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
+<p><img src="/img/B-tree.jpeg" alt=""></p>
 <blockquote>
 <p>上图是为了方便读者理解 B 树每个节点的内容，实际绘制图形还是以圆表示每个节点。</p>
 </blockquote>
@@ -436,7 +456,7 @@
 <li>所有的叶子结点都位于同一层</li>
 </ol>
 <p>用一张图对比平衡二叉树和 B 树：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a83c2bc8726?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
+<p><img src="/img/AVL&amp;B_tree.jpeg" alt=""></p>
 <p>可以看到，<strong>B 树的每个节点可以表示的信息更多，因此整个树更加 “矮胖”，这在从磁盘中查找数据（先读取到内存、后查找）的过程中，可以减少磁盘 IO 的次数，从而提升查找速度。</strong></p>
 <h2 id="B-树中如何查找数据"><a href="#B-树中如何查找数据" class="headerlink" title="B 树中如何查找数据"></a>B 树中如何查找数据</h2><p>因为 B 树的子树大小排序规则，因此在 B 树中查找数据时，一般需要这样：</p>
 <ol>
@@ -455,7 +475,7 @@
 <p>网上找到一张很不错的动图，我们来根据它分析下 B 树添加元素时如何保证平衡。</p>
 <p>这个图用以表示往 4 阶 B 树中依次插入下面这组数据的过程：</p>
 <p>6 10 4 14 5 11 15 3 2 12 1 7 8 8 6 3 6 21 5 15 15 6 32 23 45 65 7 8 6 5 4</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a83c2de95ba?imageslim" alt=""></p>
+<p><img src="/img/BInsert.gif" alt=""></p>
 <p><strong>建议放大图查看</strong>。</p>
 <p>由于我比较懒，我们来根据前几步分析下 B 树的添加流程：</p>
 <ol>
@@ -573,8 +593,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/02/SpringCloud 警告 (Eureka)：EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE/" rel="next" title="EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE">
-                <i class="fa fa-chevron-left"></i> EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE
+              <a href="/2018/11/02/类加载器与双亲委派模型/" rel="next" title="类加载器与双亲委派模型">
+                <i class="fa fa-chevron-left"></i> 类加载器与双亲委派模型
               </a>
             
           </div>
@@ -583,8 +603,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/02/类加载器与双亲委派模型/" rel="prev" title="类加载器与双亲委派模型">
-                类加载器与双亲委派模型 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/02/如何优雅的使用和理解线程池/" rel="prev" title="如何优雅的使用和理解线程池">
+                如何优雅的使用和理解线程池 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

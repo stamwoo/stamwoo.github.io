@@ -28,6 +28,9 @@
 
 
 
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
 
 
 
@@ -74,7 +77,7 @@
     root: '/',
     scheme: 'Gemini',
     version: '7.0.0',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
     fastclick: false,
     lazyload: false,
@@ -103,18 +106,12 @@
 <meta property="og:site_name" content="Blog of Woo">
 <meta property="og:description" content="在 springboot 官网照着给的介绍写了个 springboot 程序 pom.xml 1234567891011&amp;lt;parent&amp;gt;    &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;    &amp;lt;artifactId&amp;gt;spring-boot-starter-parent&amp;lt;/artifactId&amp;gt;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409005618644-1487234010.png">
-<meta property="og:image" content="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409005713894-1428437850.png">
-<meta property="og:image" content="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409005517644-1213300216.png">
 <meta property="og:image" content="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409004634847-1050076443.png">
-<meta property="og:image" content="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409010006191-38718118.png">
-<meta property="og:image" content="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409010021238-427644219.png">
-<meta property="og:image" content="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409010114410-919234476.png">
-<meta property="og:updated_time" content="2019-02-02T21:24:55.661Z">
+<meta property="og:updated_time" content="2019-02-02T21:50:18.854Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="spring cloud 扫不到自定义controller">
 <meta name="twitter:description" content="在 springboot 官网照着给的介绍写了个 springboot 程序 pom.xml 1234567891011&amp;lt;parent&amp;gt;    &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;    &amp;lt;artifactId&amp;gt;spring-boot-starter-parent&amp;lt;/artifactId&amp;gt;">
-<meta name="twitter:image" content="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409005618644-1487234010.png">
+<meta name="twitter:image" content="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409004634847-1050076443.png">
 
 
 
@@ -179,7 +176,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -227,7 +224,24 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+    <a href="/archives" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
 
   </li>
         
@@ -358,7 +372,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-02 22:24:55" itemprop="dateModified" datetime="2019-02-02T22:24:55+01:00">2019-02-02</time>
+                <time title="Modified: 2019-02-02 22:50:18" itemprop="dateModified" datetime="2019-02-02T22:50:18+01:00">2019-02-02</time>
               
             
           </span>
@@ -398,17 +412,17 @@
 <p>java 文件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">package hello;</span><br><span class="line"></span><br><span class="line">import org.springframework.boot.*;</span><br><span class="line">import org.springframework.boot.autoconfigure.*;</span><br><span class="line">import org.springframework.stereotype.*;</span><br><span class="line">import org.springframework.web.bind.annotation.*;</span><br><span class="line"></span><br><span class="line">@Controller</span><br><span class="line">@EnableAutoConfiguration</span><br><span class="line">public class Application&#123;</span><br><span class="line"></span><br><span class="line">    @RequestMapping(&quot;/&quot;)</span><br><span class="line">    @ResponseBody</span><br><span class="line">    String home() &#123;</span><br><span class="line">        return &quot;Hello World!&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        SpringApplication.run(SampleController.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>然后自己写了个 Controller</p>
-<p><img src="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409005618644-1487234010.png" alt=""></p>
-<p>但是无论如何也无法扫描到自己定义的 Controller（如果用的是 idea，能明显看出来，如果扫描到会有<img src="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409005713894-1428437850.png" alt="">的图标）。访问结果结果如下：</p>
-<p><img src="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409005517644-1213300216.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Controller</span><br><span class="line">public class MyController &#123;</span><br><span class="line">    @RequestMapping(&quot;/hello&quot;)</span><br><span class="line">    @ResponseBody</span><br><span class="line">    public String hello() &#123;</span><br><span class="line">        System.out.println(&quot;hello&quot;);</span><br><span class="line">        return &quot;hello&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是无论如何也无法扫描到自己定义的 Controller</p>
+<p>访问之后,网页报错:</p>
+<blockquote>
+<p>Whitelabel Error Page</p>
+</blockquote>
 <p>报错的原因是找不到对应的映射路径，即 Controller 没有被扫描到 ，。</p>
 <p>郁闷至极，到晚上搜的结果说的是 LoginController 方的位置不对，应该让启动类和 Controller 的包在同一级目录下，然而对我却没有效果。</p>
 <p>官方建议 application.java 放的位置：</p>
 <p><img src="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409004634847-1050076443.png" alt=""></p>
 <p>最后尝试了下修改下 Application 上的注解，<strong>我本来复制官方的代码用的是 @Controller 和 <em>@EnableAutoConfiguration，试着换成了 @</em>**</strong>SpringBootApplication<strong> </strong>注解**，出乎意外的可以扫描到 Controller </p>
-<p><img src="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409010006191-38718118.png" alt=""></p>
-<p><img src="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409010021238-427644219.png" alt=""></p>
-<p><img src="https://images2015.cnblogs.com/blog/997786/201704/997786-20170409010114410-919234476.png" alt=""></p>
 <p>又查了下官方的文档终于找到原因了，原因是：</p>
 <p>如果使用 @Controller 和 <em>@EnableAutoConfiguration 注解还应该再加上一个注解：</em>@ComponentScan  就可以了。@Controller 和 @EnableAutoConfiguration 没有扫描注解的功能，而 @ComponentScan 是</p>
 <p> springboot 专门用来扫描 @Component, @Service, @Repository, @Controller 等注解的注解</p>
@@ -456,8 +470,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/02/为什么你需要一个 vps/" rel="next" title="为什么你需要一个VPS">
-                <i class="fa fa-chevron-left"></i> 为什么你需要一个VPS
+              <a href="/2018/11/02/为什么匿名内部类访问局部变量必须是 final/" rel="next" title="为什么匿名内部类访问局部变量必须是final?">
+                <i class="fa fa-chevron-left"></i> 为什么匿名内部类访问局部变量必须是final?
               </a>
             
           </div>
@@ -466,8 +480,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/02/mysql explain 详解/" rel="prev" title="mysql explain 详解">
-                mysql explain 详解 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/02/既然Java反射可以访问和修改私有成员变量，那封装成private的意义/" rel="prev" title="既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？">
+                既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？ <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

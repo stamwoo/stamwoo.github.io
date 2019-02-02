@@ -28,6 +28,9 @@
 
 
 
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
 
 
 
@@ -74,7 +77,7 @@
     root: '/',
     scheme: 'Gemini',
     version: '7.0.0',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
     fastclick: false,
     lazyload: false,
@@ -96,22 +99,22 @@
 
 
 
-  <meta name="description" content="功能问题，通过日志，单步调试相对比较好定位。 性能问题，例如线上服务器 CPU100%，如何找到相关服务，如何定位问题代码，更考验技术人的功底。 58 到家架构部，运维部，58 速运技术部联合进行了一次线上服务 CPU 问题排查实战演练，同学们反馈有收获，特将实战演练的试题和答案公布出来，希望对大家也有帮助。 题目 某服务器上部署了若干 tomcat 实例，即若干垂直切分的 Java 站点服务，以">
+  <meta name="description" content="功能问题，通过日志，单步调试相对比较好定位。 性能问题，例如线上服务器 CPU100%，如何找到相关服务，如何定位问题代码，更考验技术人的功底。 题目 某服务器上部署了若干 tomcat 实例，即若干垂直切分的 Java 站点服务，以及若干 Java 微服务，突然收到运维的 CPU 异常告警。 问：如何定位是哪个服务进程导致 CPU 过载，哪个线程导致 CPU 过载，哪段代码导致 CPU 过载？">
 <meta property="og:type" content="article">
 <meta property="og:title" content="线上服务CPU100%问题快速定位实践">
 <meta property="og:url" content="http://yoursite.com/2018/11/02/线上服务 CPU100% 问题快速定位实战/index.html">
 <meta property="og:site_name" content="Blog of Woo">
-<meta property="og:description" content="功能问题，通过日志，单步调试相对比较好定位。 性能问题，例如线上服务器 CPU100%，如何找到相关服务，如何定位问题代码，更考验技术人的功底。 58 到家架构部，运维部，58 速运技术部联合进行了一次线上服务 CPU 问题排查实战演练，同学们反馈有收获，特将实战演练的试题和答案公布出来，希望对大家也有帮助。 题目 某服务器上部署了若干 tomcat 实例，即若干垂直切分的 Java 站点服务，以">
+<meta property="og:description" content="功能问题，通过日志，单步调试相对比较好定位。 性能问题，例如线上服务器 CPU100%，如何找到相关服务，如何定位问题代码，更考验技术人的功底。 题目 某服务器上部署了若干 tomcat 实例，即若干垂直切分的 Java 站点服务，以及若干 Java 微服务，突然收到运维的 CPU 异常告警。 问：如何定位是哪个服务进程导致 CPU 过载，哪个线程导致 CPU 过载，哪段代码导致 CPU 过载？">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://img-blog.csdn.net/20170820155433936?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamlhbmd6aGV4aQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
-<meta property="og:image" content="https://img-blog.csdn.net/20170820155519686?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamlhbmd6aGV4aQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
-<meta property="og:image" content="https://img-blog.csdn.net/20170820155607290?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamlhbmd6aGV4aQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
-<meta property="og:image" content="https://img-blog.csdn.net/20170820155648798?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamlhbmd6aGV4aQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
-<meta property="og:updated_time" content="2019-02-02T21:24:55.662Z">
+<meta property="og:image" content="http://yoursite.com/img/topc.png">
+<meta property="og:image" content="http://yoursite.com/img/tophp.png">
+<meta property="og:image" content="http://yoursite.com/img/printf.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/02/线上服务%20CPU100%%20问题快速定位实战/jstack.png">
+<meta property="og:updated_time" content="2019-02-02T22:04:21.176Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="线上服务CPU100%问题快速定位实践">
-<meta name="twitter:description" content="功能问题，通过日志，单步调试相对比较好定位。 性能问题，例如线上服务器 CPU100%，如何找到相关服务，如何定位问题代码，更考验技术人的功底。 58 到家架构部，运维部，58 速运技术部联合进行了一次线上服务 CPU 问题排查实战演练，同学们反馈有收获，特将实战演练的试题和答案公布出来，希望对大家也有帮助。 题目 某服务器上部署了若干 tomcat 实例，即若干垂直切分的 Java 站点服务，以">
-<meta name="twitter:image" content="https://img-blog.csdn.net/20170820155433936?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamlhbmd6aGV4aQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta name="twitter:description" content="功能问题，通过日志，单步调试相对比较好定位。 性能问题，例如线上服务器 CPU100%，如何找到相关服务，如何定位问题代码，更考验技术人的功底。 题目 某服务器上部署了若干 tomcat 实例，即若干垂直切分的 Java 站点服务，以及若干 Java 微服务，突然收到运维的 CPU 异常告警。 问：如何定位是哪个服务进程导致 CPU 过载，哪个线程导致 CPU 过载，哪段代码导致 CPU 过载？">
+<meta name="twitter:image" content="http://yoursite.com/img/topc.png">
 
 
 
@@ -176,7 +179,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -224,7 +227,24 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+    <a href="/archives" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
 
   </li>
         
@@ -355,7 +375,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-02 22:24:55" itemprop="dateModified" datetime="2019-02-02T22:24:55+01:00">2019-02-02</time>
+                <time title="Modified: 2019-02-02 23:04:21" itemprop="dateModified" datetime="2019-02-02T23:04:21+01:00">2019-02-02</time>
               
             
           </span>
@@ -391,7 +411,6 @@
       
         <p>功能问题，通过日志，单步调试相对比较好定位。</p>
 <p>性能问题，例如线上<a href="https://www.baidu.com/s?wd=%E6%9C%8D%E5%8A%A1%E5%99%A8&amp;tn=24004469_oem_dg&amp;rsv_dl=gh_pl_sl_csd" target="_blank" rel="noopener">服务器</a> CPU100%，如何找到相关服务，如何定位问题代码，更考验技术人的功底。</p>
-<p>58 到家架构部，运维部，58 速运<a href="https://www.baidu.com/s?wd=%E6%8A%80%E6%9C%AF%E9%83%A8&amp;tn=24004469_oem_dg&amp;rsv_dl=gh_pl_sl_csd" target="_blank" rel="noopener">技术部</a>联合进行了一次线上服务 CPU 问题排查实战演练，同学们反馈有收获，特将实战演练的试题和答案公布出来，希望对大家也有帮助。</p>
 <p>题目</p>
 <p>某服务器上部署了若干 tomcat 实例，即若干垂直切分的 Java 站点服务，以及若干 Java 微服务，突然收到运维的 CPU 异常告警。</p>
 <p>问：如何定位是哪个服务进程导致 CPU 过载，哪个线程导致 CPU 过载，哪段代码导致 CPU 过载？</p>
@@ -405,7 +424,7 @@
 </li>
 </ul>
 <p>图示：</p>
-<p><img src="https://img-blog.csdn.net/20170820155433936?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamlhbmd6aGV4aQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<p><img src="/img/topc.png" alt=""></p>
 <p>如上图，最耗 CPU 的进程 PID 为 10765</p>
 <p>步骤二：找到最耗 CPU 的线程</p>
 <p>工具：top</p>
@@ -417,13 +436,13 @@
 </li>
 </ul>
 <p>图示：</p>
-<p><img src="https://img-blog.csdn.net/20170820155519686?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamlhbmd6aGV4aQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<p><img src="/img/tophp.png" alt=""></p>
 <p>如上图，进程 10765 内，最耗 CPU 的线程 PID 为 10804</p>
 <p>步骤三：将线程 PID 转化为 16 进制</p>
 <p>工具：printf</p>
 <p>方法：printf “%x\n” 10804</p>
 <p>图示：</p>
-<p><img src="https://img-blog.csdn.net/20170820155607290?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamlhbmd6aGV4aQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<p><img src="/img/printf.png" alt=""></p>
 <p>如上图，10804 对应的 16 进制是 0x2a34，当然，这一步可以用计算器。</p>
 <p>之所以要转化为 16 进制，是因为堆栈里，线程 id 是用 16 进制表示的。</p>
 <p>步骤四：查看堆栈，找到线程在干嘛</p>
@@ -436,7 +455,7 @@
 </li>
 </ul>
 <p>图示：</p>
-<p><img src="https://img-blog.csdn.net/20170820155648798?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamlhbmd6aGV4aQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<p><img src="jstack.png" alt=""></p>
 <p>如上图，找到了耗 CPU 高的线程对应的线程名称 “AsyncLogger-1”，以及看到了该线程正在执行代码的堆栈。</p>
 <p>希望对经常进行线上 CPU 问题排查的同学有帮助，如果有更好的实践，也欢迎分享。</p>
 <p>想要印象深刻，请大家务必线上实操练习哟。</p>
@@ -480,8 +499,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/02/既然Java反射可以访问和修改私有成员变量，那封装成private的意义/" rel="prev" title="既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？">
-                既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？ <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/02/为什么匿名内部类访问局部变量必须是 final/" rel="prev" title="为什么匿名内部类访问局部变量必须是final?">
+                为什么匿名内部类访问局部变量必须是final? <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
