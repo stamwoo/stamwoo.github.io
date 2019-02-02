@@ -7,17 +7,17 @@
   
   <title>Blog of Woo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本文由 简悦 SimpRead 转码， 原文地址 http://cuipengfei.me/blog/2013/06/22/why-does-it-have-to-be-final/  一个谜团如果你用过类似 guava 这种 “伪函数式编程” 风格的 library 的话，那下面这种风格的代码对你来说应该不陌生： 123456789public void tryUsingGuava() &amp;#1">
+  <meta name="description" content="一个谜团如果你用过类似 guava 这种 “伪函数式编程” 风格的 library 的话，那下面这种风格的代码对你来说应该不陌生： 123456789public void tryUsingGuava() &amp;#123;    final int expectedLength = 4;    Iterables.filter(Lists.newArrayList(&amp;quot;123&amp;quot;, &amp;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Blog of Woo">
 <meta property="og:url" content="http://yoursite.com/2019/01/21/为什么匿名内部类访问局部变量必须是 final/index.html">
 <meta property="og:site_name" content="Blog of Woo">
-<meta property="og:description" content="本文由 简悦 SimpRead 转码， 原文地址 http://cuipengfei.me/blog/2013/06/22/why-does-it-have-to-be-final/  一个谜团如果你用过类似 guava 这种 “伪函数式编程” 风格的 library 的话，那下面这种风格的代码对你来说应该不陌生： 123456789public void tryUsingGuava() &amp;#1">
+<meta property="og:description" content="一个谜团如果你用过类似 guava 这种 “伪函数式编程” 风格的 library 的话，那下面这种风格的代码对你来说应该不陌生： 123456789public void tryUsingGuava() &amp;#123;    final int expectedLength = 4;    Iterables.filter(Lists.newArrayList(&amp;quot;123&amp;quot;, &amp;">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-01-21T18:42:32.906Z">
+<meta property="og:updated_time" content="2019-02-02T20:45:14.366Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Blog of Woo">
-<meta name="twitter:description" content="本文由 简悦 SimpRead 转码， 原文地址 http://cuipengfei.me/blog/2013/06/22/why-does-it-have-to-be-final/  一个谜团如果你用过类似 guava 这种 “伪函数式编程” 风格的 library 的话，那下面这种风格的代码对你来说应该不陌生： 123456789public void tryUsingGuava() &amp;#1">
+<meta name="twitter:description" content="一个谜团如果你用过类似 guava 这种 “伪函数式编程” 风格的 library 的话，那下面这种风格的代码对你来说应该不陌生： 123456789public void tryUsingGuava() &amp;#123;    final int expectedLength = 4;    Iterables.filter(Lists.newArrayList(&amp;quot;123&amp;quot;, &amp;">
   
     <link rel="alternate" href="/atom.xml" title="Blog of Woo" type="application/atom+xml">
   
@@ -76,10 +76,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>本文由 <a href="http://ksria.com/simpread/" target="_blank" rel="noopener">简悦 SimpRead</a> 转码， 原文地址 <a href="http://cuipengfei.me/blog/2013/06/22/why-does-it-have-to-be-final/" target="_blank" rel="noopener">http://cuipengfei.me/blog/2013/06/22/why-does-it-have-to-be-final/</a></p>
-</blockquote>
-<h2 id="一个谜团"><a href="#一个谜团" class="headerlink" title="一个谜团"></a>一个谜团</h2><p>如果你用过类似 guava 这种 “伪函数式编程” 风格的 library 的话，那下面这种风格的代码对你来说应该不陌生：</p>
+        <h2 id="一个谜团"><a href="#一个谜团" class="headerlink" title="一个谜团"></a>一个谜团</h2><p>如果你用过类似 guava 这种 “伪函数式编程” 风格的 library 的话，那下面这种风格的代码对你来说应该不陌生：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public void tryUsingGuava() &#123;</span><br><span class="line">    final int expectedLength = 4;</span><br><span class="line">    Iterables.filter(Lists.newArrayList(&quot;123&quot;, &quot;1234&quot;), new Predicate&lt;String&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public boolean apply(String str) &#123;</span><br><span class="line">            return str.length() == expectedLength;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这段代码对一个字符串的 list 进行过滤，从中找出长度为 4 的字符串。看起来很是平常，没什么特别的。</p>
 <p>但是，声明 expectedLength 时用的那个 final 看起来有点扎眼，把它去掉试试：</p>
@@ -121,7 +118,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/21/为什么匿名内部类访问局部变量必须是 final/" data-id="cjrnxzmfq0004z7kmehl01kx0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/21/为什么匿名内部类访问局部变量必须是 final/" data-id="cjrnyarc900069lkmsw2q5odh" class="article-share-link">Share</a>
       
       
     </footer>
@@ -130,7 +127,7 @@
     
 <nav id="article-nav">
   
-    <a href="/2019/01/21/极光之旅/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/01/22/单例模式_双重检验锁真的线程安全吗/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
@@ -179,11 +176,15 @@
       <ul>
         
           <li>
-            <a href="/2019/02/02/mysql explain 详解 _ Hexo/">(no title)</a>
+            <a href="/2019/02/02/TCP为什么是三次握手/">(no title)</a>
           </li>
         
           <li>
-            <a href="/2019/02/02/为什么你需要一个 vps _ Hexo/">(no title)</a>
+            <a href="/2019/02/02/mysql explain 详解/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/02/为什么你需要一个 vps/">(no title)</a>
           </li>
         
           <li>
@@ -192,10 +193,6 @@
         
           <li>
             <a href="/2019/01/31/SpringCloud 警告 (Eureka)：EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE./">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2019/01/29/蓄水池抽样算法/">(no title)</a>
           </li>
         
       </ul>

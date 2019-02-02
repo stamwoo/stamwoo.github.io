@@ -62,10 +62,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-极光之旅" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <article id="post-单例模式_双重检验锁真的线程安全吗" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/01/21/极光之旅/" class="article-date">
-  <time datetime="2019-01-21T20:43:52.166Z" itemprop="datePublished">2019-01-21</time>
+    <a href="/2019/01/22/单例模式_双重检验锁真的线程安全吗/" class="article-date">
+  <time datetime="2019-01-22T20:19:41.860Z" itemprop="datePublished">2019-01-22</time>
 </a>
     
   </div>
@@ -74,21 +74,31 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="极光之旅"><a href="#极光之旅" class="headerlink" title="极光之旅"></a>极光之旅</h2><p>1.23号早上7点极光进入高峰期,因此22号晚上到.</p>
-<p>23,24,25三天高峰.</p>
-<p>22晚到挪威,25号上午从挪威回来.</p>
-<p>住22一晚,23一晚,24一晚</p>
-<p>住airbnb,汽车极光团.</p>
-<ol>
-<li>极光kp指数 &gt; 3</li>
-<li>天气未来三天为晴朗</li>
-<li>不在农历10-20号范围内</li>
-</ol>
+        <h1 id="单例模式–双重检验锁真的线程安全吗"><a href="#单例模式–双重检验锁真的线程安全吗" class="headerlink" title="单例模式–双重检验锁真的线程安全吗"></a>单例模式–双重检验锁真的线程安全吗</h1><p>单例模式是我们最熟悉不过的一种设计模式，用来保证内存中只有一个对象的实例。虽然容易，但里面的坑也有很多，比如双重检验锁模式 (double checked locking pattern) 真的是线程安全的吗？</p>
+<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>在对项目进行 PMD 静态代码检测时，遇到了这样一个问题</p>
+<blockquote>
+<p>Partially created objects can be returned by the Double Checked Locking pattern when used in Java. An optimizing JRE may assign a reference to the baz variable before it calls the constructor of the object the reference points to.</p>
+<p>Note: With Java 5, you can make Double checked locking work, if you declare the variable to be volatile.</p>
+</blockquote>
+<p>大概意思是，使用双重检验锁模式，可能会返回一个部分初始化的对象。可能大家有些疑虑，什么是部分初始化的对象，我们下面继续分析</p>
+<h2 id="什么是双重检验锁模式"><a href="#什么是双重检验锁模式" class="headerlink" title="什么是双重检验锁模式"></a>什么是双重检验锁模式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public static Singleton getSingleton() &#123;</span><br><span class="line">    if (instance == null) &#123;</span><br><span class="line">        synchronized (Singleton.class) &#123;</span><br><span class="line">            if (instance == null) &#123;</span><br><span class="line">                instance = new Singleton();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们看到，在同步代码块的内部和外部都判断了 instance == null，这时因为，可能会有多个线程同时进入到同步代码块外的 if 判断中，如果在同步代码块内部不进行判空的话，可能会初始化多个实例。</p>
+<h2 id="问题所在"><a href="#问题所在" class="headerlink" title="问题所在"></a>问题所在</h2><p>这种写法看似完美无缺，但它却是有问题的，或者说它并不担保一定完美无缺。主要原因在于 instance = new Singleton(); 并不是原子性的操作。<br>创建一个对象可以分为三部：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.分配对象的内存空间</span><br><span class="line">2.初始化对象</span><br><span class="line">3.设置instance指向刚分配的内存地址,当instance指向分配地址时，instance不为空</span><br></pre></td></tr></table></figure>
+<p>但是，2、3 部之间，可能会被重排序，造成创建对象顺序变为 1-3-2. 试想一个场景：<br>线程 A 第一次创建对象 Singleton，对象创建顺序为 1-3-2；<br>当给 instance 分配完内存后，这时来了一个线程 B 调用了 getSingleton() 方法<br>这时候进行 instance == null 的判断，发现 instance 并不为 null。<br>但注意这时候 instance 并没有初始化对象，线程 B 则会将这个未初始化完成的对象返回。那 B 线程使用 instance 时就可能会出现问题，这就是双重检查锁问题所在。</p>
+<h2 id="使用-volatile"><a href="#使用-volatile" class="headerlink" title="使用 volatile"></a>使用 volatile</h2><p>对于上述的问题，我们可以通过把 instance 声明为 volatile 型来解决</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton &#123;</span><br><span class="line">    private volatile static Singleton instance;</span><br><span class="line"></span><br><span class="line">    public static Singleton getSingleton() &#123;</span><br><span class="line">        if (instance == null) &#123;</span><br><span class="line">            synchronized (Singleton.class) &#123;</span><br><span class="line">                if (instance == null) &#123;</span><br><span class="line">                    instance = new Singleton();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有些人认为使用 volatile 的原因是可见性，也就是可以保证线程在本地不会存有 instance 的副本，每次都是去主内存中读取。但其实是不对的。使用 volatile 的主要原因是其另一个特性：禁止指令重排序优化。也就是说，在 volatile 变量的赋值操作后面会有一个内存屏障，读操作不会被重排序到内存屏障之前。比如上面的例子，取操作必须在执行完 1-2-3 之后或者 1-3-2 之后，不存在执行到 1-3 然后取到值的情况。从「先行发生原则」的角度理解的话，就是对于一个 volatile 变量的写操作都先行发生于后面对这个变量的读操作（这里的“后面”是时间上的先后顺序.   </p>
+<p>但是特别注意在 Java 5 以前的版本使用了 volatile 的双检锁还是有问题的。其原因是 Java 5 以前的 JMM （Java 内存模型）是存在缺陷的，即时将变量声明成 volatile 也不能完全避免重排序，主要是 volatile 变量前后的代码仍然存在重排序问题。这个 volatile 屏蔽重排序的问题在 Java 5 中才得以修复，所以在这之后才可以放心使用 volatile。</p>
+<p>必须在 JDK5 版本以上使用。</p>
+<h2 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton &#123;</span><br><span class="line">    private static class SingletonHolder &#123;</span><br><span class="line">        private static final Singleton INSTANCE = new Singleton();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private Singleton() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static final Singleton getInstance() &#123;</span><br><span class="line">        return SingletonHolder.INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种写法是目前比较推荐的一种写法，采用静态内部类的方式，即实现了懒加载又不会出现线程安全问题。而且减少了 synchronized 的开销。</p>
+<h2 id="Learn-more"><a href="#Learn-more" class="headerlink" title="Learn more"></a><a href="#Learn-more" title="Learn more"></a>Learn more</h2><p><a href="http://www.infoq.com/cn/articles/double-checked-locking-with-delay-initialization" target="_blank" rel="noopener">双重检查锁定与延迟初始化</a><br><a href="https://pmd.github.io/pmd-5.5.4/pmd-java/rules/java/basic.html" target="_blank" rel="noopener">PMD-DoubleCheckedLocking</a><br><a href="http://www.javaworld.com/article/2074979/java-concurrency/double-checked-locking--clever--but-broken.html" target="_blank" rel="noopener">Double-checked locking: Clever, but broken</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/21/极光之旅/" data-id="cjrnxzmfs0006z7km85j3jgzi" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/22/单例模式_双重检验锁真的线程安全吗/" data-id="cjrnyarc800059lkm4r0xrpqp" class="article-share-link">Share</a>
       
       
     </footer>
@@ -110,10 +120,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>本文由 <a href="http://ksria.com/simpread/" target="_blank" rel="noopener">简悦 SimpRead</a> 转码， 原文地址 <a href="http://cuipengfei.me/blog/2013/06/22/why-does-it-have-to-be-final/" target="_blank" rel="noopener">http://cuipengfei.me/blog/2013/06/22/why-does-it-have-to-be-final/</a></p>
-</blockquote>
-<h2 id="一个谜团"><a href="#一个谜团" class="headerlink" title="一个谜团"></a>一个谜团</h2><p>如果你用过类似 guava 这种 “伪函数式编程” 风格的 library 的话，那下面这种风格的代码对你来说应该不陌生：</p>
+        <h2 id="一个谜团"><a href="#一个谜团" class="headerlink" title="一个谜团"></a>一个谜团</h2><p>如果你用过类似 guava 这种 “伪函数式编程” 风格的 library 的话，那下面这种风格的代码对你来说应该不陌生：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public void tryUsingGuava() &#123;</span><br><span class="line">    final int expectedLength = 4;</span><br><span class="line">    Iterables.filter(Lists.newArrayList(&quot;123&quot;, &quot;1234&quot;), new Predicate&lt;String&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public boolean apply(String str) &#123;</span><br><span class="line">            return str.length() == expectedLength;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这段代码对一个字符串的 list 进行过滤，从中找出长度为 4 的字符串。看起来很是平常，没什么特别的。</p>
 <p>但是，声明 expectedLength 时用的那个 final 看起来有点扎眼，把它去掉试试：</p>
@@ -155,7 +162,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/21/为什么匿名内部类访问局部变量必须是 final/" data-id="cjrnxzmfq0004z7kmehl01kx0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/21/为什么匿名内部类访问局部变量必须是 final/" data-id="cjrnyarc900069lkmsw2q5odh" class="article-share-link">Share</a>
       
       
     </footer>
@@ -182,7 +189,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/21/既然Java反射可以访问和修改私有成员变量，那封装成private的意义/" data-id="cjrnxzmfu0007z7kmxccsz94e" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/21/既然Java反射可以访问和修改私有成员变量，那封装成private的意义/" data-id="cjrnyarca00079lkmetjbwzyj" class="article-share-link">Share</a>
       
       
     </footer>
@@ -192,9 +199,9 @@
 
 
   
-    <article id="post-【深入理解 JVM】：类加载器与双亲委派模型 - smile4lee 的博客 - CSDN 博客" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <article id="post-类加载器与双亲委派模型" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/01/20/【深入理解 JVM】：类加载器与双亲委派模型 - smile4lee 的博客 - CSDN 博客/" class="article-date">
+    <a href="/2019/01/20/类加载器与双亲委派模型/" class="article-date">
   <time datetime="2019-01-20T16:11:56.219Z" itemprop="datePublished">2019-01-20</time>
 </a>
     
@@ -204,8 +211,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p> 原文地址  <a href="https://blog.csdn.net/u011080472/article/details/51332866" target="_blank" rel="noopener">https://blog.csdn.net/u011080472/article/details/51332866</a></p>
-<h1 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a><strong>类加载器</strong></h1><h2 id="加载类的开放性"><a href="#加载类的开放性" class="headerlink" title="加载类的开放性"></a><strong>加载类的开放性</strong></h2><p>类加载器（ClassLoader）是 Java 语言的一项创新，也是 Java 流行的一个重要原因。在类加载的第一阶段 “加载” 过程中，需要通过一个类的全限定名来获取定义此类的二进制字节流，完成这个动作的代码块就是<strong>类加载器</strong>。这一动作是放在 Java 虚拟机外部去实现的，以便让应用程序自己决定如何获取所需的类。</p>
+        <h1 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a><strong>类加载器</strong></h1><h2 id="加载类的开放性"><a href="#加载类的开放性" class="headerlink" title="加载类的开放性"></a><strong>加载类的开放性</strong></h2><p>类加载器（ClassLoader）是 Java 语言的一项创新，也是 Java 流行的一个重要原因。在类加载的第一阶段 “加载” 过程中，需要通过一个类的全限定名来获取定义此类的二进制字节流，完成这个动作的代码块就是<strong>类加载器</strong>。这一动作是放在 Java 虚拟机外部去实现的，以便让应用程序自己决定如何获取所需的类。</p>
 <p>虚拟机规范并没有指明二进制字节流要从一个 Class 文件获取，或者说根本没有指明从哪里获取、怎样获取。这种开放使得 Java 在很多领域得到充分运用，例如：</p>
 <ul>
 <li>从 ZIP 包中读取，这很常见，成为 JAR，EAR，WAR 格式的基础</li>
@@ -245,7 +251,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/20/【深入理解 JVM】：类加载器与双亲委派模型 - smile4lee 的博客 - CSDN 博客/" data-id="cjrnxzmg70009z7kmlxpexbx2" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/20/类加载器与双亲委派模型/" data-id="cjrnyarcj000b9lkmhc6k7cry" class="article-share-link">Share</a>
       
       
     </footer>
@@ -291,11 +297,15 @@
       <ul>
         
           <li>
-            <a href="/2019/02/02/mysql explain 详解 _ Hexo/">(no title)</a>
+            <a href="/2019/02/02/TCP为什么是三次握手/">(no title)</a>
           </li>
         
           <li>
-            <a href="/2019/02/02/为什么你需要一个 vps _ Hexo/">(no title)</a>
+            <a href="/2019/02/02/mysql explain 详解/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/02/为什么你需要一个 vps/">(no title)</a>
           </li>
         
           <li>
@@ -304,10 +314,6 @@
         
           <li>
             <a href="/2019/01/31/SpringCloud 警告 (Eureka)：EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE./">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2019/01/29/蓄水池抽样算法/">(no title)</a>
           </li>
         
       </ul>
