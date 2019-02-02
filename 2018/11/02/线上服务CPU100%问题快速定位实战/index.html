@@ -99,24 +99,24 @@
 
 
 
-  <meta name="description" content="既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？简单来说，private并不是解决“安全”问题的。安全是指不让代码被非法看到/访问。但是只要人能拿到代码，总会有办法去查看和改变代码。其他答案提到反射可以用SecurityManager来防止private被访问。但是从更高一层的角度，即便使用了SecurityManager，还是可以通过各种方式拿到java的bytec">
+  <meta name="description" content="功能问题，通过日志，单步调试相对比较好定位。性能问题，例如线上服务器 CPU100%，如何找到相关服务，如何定位问题代码，更考验技术人的功底题目 某服务器上部署了若干 tomcat 实例，即若干垂直切分的 Java 站点服务，以及若干 Java 微服务，突然收到运维的 CPU 异常告警问：如何定位是哪个服务进程导致 CPU 过载，哪个线程导致 CPU 过载，哪段代码导致 CPU 过载?    步骤">
 <meta property="og:type" content="article">
-<meta property="og:title" content="既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？">
-<meta property="og:url" content="http://yoursite.com/2018/11/02/既然Java反射可以访问和修改私有成员变量，那封装成private的意义/index.html">
+<meta property="og:title" content="CPU100%问题定位实战">
+<meta property="og:url" content="http://yoursite.com/2018/11/02/线上服务CPU100%问题快速定位实战/index.html">
 <meta property="og:site_name" content="Blog of Woo">
-<meta property="og:description" content="既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？简单来说，private并不是解决“安全”问题的。安全是指不让代码被非法看到/访问。但是只要人能拿到代码，总会有办法去查看和改变代码。其他答案提到反射可以用SecurityManager来防止private被访问。但是从更高一层的角度，即便使用了SecurityManager，还是可以通过各种方式拿到java的bytec">
+<meta property="og:description" content="功能问题，通过日志，单步调试相对比较好定位。性能问题，例如线上服务器 CPU100%，如何找到相关服务，如何定位问题代码，更考验技术人的功底题目 某服务器上部署了若干 tomcat 实例，即若干垂直切分的 Java 站点服务，以及若干 Java 微服务，突然收到运维的 CPU 异常告警问：如何定位是哪个服务进程导致 CPU 过载，哪个线程导致 CPU 过载，哪段代码导致 CPU 过载?    步骤">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-02-02T21:24:55.662Z">
+<meta property="og:updated_time" content="2019-02-02T22:21:25.687Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？">
-<meta name="twitter:description" content="既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？简单来说，private并不是解决“安全”问题的。安全是指不让代码被非法看到/访问。但是只要人能拿到代码，总会有办法去查看和改变代码。其他答案提到反射可以用SecurityManager来防止private被访问。但是从更高一层的角度，即便使用了SecurityManager，还是可以通过各种方式拿到java的bytec">
+<meta name="twitter:title" content="CPU100%问题定位实战">
+<meta name="twitter:description" content="功能问题，通过日志，单步调试相对比较好定位。性能问题，例如线上服务器 CPU100%，如何找到相关服务，如何定位问题代码，更考验技术人的功底题目 某服务器上部署了若干 tomcat 实例，即若干垂直切分的 Java 站点服务，以及若干 Java 微服务，突然收到运维的 CPU 异常告警问：如何定位是哪个服务进程导致 CPU 过载，哪个线程导致 CPU 过载，哪段代码导致 CPU 过载?    步骤">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/11/02/既然Java反射可以访问和修改私有成员变量，那封装成private的意义/">
+  <link rel="canonical" href="http://yoursite.com/2018/11/02/线上服务CPU100%问题快速定位实战/">
 
 
 
@@ -126,7 +126,7 @@
   };
 </script>
 
-  <title>既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？ | Blog of Woo</title>
+  <title>CPU100%问题定位实战 | Blog of Woo</title>
   
 
 
@@ -293,7 +293,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/02/既然Java反射可以访问和修改私有成员变量，那封装成private的意义/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/02/线上服务CPU100%问题快速定位实战/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="woo">
@@ -310,7 +310,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？
+          <h1 class="post-title" itemprop="name headline">CPU100%问题定位实战
 
               
             
@@ -353,7 +353,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-02 22:24:55" itemprop="dateModified" datetime="2019-02-02T22:24:55+01:00">2019-02-02</time>
+                <time title="Modified: 2019-02-02 23:21:25" itemprop="dateModified" datetime="2019-02-02T23:21:25+01:00">2019-02-02</time>
               
             
           </span>
@@ -387,7 +387,16 @@
       
 
       
-        <h1 id="既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？"><a href="#既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？" class="headerlink" title="既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？"></a>既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？</h1><p>简单来说，private并不是解决“安全”问题的。<br>安全是指不让代码被非法看到/访问。但是只要人能拿到代码，总会有办法去查看和改变代码。<br>其他答案提到反射可以用SecurityManager来防止private被访问。但是从更高一层的角度，即便使用了SecurityManager，还是可以通过各种方式拿到java的bytecode，并做任意修改。比如有asm这样的lib，也有instrument api这种东西可以帮你。<br>所以记得，如果你真有一段代码不允许被别人看/用，就不要把这段代码放到其他人可以碰到的地方，而是做一个server，通过接口允许有限制的访问。其他人想破解，只能破解你的服务器网关和跳板机器。<br>关于真正的安全性，可以参考激活服务器的工作原理.<br>private想表达的不是“安全性”的意思，而是OOP的封装概念，是一种编译器可以帮助你的设计上的hint。这就像是一家没人的店挂了个牌子“闲人免进”，但你真要进去还是有各种办法可以办到。所以private，以及所有其他的access modifier都有一层隐含的含义：如果你按照遵守这套规则，开发者可以保证不问题（不考虑bug的情况下）；否则，后果自负。比如，你在用spring的IoC的时候，你知道你要“注入”，不管它是不是private的，你知道“注入”是你自己控制的，是你设计好的效果。那么通过spring的IoC利用反射帮你注入一些private property是再正常不过的用法。再比如，单元测试，你就想测一个private方法。但是因为private的缘故就是测不了。于是你可以用反射绕开这个限制，开心的做测试。虽说某些人坚持“不应该测试private方法，而应该通过测试其他方法间接测试private方法，但并没有形成广泛的共识。这里不对这个问题展开。虽然能绕开，但绕开的代码很繁琐。久而久之就会厌倦。毕竟，代码应该为你工作，而不是你为代码工作。<br>因此，我的经验是通常会用protected或者default来代替private。我曾设想runtime应该给一种运行模式，通过设定一个启动参数使其不管private这类的限制，这样做UT，做profiling等工作都会轻松许多。等到最后发布时，再用普通模式。但可惜现实当中并没有这种设定。评论区提到了Android里的VisibleForTesting，可以实现我期望的功能。大赞！感谢 @尤华杰<br>我之所以敢用protected/default来代替private是因为现实当中非private不可的情景非常少见。实际上，很多时候private带来的麻烦比起带来的好处要多，这是因为很多时候对OOP的误用造成的。OOP的误用造成了无谓的private，然后逼着你必须得绕开private。其实private就是个约定而已。<br>看看其他语言，比如python，它的“private“是一种很松散的约定，所有private的成员都用下划线开头，告诉调用者“不要随便调用我哦”，但是如果真调用了也就调用了。C++，通过指针就能绕开private。<br>有人说，private会避免新手误用。但问题是，大家从出道开始，自己或者周围的同事朋友有谁曾经出过这个问题？IDE知道一个成员当前不能访问，就根本就不会提示。如果一个人已经开始通过源代码/反编译研究“我能不能调用这个私有方法了“，他还算是一个菜鸟吗？他会不知道这里的潜在风险吗？如果真的误用了，code review能过吗？测试能过吗？如果一个公司因为误用private成员，造成了重大的损失，那这个公司就活该倒闭算了，不要在世上丢人。<br>OOP是一种编程思想，是众多编程思想中的一种。是开发者决定了一个问题应该用OOP合适，并且用了Java这样的语言来简化自己开发OOP代码时的工作。如果抱着这种态度，就不会误用，因为private在开发者的心中。其他人也不太可能误用，如果他上过几天java培训。不要因为语言是OOP的就去套，把不适合的OOP的代码强用OOP的各种套路实现，然后给自己后续的维护扩展埋坑。</p>
+        <p>功能问题，通过日志，单步调试相对比较好定位。<br>性能问题，例如线上服务器 CPU100%，如何找到相关服务，如何定位问题代码，更考验技术人的功底<br>题目 某服务器上部署了若干 tomcat 实例，即若干垂直切分的 Java 站点服务，以及若干 Java 微服务，突然收到运维的 CPU 异常告警<br>问：如何定位是哪个服务进程导致 CPU 过载，哪个线程导致 CPU 过载，哪段代码导致 CPU 过载?   </p>
+<h3 id="步骤一、找到最耗-CPU-的进程"><a href="#步骤一、找到最耗-CPU-的进程" class="headerlink" title="步骤一、找到最耗 CPU 的进程"></a>步骤一、找到最耗 CPU 的进程</h3><p>工具：top<br>方法： </p>
+<ul>
+<li>执行 top -c ，显示进程运行信息列表 </li>
+<li>键入 P (大写 p)，进程按照 CPU 使用率排序<br>最耗 CPU 的进程 PID 为 10765   <h3 id="步骤二：找到最耗-CPU-的线程"><a href="#步骤二：找到最耗-CPU-的线程" class="headerlink" title="步骤二：找到最耗 CPU 的线程"></a>步骤二：找到最耗 CPU 的线程</h3>工具：top<br>方法： </li>
+<li>top -Hp 10765 ，显示一个进程的线程运行信息列表 </li>
+<li>键入 P (大写 p)，线程按照 CPU 使用率排序，进程 10765 内，最耗 CPU 的线程 PID 为 10804 <h3 id="步骤三：将线程-PID-转化为-16-进制"><a href="#步骤三：将线程-PID-转化为-16-进制" class="headerlink" title="步骤三：将线程 PID 转化为 16 进制"></a>步骤三：将线程 PID 转化为 16 进制</h3>工具：printf 方法：printf “%x\n” 10804 ，10804 对应的 16 进制是 0x2a34，当然，这一步可以用计算器。 之所以要转化为 16 进制，是因为堆栈里，线程 id 是用 16 进制表示的。 <h3 id="步骤四：查看堆栈，找到线程在干嘛"><a href="#步骤四：查看堆栈，找到线程在干嘛" class="headerlink" title="步骤四：查看堆栈，找到线程在干嘛"></a>步骤四：查看堆栈，找到线程在干嘛</h3>工具：pstack/jstack/grep<br>方法：jstack 10765 | grep ‘0x2a34’ -C5 –color </li>
+<li>打印进程堆栈 </li>
+<li>通过线程 id，过滤得到线程堆栈<br>找到了耗 CPU 高的线程对应的线程名称 “AsyncLogger-1”，以及看到了该线程正在执行代码的堆栈。<br>希望对经常进行线上 CPU 问题排查的同学有帮助，如果有更好的实践，也欢迎分享。 想要印象深刻，请大家务必线上实操练习哟。</li>
+</ul>
 
       
     </div>
@@ -418,8 +427,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/02/线上服务CPU100%问题快速定位实战/" rel="next" title="CPU100%问题定位实战">
-                <i class="fa fa-chevron-left"></i> CPU100%问题定位实战
+              <a href="/2018/11/02/如何优雅的使用和理解线程池/" rel="next" title="如何优雅的使用和理解线程池">
+                <i class="fa fa-chevron-left"></i> 如何优雅的使用和理解线程池
               </a>
             
           </div>
@@ -428,8 +437,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/02/为什么匿名内部类访问局部变量必须是 final/" rel="prev" title="为什么匿名内部类访问局部变量必须是final?">
-                为什么匿名内部类访问局部变量必须是final? <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/02/既然Java反射可以访问和修改私有成员变量，那封装成private的意义/" rel="prev" title="既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？">
+                既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？ <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -540,7 +549,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？"><span class="nav-number">1.</span> <span class="nav-text">既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤一、找到最耗-CPU-的进程"><span class="nav-number">1.</span> <span class="nav-text">步骤一、找到最耗 CPU 的进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤二：找到最耗-CPU-的线程"><span class="nav-number">2.</span> <span class="nav-text">步骤二：找到最耗 CPU 的线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤三：将线程-PID-转化为-16-进制"><span class="nav-number">3.</span> <span class="nav-text">步骤三：将线程 PID 转化为 16 进制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤四：查看堆栈，找到线程在干嘛"><span class="nav-number">4.</span> <span class="nav-text">步骤四：查看堆栈，找到线程在干嘛</span></a></li></ol></div>
             
 
           </div>
