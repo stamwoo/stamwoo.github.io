@@ -1042,223 +1042,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://stamwoo.github.io/3262901390/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="woo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Woo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                  <span class="post-sticky-flag" title="置顶">
-                    <i class="fa fa-thumb-tack"></i>
-                  </span>
-                
-                
-                <a href="/3262901390/" class="post-title-link" itemprop="url">为什么你需要一个VPS</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-11-02 22:11:29" itemprop="dateCreated datePublished" datetime="2018-11-02T22:11:29+01:00">2018-11-02</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-02-03 16:29:40" itemprop="dateModified" datetime="2019-02-03T16:29:40+01:00">2019-02-03</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-          
-
-          
-          
-            <span id="/3262901390/" class="leancloud_visitors" data-flag-title="为什么你需要一个VPS">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">2.3k</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">2 分钟</span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="VPS-是什么"><a href="#VPS-是什么" class="headerlink" title="VPS 是什么"></a>VPS 是什么</h1><p>VPS 是 Virtual private server 的简称，中文是 “虚拟专用服务器”，是指通过虚拟化技术在独立服务器中运行的专用服务器。每个使用 VPS 技术的虚拟独立服务器拥有各自独立的公网 IP 地址、操作系统、硬盘空间、内存空间、CPU 资源等，还可以进行安装程序、重启服务器等操作，与运行一台独立服务器基本相同。</p>
-<p>很多人有点分不清 VPS 与虚拟主机的区别，网上也有很多人说过这个。博主这里就不长篇大论了，简单说，VPS 就相当于一台真正的电脑，只不过这台电脑是放在别人家的。你可以通过 ssh 工具对它做任何事，只要你开心，你砸了它也行。<br>而虚拟主机说到底是别人家的电脑借给你用，你可以使用上面的计算资源，虚拟主机的服务商已经给你提供各种安装好的工具以及计算资源。但你对它的权限是比不上 VPS 大的。</p>
-<h1 id="VPS-可以用来做什么"><a href="#VPS-可以用来做什么" class="headerlink" title="VPS 可以用来做什么"></a>VPS 可以用来做什么</h1><h2 id="Shadowsocks"><a href="#Shadowsocks" class="headerlink" title="Shadowsocks"></a>Shadowsocks</h2><p>使用 Python、C++、C# 等语言开发、基于 Apache 许可证的开放源代码软件，用于保护网络流量、加密数据传输。Shadowsocks 使用 Socks5 代理方式。<br>Shadowsocks 分为服务器端和客户端。在使用之前，需要先将服务器端部署到服务器上面，然后通过客户端连接并创建本地代理。<br>其实关于在 vps 搭建 SS 的教程已经很多了，但是博主之前搭梯子的时候发现很多教程存在一些问题，或者是太繁琐，或者是很多重要地方过了一段时间已经发生了变化，对小白用户不太友好。</p>
-<p>因此博主决定写一篇新的教程分享出来。</p>
-<h2 id="Blog"><a href="#Blog" class="headerlink" title="Blog"></a>Blog</h2><p>搭建一个属于自己的博客，搭配上 github education 提供的工具包，还可以获得一个免费域名及 SSL 认证。博主这个博客既是使用我说的这种方案搭建的。过程十分简单，按照博主的上一篇教程：在自己的 VPS 上从零开始搭建 Hexo 博客, 半天时间即可搭建完成并上线。</p>
-<h2 id="Seafile"><a href="#Seafile" class="headerlink" title="Seafile"></a>Seafile</h2><p>一套中国国产的开源、专业、可靠的云存储项目管理软件，[解决文件集中存储、共享和跨平台访问等问题。正式发布于 2012 年 10 月。除了一般网盘所提供的云存储以及共享功能外，Seafile 还提供消息通信、群组讨论等辅助功能，帮助员工更好的围绕文件展开协同工作，已有 10 多万用户使用。</p>
-<p>作为一套比较成熟的管理软件，Seafile 的安装也十分简单。Install Seafile Client on Linux</p>
-<p>此外，你还可以在 VPS 部署更多你自己写的脚本，比如爬虫类工具，抢票程序等等。一句话，只要是你的程序有 7*24h 的服务时间需求，你都可以把它放在你的 VPS 上跑。</p>
-<h1 id="VPS-哪家强"><a href="#VPS-哪家强" class="headerlink" title="VPS 哪家强"></a>VPS 哪家强</h1><p>看了上面的内容，如果你想选择一家 VPS 提供商，那么你大概有哪些选择呢？博主也给出了当下比较流行，有口碑的 VPS 服务商供大家参考。</p>
-<h2 id="DigitalOcean"><a href="#DigitalOcean" class="headerlink" title="DigitalOcean"></a>DigitalOcean</h2><p>一家位于美国的云主机服务商，总部位于纽约，成立于 2012 年。由于价格低廉，高性能配置、灵活布置的优势，近些年来发展迅猛，成为中国站长圈们喜爱的品牌。该公司拥有多个数据中心：日本东京、美国 洛杉矶、纽约、新泽西、新加坡、英国伦敦、德国富兰克林.</p>
-<p>DigitailOcean，博主习惯称为 DO。也是博主选择的第一家 VPS 服务商，对于博主这种学生党而言，DO 是最具有性价比的一家服务商，由邀请链接注册自动赠送 $10 的优惠，再通过 paypal 充值 $5 即可使用。如果是学生用户的话使用 github education 提供的学生开发包可以再获得 $50 的优惠码。也就是说 $5 就可以使用 DO 的 1G 25gSSD 的 VPS 长达 13 个月，这性价比也是没谁了吧。</p>
-<p>我的邀请链接是：$10 邀请链接, 另外为了选择合适的机房，再贴一个测速链接：SFO2 Speedtest | DigitalOcean</p>
-<h2 id="Linode"><a href="#Linode" class="headerlink" title="Linode"></a>Linode</h2><p>一个建立于美国新泽西州加洛伟的虚拟专用服务器（VPS）提供商。它的名字是由英文中 Linux 中的 Li 和 node（即 “节点” 一词）构成的混成词。如同它的名字一样，Linode 只提供运行 Linux 的服务器，而不提供运行 Windows Server 的服务器。它的服务一向以稳定著称。</p>
-<p>知乎在发展初期使用的就是 Linode 的服务，现在口碑比较好的比较稳定的就是日本机房了，不过是要抢购，基本每每放出来都被抢完了。</p>
-<h2 id="搬瓦工"><a href="#搬瓦工" class="headerlink" title="搬瓦工"></a>搬瓦工</h2><p>隶属于加拿大 IT7 旗下的 VPS 服务品牌，主推 OPENVZ 架构方案，尤其是其中的 4 款便宜年付 VPS 深受广大用户的喜欢，支持支付宝付款，旗下有四个机房，均支持一键切换机房位置以及一键安装各类软件等功能。</p>
-<p>这家前些年应该是最火的 vps 服务商了，记得曾经有 $5 的年 vps，小内存搭个 ss 还是很够用的。后来因为 ip 资源枯竭，搬瓦工拿不到什么 ip 就停了自家的超低资费服务。不过现在还是有 $19.99 的资费可以选。</p>
-<h2 id="Vultr"><a href="#Vultr" class="headerlink" title="Vultr"></a>Vultr</h2><p>一家 2014 年刚成立的 VPS 服务商，基于 KVM，采用 SSD 硬盘，拥有大量自建机房。有日本、美国洛杉矶、Dallas、Chicago、New York、Seattle、Atlanta、英国、德国等，价格便宜，配置又高。支持 Paypal、信用卡或比特币付款。</p>
-<p>这家比较好的依然是日本主机，国内 ping 值在 100 以内，也较少抽风。另外他家的最低配置也比别家高，价格嘛，自然就水涨船高了。博主作为一个学生党目前觉得还没太必要用他家，以后说不定想试一试。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-    
-  
-
-  
-
-  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://stamwoo.github.io/3714837258/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1671,6 +1454,223 @@
 <p><pre>@ComponentScan(basePackages = {“com.oskyhang”, “com.frames”})</pre></p>
 <p>注解就可以，注解指定扫描的包，就可以扫描到，更灵活方便。</p>
 <p> PS：如有疑问或错误，欢迎指教。3Q</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+    
+  
+
+  
+
+  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://stamwoo.github.io/3262901390/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="woo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Woo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                  <span class="post-sticky-flag" title="置顶">
+                    <i class="fa fa-thumb-tack"></i>
+                  </span>
+                
+                
+                <a href="/3262901390/" class="post-title-link" itemprop="url">为什么你需要一个VPS</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-02 22:11:29" itemprop="dateCreated datePublished" datetime="2018-11-02T22:11:29+01:00">2018-11-02</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-03 16:29:40" itemprop="dateModified" datetime="2019-02-03T16:29:40+01:00">2019-02-03</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+            <span id="/3262901390/" class="leancloud_visitors" data-flag-title="为什么你需要一个VPS">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.3k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">2 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="VPS-是什么"><a href="#VPS-是什么" class="headerlink" title="VPS 是什么"></a>VPS 是什么</h1><p>VPS 是 Virtual private server 的简称，中文是 “虚拟专用服务器”，是指通过虚拟化技术在独立服务器中运行的专用服务器。每个使用 VPS 技术的虚拟独立服务器拥有各自独立的公网 IP 地址、操作系统、硬盘空间、内存空间、CPU 资源等，还可以进行安装程序、重启服务器等操作，与运行一台独立服务器基本相同。</p>
+<p>很多人有点分不清 VPS 与虚拟主机的区别，网上也有很多人说过这个。博主这里就不长篇大论了，简单说，VPS 就相当于一台真正的电脑，只不过这台电脑是放在别人家的。你可以通过 ssh 工具对它做任何事，只要你开心，你砸了它也行。<br>而虚拟主机说到底是别人家的电脑借给你用，你可以使用上面的计算资源，虚拟主机的服务商已经给你提供各种安装好的工具以及计算资源。但你对它的权限是比不上 VPS 大的。</p>
+<h1 id="VPS-可以用来做什么"><a href="#VPS-可以用来做什么" class="headerlink" title="VPS 可以用来做什么"></a>VPS 可以用来做什么</h1><h2 id="Shadowsocks"><a href="#Shadowsocks" class="headerlink" title="Shadowsocks"></a>Shadowsocks</h2><p>使用 Python、C++、C# 等语言开发、基于 Apache 许可证的开放源代码软件，用于保护网络流量、加密数据传输。Shadowsocks 使用 Socks5 代理方式。<br>Shadowsocks 分为服务器端和客户端。在使用之前，需要先将服务器端部署到服务器上面，然后通过客户端连接并创建本地代理。<br>其实关于在 vps 搭建 SS 的教程已经很多了，但是博主之前搭梯子的时候发现很多教程存在一些问题，或者是太繁琐，或者是很多重要地方过了一段时间已经发生了变化，对小白用户不太友好。</p>
+<p>因此博主决定写一篇新的教程分享出来。</p>
+<h2 id="Blog"><a href="#Blog" class="headerlink" title="Blog"></a>Blog</h2><p>搭建一个属于自己的博客，搭配上 github education 提供的工具包，还可以获得一个免费域名及 SSL 认证。博主这个博客既是使用我说的这种方案搭建的。过程十分简单，按照博主的上一篇教程：在自己的 VPS 上从零开始搭建 Hexo 博客, 半天时间即可搭建完成并上线。</p>
+<h2 id="Seafile"><a href="#Seafile" class="headerlink" title="Seafile"></a>Seafile</h2><p>一套中国国产的开源、专业、可靠的云存储项目管理软件，[解决文件集中存储、共享和跨平台访问等问题。正式发布于 2012 年 10 月。除了一般网盘所提供的云存储以及共享功能外，Seafile 还提供消息通信、群组讨论等辅助功能，帮助员工更好的围绕文件展开协同工作，已有 10 多万用户使用。</p>
+<p>作为一套比较成熟的管理软件，Seafile 的安装也十分简单。Install Seafile Client on Linux</p>
+<p>此外，你还可以在 VPS 部署更多你自己写的脚本，比如爬虫类工具，抢票程序等等。一句话，只要是你的程序有 7*24h 的服务时间需求，你都可以把它放在你的 VPS 上跑。</p>
+<h1 id="VPS-哪家强"><a href="#VPS-哪家强" class="headerlink" title="VPS 哪家强"></a>VPS 哪家强</h1><p>看了上面的内容，如果你想选择一家 VPS 提供商，那么你大概有哪些选择呢？博主也给出了当下比较流行，有口碑的 VPS 服务商供大家参考。</p>
+<h2 id="DigitalOcean"><a href="#DigitalOcean" class="headerlink" title="DigitalOcean"></a>DigitalOcean</h2><p>一家位于美国的云主机服务商，总部位于纽约，成立于 2012 年。由于价格低廉，高性能配置、灵活布置的优势，近些年来发展迅猛，成为中国站长圈们喜爱的品牌。该公司拥有多个数据中心：日本东京、美国 洛杉矶、纽约、新泽西、新加坡、英国伦敦、德国富兰克林.</p>
+<p>DigitailOcean，博主习惯称为 DO。也是博主选择的第一家 VPS 服务商，对于博主这种学生党而言，DO 是最具有性价比的一家服务商，由邀请链接注册自动赠送 $10 的优惠，再通过 paypal 充值 $5 即可使用。如果是学生用户的话使用 github education 提供的学生开发包可以再获得 $50 的优惠码。也就是说 $5 就可以使用 DO 的 1G 25gSSD 的 VPS 长达 13 个月，这性价比也是没谁了吧。</p>
+<p>我的邀请链接是：$10 邀请链接, 另外为了选择合适的机房，再贴一个测速链接：SFO2 Speedtest | DigitalOcean</p>
+<h2 id="Linode"><a href="#Linode" class="headerlink" title="Linode"></a>Linode</h2><p>一个建立于美国新泽西州加洛伟的虚拟专用服务器（VPS）提供商。它的名字是由英文中 Linux 中的 Li 和 node（即 “节点” 一词）构成的混成词。如同它的名字一样，Linode 只提供运行 Linux 的服务器，而不提供运行 Windows Server 的服务器。它的服务一向以稳定著称。</p>
+<p>知乎在发展初期使用的就是 Linode 的服务，现在口碑比较好的比较稳定的就是日本机房了，不过是要抢购，基本每每放出来都被抢完了。</p>
+<h2 id="搬瓦工"><a href="#搬瓦工" class="headerlink" title="搬瓦工"></a>搬瓦工</h2><p>隶属于加拿大 IT7 旗下的 VPS 服务品牌，主推 OPENVZ 架构方案，尤其是其中的 4 款便宜年付 VPS 深受广大用户的喜欢，支持支付宝付款，旗下有四个机房，均支持一键切换机房位置以及一键安装各类软件等功能。</p>
+<p>这家前些年应该是最火的 vps 服务商了，记得曾经有 $5 的年 vps，小内存搭个 ss 还是很够用的。后来因为 ip 资源枯竭，搬瓦工拿不到什么 ip 就停了自家的超低资费服务。不过现在还是有 $19.99 的资费可以选。</p>
+<h2 id="Vultr"><a href="#Vultr" class="headerlink" title="Vultr"></a>Vultr</h2><p>一家 2014 年刚成立的 VPS 服务商，基于 KVM，采用 SSD 硬盘，拥有大量自建机房。有日本、美国洛杉矶、Dallas、Chicago、New York、Seattle、Atlanta、英国、德国等，价格便宜，配置又高。支持 Paypal、信用卡或比特币付款。</p>
+<p>这家比较好的依然是日本主机，国内 ping 值在 100 以内，也较少抽风。另外他家的最低配置也比别家高，价格嘛，自然就水涨船高了。博主作为一个学生党目前觉得还没太必要用他家，以后说不定想试一试。</p>
 
           
         
