@@ -99,20 +99,24 @@
 
 
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Blog of Woo">
-<meta property="og:url" content="https://stamwoo.github.io/archives/2018/11/index.html">
+  <meta name="description" content="mysql explain 详解语法及描述语法在 select 语句前加上 explain 关键字就可以 描述获取查询操作的执行顺序使用到的索引成功返回结果需要执行的行数 字段含义id标识符, 表示执行顺序. id 一样则自上而下, 否则大的先执行. select_type查询类型  simple: 不包含 union 操作或者不包含子查询的简单 select 查询 primary: 需要 uni">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql explain 详解">
+<meta property="og:url" content="https://stamwoo.github.io/3714837258/index.html">
 <meta property="og:site_name" content="Blog of Woo">
+<meta property="og:description" content="mysql explain 详解语法及描述语法在 select 语句前加上 explain 关键字就可以 描述获取查询操作的执行顺序使用到的索引成功返回结果需要执行的行数 字段含义id标识符, 表示执行顺序. id 一样则自上而下, 否则大的先执行. select_type查询类型  simple: 不包含 union 操作或者不包含子查询的简单 select 查询 primary: 需要 uni">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-02-02T21:24:55.661Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Blog of Woo">
+<meta name="twitter:title" content="mysql explain 详解">
+<meta name="twitter:description" content="mysql explain 详解语法及描述语法在 select 语句前加上 explain 关键字就可以 描述获取查询操作的执行顺序使用到的索引成功返回结果需要执行的行数 字段含义id标识符, 表示执行顺序. id 一样则自上而下, 否则大的先执行. select_type查询类型  simple: 不包含 union 操作或者不包含子查询的简单 select 查询 primary: 需要 uni">
 
 
 
 
 
 
-  <link rel="canonical" href="https://stamwoo.github.io/archives/2018/11/">
+  <link rel="canonical" href="https://stamwoo.github.io/3714837258/">
 
 
 
@@ -122,7 +126,7 @@
   };
 </script>
 
-  <title>归档 | Blog of Woo</title>
+  <title>mysql explain 详解 | Blog of Woo</title>
   
 
 
@@ -170,7 +174,7 @@
     
   
 
-  <div class="container sidebar-position-right page-archive">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -225,7 +229,7 @@
         
         
           
-          <li class="menu-item menu-item-archives menu-item-active">
+          <li class="menu-item menu-item-archives">
 
     
     
@@ -322,417 +326,295 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+    
+  
+
+  
+
+  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://stamwoo.github.io/3714837258/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="woo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Woo">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h2 class="post-title" itemprop="name headline">mysql explain 详解
+
+              
+            
+          </h2>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-02 22:11:29" itemprop="dateCreated datePublished" datetime="2018-11-02T22:11:29+01:00">2018-11-02</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-02 22:24:55" itemprop="dateModified" datetime="2019-02-02T22:24:55+01:00">2019-02-02</time>
+              
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 14 篇日志。 继续努力。
-      </span>
-      
 
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h2 class="archive-year" id="archive-year-2018">2018</h2>
-          </div>
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/4205246882/" itemprop="url">
             
-              <span itemprop="name">EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE</span>
             
-          </a>
-        
-      </h3>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
+          
+          
+            <span id="/3714837258/" class="leancloud_visitors" data-flag-title="mysql explain 详解">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
 
-    </header>
-  </article>
+          
 
+          
+            <div class="post-symbolscount">
+              
 
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.1k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">2 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/522943020/" itemprop="url">
-            
-              <span itemprop="name">spring cloud 扫不到自定义controller</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/3162095545/" itemprop="url">
-            
-              <span itemprop="name">TCP为什么是三次握手</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <h1 id="mysql-explain-详解"><a href="#mysql-explain-详解" class="headerlink" title="mysql explain 详解"></a>mysql explain 详解</h1><h2 id="语法及描述"><a href="#语法及描述" class="headerlink" title="语法及描述"></a>语法及描述</h2><h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p>在 select 语句前加上 explain 关键字就可以</p>
+<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>获取查询操作的执行顺序<br>使用到的索引<br>成功返回结果需要执行的行数</p>
+<h2 id="字段含义"><a href="#字段含义" class="headerlink" title="字段含义"></a>字段含义</h2><h3 id="id"><a href="#id" class="headerlink" title="id"></a>id</h3><p>标识符, 表示执行顺序. id 一样则自上而下, 否则大的先执行.</p>
+<h3 id="select-type"><a href="#select-type" class="headerlink" title="select_type"></a>select_type</h3><p>查询类型</p>
+<ol>
+<li>simple: 不包含 union 操作或者不包含子查询的简单 select 查询</li>
+<li>primary: 需要 union 操作或者含有子查询的 select, 位于最外层的 select.type 即为 primary, 且只有一个.</li>
+<li>union:union 链接的两个 select 查询, 第一个是 primiary, 第二个之后的都是 union.</li>
+<li>Dependent union: 出现在 union 或 union all 语句, 但是这个查询要收到外部查询的影响.</li>
+<li>union result: 包含 union 的结果集, 在 union 和 union all 语句中, 因为它不需要参与查询,, 所以 id 字段为 null</li>
+<li>subquery: 除了 from 子句中包含的子查询外, 其他地方出现的子查询都可能是 subquery</li>
+<li>Dependent subquery: 与 dependent union 类似, 表示这个 subquery 的查询要受到外部表查询的影响</li>
+<li>derived:from 子句中出现的子查询, 也叫做派生表, 其他数据库中可能叫做内联师徒或嵌套 select</li>
+</ol>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//外层是primary,内层是subquery</span><br><span class="line">explain select * from student s where s. classid = (select id from classes where classno=&apos;2017001&apos;);</span><br><span class="line"></span><br><span class="line">//结果有三行,第一行是primary,第二行是union,第三行是union result</span><br><span class="line">explain select * from student where id = 1 union select * from student where id = 2;</span><br><span class="line"></span><br><span class="line">//结果有四行,分别是primary,dependent subquery,dependent union,union result</span><br><span class="line">explain select * from student s where s.classid in (select id from classes where classno=&apos;2017001&apos; union select id from classes where classno=&apos;2017002&apos;);</span><br><span class="line"></span><br><span class="line">//跟mysql版本有关</span><br><span class="line">explain select * from (select * from student) s;</span><br><span class="line">table</span><br><span class="line">显示查询语句所查询的表名,如果查询使用了别名,那么这里使用的是别名.如果不涉及对数据表的操作,显示为null;有一种特殊情况,如果显示为,,则都是临时表.M,N代表的id,表示结果来自于这个查询产生</span><br></pre></td></tr></table></figure>
+<h3 id="partitions"><a href="#partitions" class="headerlink" title="partitions"></a>partitions</h3><p>表是分区表才行</p>
+<h3 id="type"><a href="#type" class="headerlink" title="type"></a>type</h3><p>查询结果类型</p>
+<ol>
+<li>const: 返回结果只有一个匹配行</li>
+<li>range: 索引范围扫描，常见于使用 &gt;,&lt;,is null,between ,in ,like 等运算符的查询中</li>
+<li>index: 索引全表扫描，把索引从头到尾扫一遍，常见于使用索引列就可以处理不需要读取数据文件的查询、可以使用索引排序或者分组的查询。</li>
+<li>index_merge: 使用了一张表的多个索引, 实际上由于要读取所个索引，性能可能大部分时间都不如 range<br>全表扫描数据文件</li>
+<li><p>possible_keys &amp; key<br>possible_keys: 查询可能使用到的索引都会在这里列出来。</p>
+</li>
+<li><p>key: 查询真正使用到的索引，select_type 为 index_merge 时，这里可能出现两个以上的索引，其他的 select_type 这里只会出现一个。</p>
+</li>
+<li><p>key_len<br>用于处理查询的索引长度，如果是单列索引，那就整个索引长度算进去，如果是多列索引，那么查询不一定都能使用到所有的列，具体使用到了多少个列的索引，这里就会计算进去，没有使用到的列，这里不会计算进去。</p>
+</li>
+</ol>
+<p>留意下这个列的值，算一下你的多列索引总长度就知道有没有使用到所有的列了.</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过对上面 explain 中的每个字段的详细讲解。我们不难看出，对查询性能影响最大的几个列是：</p>
+<ul>
+<li>select_type：查询类型</li>
+<li>type: 连接使用了何种类型</li>
+<li>rows: 查询数据需要用到的行</li>
+<li>key: 查询真正使用到的索引</li>
+<li>extra: 额外的信息<br>尽量让自己的 SQL 用上索引，避免让 extra 里面出现 file sort(文件排序),using temporary(使用临时表)。</li>
+</ul>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/3714837258/" itemprop="url">
-            
-              <span itemprop="name">mysql explain 详解</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/3262901390/" itemprop="url">
-            
-              <span itemprop="name">为什么你需要一个VPS</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/775929552/" itemprop="url">
-            
-              <span itemprop="name">为什么匿名内部类访问局部变量必须是final?</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/2868978503/" itemprop="url">
-            
-              <span itemprop="name">既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/2008800739/" itemprop="url">
-            
-              <span itemprop="name">CPU100%问题定位实战</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/1328518056/" itemprop="url">
-            
-              <span itemprop="name">如何优雅的使用和理解线程池</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/1643632136/" itemprop="url">
-            
-              <span itemprop="name">理解B树,B+树特点及使用场景</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>多谢支持</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/img/wechatpay.jpeg" alt="woo 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/img/alipay.jpeg" alt="woo 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/3262901390/" rel="next" title="为什么你需要一个VPS">
+                <i class="fa fa-chevron-left"></i> 为什么你需要一个VPS
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/3162095545/" rel="prev" title="TCP为什么是三次握手">
+                TCP为什么是三次握手 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/2018/11/page/2/">2</a><a class="extend next" rel="next" href="/archives/2018/11/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
+  </article>
 
 
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -753,8 +635,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -842,6 +733,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#mysql-explain-详解"><span class="nav-number">1.</span> <span class="nav-text">mysql explain 详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#语法及描述"><span class="nav-number">1.1.</span> <span class="nav-text">语法及描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#语法"><span class="nav-number">1.1.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#描述"><span class="nav-number">1.1.2.</span> <span class="nav-text">描述</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字段含义"><span class="nav-number">1.2.</span> <span class="nav-text">字段含义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#id"><span class="nav-number">1.2.1.</span> <span class="nav-text">id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select-type"><span class="nav-number">1.2.2.</span> <span class="nav-text">select_type</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实例"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">实例</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#partitions"><span class="nav-number">1.2.3.</span> <span class="nav-text">partitions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#type"><span class="nav-number">1.2.4.</span> <span class="nav-text">type</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -994,6 +902,10 @@
 
 
   
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
 
   
 
@@ -1004,6 +916,8 @@
 
   
 
+
+  
 
 
   
@@ -1336,38 +1250,37 @@
   
   <script>
     
-    function showTime(Counter) {
-      var entries = [];
+    function addCount(Counter) {
       var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
 
-      $visitors.each(function() {
-        entries.push( $(this).attr('id').trim() );
-      });
-
-      Counter('get', '/classes/Counter', { where: JSON.stringify({ url: { '$in': entries } }) })
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
         .done(function({ results }) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.url;
-            var time = item.time;
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for (var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if (countSpan.text() == '') {
-              countSpan.text(0);
-            }
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
           }
         })
         .fail(function ({ responseJSON }) {
@@ -1392,9 +1305,7 @@
             });
           };
           
-            if ($('.post-title-link').length >= 1) {
-              showTime(Counter);
-            }
+            addCount(Counter);
           
         });
     });

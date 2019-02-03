@@ -99,20 +99,24 @@
 
 
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Blog of Woo">
-<meta property="og:url" content="https://stamwoo.github.io/page/2/index.html">
+  <meta name="description" content="蓄水池抽样算法（Reservoir Sampling）许多年以后，当听说蓄水池抽样算法时,将会想起，那个小学数学老师带他做 “小明对水池边加水边放水，求何时能加满水” 应用题的下午。 一、问题我是在一次失败的面试经历中听说蓄水池算法的。之后上网搜了搜，知道是一个数据抽样算法，寥寥几行，却暗藏玄机。主要用来解决如下问题。 给定一个数据流，数据流长度 N 很大，且 N 直到处理完所有数据之前都不可知，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="蓄水池抽样算法（Reservoir Sampling）">
+<meta property="og:url" content="https://stamwoo.github.io/4125998541/index.html">
 <meta property="og:site_name" content="Blog of Woo">
+<meta property="og:description" content="蓄水池抽样算法（Reservoir Sampling）许多年以后，当听说蓄水池抽样算法时,将会想起，那个小学数学老师带他做 “小明对水池边加水边放水，求何时能加满水” 应用题的下午。 一、问题我是在一次失败的面试经历中听说蓄水池算法的。之后上网搜了搜，知道是一个数据抽样算法，寥寥几行，却暗藏玄机。主要用来解决如下问题。 给定一个数据流，数据流长度 N 很大，且 N 直到处理完所有数据之前都不可知，">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-02-02T21:24:55.694Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Blog of Woo">
+<meta name="twitter:title" content="蓄水池抽样算法（Reservoir Sampling）">
+<meta name="twitter:description" content="蓄水池抽样算法（Reservoir Sampling）许多年以后，当听说蓄水池抽样算法时,将会想起，那个小学数学老师带他做 “小明对水池边加水边放水，求何时能加满水” 应用题的下午。 一、问题我是在一次失败的面试经历中听说蓄水池算法的。之后上网搜了搜，知道是一个数据抽样算法，寥寥几行，却暗藏玄机。主要用来解决如下问题。 给定一个数据流，数据流长度 N 很大，且 N 直到处理完所有数据之前都不可知，">
 
 
 
 
 
 
-  <link rel="canonical" href="https://stamwoo.github.io/page/2/">
+  <link rel="canonical" href="https://stamwoo.github.io/4125998541/">
 
 
 
@@ -122,7 +126,7 @@
   };
 </script>
 
-  <title>Blog of Woo</title>
+  <title>蓄水池抽样算法（Reservoir Sampling） | Blog of Woo</title>
   
 
 
@@ -170,8 +174,7 @@
     
   
 
-  <div class="container sidebar-position-right 
-  page-home">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -326,591 +329,9 @@
           
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
-
-  
-
-  
-  
-  
-    
-  
-
-  
-
-  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://stamwoo.github.io/1643632136/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="woo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Woo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                  <span class="post-sticky-flag" title="置顶">
-                    <i class="fa fa-thumb-tack"></i>
-                  </span>
-                
-                
-                <a href="/1643632136/" class="post-title-link" itemprop="url">理解B树,B+树特点及使用场景</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-11-02 22:11:29" itemprop="dateCreated datePublished" datetime="2018-11-02T22:11:29+01:00">2018-11-02</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-02-02 23:01:56" itemprop="dateModified" datetime="2019-02-02T23:01:56+01:00">2019-02-02</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-          
-
-          
-          
-            <span id="/1643632136/" class="leancloud_visitors" data-flag-title="理解B树,B+树特点及使用场景">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">3.7k</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">3 分钟</span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>读完本文你将了解：</p>
-<ul>
-<li><a href="#b-树">B 树</a><ul>
-<li><a href="#对比平衡二叉树和-b-树">对比平衡二叉树和 B 树</a></li>
-<li><a href="#b-树中如何查找数据">B 树中如何查找数据</a></li>
-<li><a href="#b-树如何保证平衡">B 树如何保证平衡</a></li>
-<li><a href="#使用场景">使用场景</a></li>
-</ul>
-</li>
-<li><a href="#b-树-1">B+ 树</a></li>
-<li><a href="#thanks">Thanks</a></li>
-</ul>
-<p>大家好，前面那篇文章<a href="https://link.juejin.im?target=https%3A%2F%2Fmp.weixin.qq.com%2Fs%2FK_oGI2rl3epTirxkST5LVQ" target="_blank" rel="noopener">《3 分钟理解完全二叉树、平衡二叉树、二叉查找树》</a>中我们了解了几种特殊的二叉树的功能及特点，知道了它们在进行查找数据时可以提高效率，但需要注意的是，这是指在内存中进行查找。如果有海量的数据，不可能一次性读取到内存中，这时候就要考虑的是，如何在磁盘中快速找到需要的数据。</p>
-<p>今天这篇文章中要介绍的 “B 树、B+ 树”，他们的使用场景是：查找磁盘中的大量数据。</p>
-<h1 id="B-树"><a href="#B-树" class="headerlink" title="B 树"></a>B 树</h1><p>B 树就是常说的 “B 减树（B- 树）”，又名平衡多路（即不止两个子树）查找树，它和平衡二叉树的不同有这么几点：</p>
-<ol>
-<li>平衡二叉树节点最多有两个子树，而 B 树每个节点可以有多个子树，<strong>M 阶 B 树表示该树每个节点最多有 M 个子树</strong></li>
-<li>平衡二叉树每个节点只有一个数据和两个指向孩子的指针，而 B 树每个<strong>中间节点</strong>有 k-1 个关键字（可以理解为数据）和 k 个子树（ **k 介于阶数 M 和 M/2 之间，M/2 向上取整）</li>
-<li>B 树的所有叶子节点都在同一层，并且叶子节点只有关键字，指向孩子的指针为 null</li>
-</ol>
-<p>和平衡二叉树相同的点在于：B 树的节点数据大小也是按照左小右大，子树与节点的大小比较决定了子树指针所处位置。</p>
-<p>看着概念可能有点难理解，来看看图对比下平衡二叉树和 B 树。</p>
-<h2 id="对比平衡二叉树和-B-树"><a href="#对比平衡二叉树和-B-树" class="headerlink" title="对比平衡二叉树和 B 树"></a>对比平衡二叉树和 B 树</h2><p>首先是节点， 平衡二叉树的节点如下图所示，每个节点有一个数据和最多两个子树：</p>
-<p><img src="/img/AVL.jpeg" alt=""></p>
-<p>B 树中的每个节点由两部分组成：</p>
-<ol>
-<li>关键字（可以理解为数据）</li>
-<li>指向孩子节点的指针</li>
-</ol>
-<p>B 树的节点如下图所示，每个节点可以有不只一个数据，同时拥有<strong>数据数加一</strong>个子树，同时每个节点左子树的数据比当前节点都小、右子树的数据都比当前节点的数据大：</p>
-<p><img src="/img/B-tree.jpeg" alt=""></p>
-<blockquote>
-<p>上图是为了方便读者理解 B 树每个节点的内容，实际绘制图形还是以圆表示每个节点。</p>
-</blockquote>
-<p>了解了节点的差异后，来看看 B 树的定义，<strong>一棵 B 树必须满足以下条件</strong>：</p>
-<ol>
-<li>若根结点不是终端结点，则至少有 2 棵子树</li>
-<li>除根节点以外的所有非叶结点至少有 M/2 棵子树，至多有 M 个子树（关键字数为子树减一）</li>
-<li>所有的叶子结点都位于同一层</li>
-</ol>
-<p>用一张图对比平衡二叉树和 B 树：</p>
-<p><img src="/img/AVL&amp;B_tree.jpeg" alt=""></p>
-<p>可以看到，<strong>B 树的每个节点可以表示的信息更多，因此整个树更加 “矮胖”，这在从磁盘中查找数据（先读取到内存、后查找）的过程中，可以减少磁盘 IO 的次数，从而提升查找速度。</strong></p>
-<h2 id="B-树中如何查找数据"><a href="#B-树中如何查找数据" class="headerlink" title="B 树中如何查找数据"></a>B 树中如何查找数据</h2><p>因为 B 树的子树大小排序规则，因此在 B 树中查找数据时，一般需要这样：</p>
-<ol>
-<li>从根节点开始，如果查找的数据比根节点小，就去左子树找，否则去右子树</li>
-<li>和子树的多个关键字进行比较，找到它所处的范围，然后去范围对应的子树中继续查找</li>
-<li>以此循环，直到找到或者到叶子节点还没找到为止</li>
-</ol>
-<h2 id="B-树如何保证平衡"><a href="#B-树如何保证平衡" class="headerlink" title="B 树如何保证平衡"></a>B 树如何保证平衡</h2><p>我们知道，平衡的树之所以能够加快查找速度，是因为在添加、删除的时候做了某些操作以保证平衡。</p>
-<p>平衡二叉树的平衡条件是：<strong>左右子树的高度差不大于 1</strong>；而 B 树的平衡条件则有三点：</p>
-<ol>
-<li>叶子节点都在同一层</li>
-<li>每个节点的关键字数为子树个数减一（子树个数 k 介于树的阶 M 和它的二分之一</li>
-<li>子树的关键字保证左小右大的顺序</li>
-</ol>
-<p>也就是说，一棵 3 阶的 B 树（即节点最多有三个子树），每个节点的关键字数最少为 1，最多为 2，如果要添加数据的子树的关键字数已经是最多，就需要<strong>拆分节点，调整树的结构。</strong></p>
-<p>网上找到一张很不错的动图，我们来根据它分析下 B 树添加元素时如何保证平衡。</p>
-<p>这个图用以表示往 4 阶 B 树中依次插入下面这组数据的过程：</p>
-<p>6 10 4 14 5 11 15 3 2 12 1 7 8 8 6 3 6 21 5 15 15 6 32 23 45 65 7 8 6 5 4</p>
-<p><img src="/img/BInsert.gif" alt=""></p>
-<p><strong>建议放大图查看</strong>。</p>
-<p>由于我比较懒，我们来根据前几步分析下 B 树的添加流程：</p>
-<ol>
-<li>首先明确：<strong>4 阶 B 树表示每个节点最多有 4 个子树、3 个关键字，最少有 2 个子树、一个关键字</strong></li>
-<li>添加 6，第一个节点，没什么好说的</li>
-<li>添加 10，根节点最多能放三个关键字，按顺序添到根节点中</li>
-<li>添加 4，还能放到根节点中</li>
-<li>添加 14，这时超出了关键字最大限制，需要把 14 添加为子树，同时为了保证 “所有叶子节点在同一层”，就需要拆几个关键字作为子树：</li>
-</ol>
-<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a8432fdb64b?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""> 拆为：<img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a8433e01546?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
-<p>这个拆的过程比较复杂，首先要确定根节点保留几个关键字，由于 <strong>“非叶子节点的根节点至少有 2 棵子树”</strong> 的限制，那就至少需要两个关键字分出去，又因为 <strong>“子树数是关键字数 + 1”</strong>，如果根节点有两个关键字，就得有三个子树，无法满足，所以只好把除 6 以外的三个关键字都拆为子树。</p>
-<p>谁和谁在一个子树上呢，根据 <strong>“左子树比关键字小、右子树比关键字大”</strong> 的规律，4 在左子树，10 和 14 在右子树。</p>
-<p>继续添加 ：</p>
-<ol>
-<li>添加 5，放到 4 所在的子树上</li>
-<li>添加 11，放在 10 和 14 所在的右子树上</li>
-<li>添加 15，按大小应该放到 10、11 和 14 所在的子树上，但因为超过了关键字数限制，又得拆分</li>
-</ol>
-<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a843f1656c8?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
-<p>因为 <strong>“根节点必须都在同一层”</strong>，因此我们不能给现有的左右子树添加子树，只能添加给 6 了；但是如果 6 有三个子树，就必须得有 2 个关键字，提升谁做关键字好呢，这得看谁做 6 中间的子树，因为右子树的所有关键字都得比父节点的关键字大，所以这个提升的关键字只能比未来右子树中的关键字都小，那就只有 10 和 11 可以考虑了。</p>
-<p>提升 10 吧，没有比它小的做子树，那就只能提升 11 了：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a8449e5305e?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
-<p>再添加元素也是类似的逻辑：</p>
-<ol>
-<li>首先考虑要插入的子树是否已经超出了关键字数的限制</li>
-<li>超出的话，如果要插入的位置是叶子节点，就只能拆一个关键字添加到要插入位置的父节点</li>
-<li>如果非叶子节点，就得从其他子树拆子树给新插入的元素做孩子</li>
-</ol>
-<p>删除也是一样的，要考虑删除孩子后，父节点是否还满足子树 k 介于 M/2 和 M 的条件，不满足就得从别的节点拆子树甚至修改相关子树结构来保持平衡。</p>
-<p>总之添加、删除的过程很复杂，要考虑的条件很多，具体实现就不细追究了，这里我们有个基本认识即可。</p>
-<p>正是这个复杂的保持平衡操作，使得平衡后的 B 树能够发挥出磁盘中快速查找的作用。</p>
-<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><blockquote>
-<p>这部分摘自：<a href="https://link.juejin.im?target=http%3A%2F%2Fblog.jobbole.com%2F79311%2F" target="_blank" rel="noopener">浅谈算法和数据结构：平衡查找树之 B 树</a></p>
-</blockquote>
-<p>文件系统和数据库系统中常用的 B/B+ 树，他通过对每个节点存储个数的扩展，使得对连续的数据能够进行较快的定位和访问，能够有效减少查找时间，提高存储的空间局部性从而减少 IO 操作。他广泛用于文件系统及数据库中，如：</p>
-<ul>
-<li><p>Windows：HPFS 文件系统</p>
-</li>
-<li><p>Mac：HFS，HFS+ 文件系统</p>
-</li>
-<li><p>Linux：ResiserFS，XFS，Ext3FS，JFS 文件系统</p>
-</li>
-<li><p>数据库：ORACLE，MYSQL，SQLSERVER 等中</p>
-</li>
-<li><p>数据库：ORACLE，MYSQL，SQLSERVER 等中</p>
-</li>
-</ul>
-<h1 id="B-树-1"><a href="#B-树-1" class="headerlink" title="B+ 树"></a>B+ 树</h1><blockquote>
-<p>这部分主要学习自 “程序员小灰” 的 <a href="https://link.juejin.im?target=https%3A%2F%2Fmp.weixin.qq.com%2Fs%2FjRZMMONW3QP43dsDKIV9VQ" target="_blank" rel="noopener">漫画：什么是 B + 树？</a></p>
-</blockquote>
-<p>了解了 B 树后再来了解下它的变形版：B+ 树，它比 B 树的查询性能更高。</p>
-<p>一棵 B+ 树需要满足以下条件：</p>
-<ol>
-<li>节点的子树数和关键字数相同（B 树是关键字数比子树数少一）</li>
-<li>节点的关键字表示的是子树中的最大数，在子树中同样含有这个数据</li>
-<li>叶子节点包含了全部数据，同时符合左小右大的顺序</li>
-</ol>
-<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a844c9a40b6?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
-<p>简单概括下 B+ 树的三个特点：</p>
-<ol>
-<li>关键字数和子树相同</li>
-<li>非叶子节点仅用作索引，它的关键字和子节点有重复元素</li>
-<li>叶子节点用指针连在一起</li>
-</ol>
-<p>首先第一点不用特别介绍了，在 B 树中，节点的关键字用于在查询时确定查询区间，因此关键字数比子树数少一；而在 B+ 树中，节点的关键字代表子树的最大值，因此关键字数等于子树数。</p>
-<p>第二点，除叶子节点外的所有节点的关键字，都在它的下一级子树中同样存在，最后所有数据都存储在叶子节点中。</p>
-<blockquote>
-<p>根节点的最大关键字其实就表示整个 B+ 树的最大元素。</p>
-</blockquote>
-<p>第三点，叶子节点包含了全部的数据，并且按顺序排列，B+ 树使用一个链表将它们排列起来，这样在查询时效率更快。</p>
-<p>由于 B+ 树的中间节点不含有实际数据，只有子树的最大数据和子树指针，因此磁盘页中可以容纳更多节点元素，也就是说同样数据情况下，B+ 树会 B 树更加 “矮胖”，因此查询效率更快。</p>
-<p>B+ 树的查找必会查到叶子节点，更加稳定。</p>
-<p>有时候需要查询某个范围内的数据，由于 B+ 树的叶子节点是一个有序链表，只需在叶子节点上遍历即可，不用像 B 树那样挨个中序遍历比较大小。</p>
-<p>B+ 树的三个优点：</p>
-<ol>
-<li>层级更低，IO 次数更少</li>
-<li>每次都需要查询到叶子节点，查询性能稳定</li>
-<li>叶子节点形成有序链表，范围查询方便</li>
-</ol>
-<p>添加过程就不深入研究了，后面用到再看吧，这里先贴一个 B+ 树动态添加元素图：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/5/29/163a9a844ffb91f5?imageslim" alt=""></p>
-<h1 id="Thanks"><a href="#Thanks" class="headerlink" title="Thanks"></a>Thanks</h1><ul>
-<li><a href="https://link.juejin.im?target=https%3A%2F%2Fwww.zhihu.com%2Fquestion%2F30527705" target="_blank" rel="noopener">www.zhihu.com/question/30…</a></li>
-<li><a href="https://link.juejin.im?target=https%3A%2F%2Fzhuanlan.zhihu.com%2Fp%2F27700617" target="_blank" rel="noopener">zhuanlan.zhihu.com/p/27700617</a></li>
-<li><a href="https://link.juejin.im?target=https%3A%2F%2Fmp.weixin.qq.com%2Fs%2FjRZMMONW3QP43dsDKIV9VQ" target="_blank" rel="noopener">mp.weixin.qq.com/s/jRZMMONW3…</a></li>
-<li><a href="https://link.juejin.im?target=http%3A%2F%2Fblog.jobbole.com%2F79311%2F" target="_blank" rel="noopener">blog.jobbole.com/79311/</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-    
-  
-
-  
-
-  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://stamwoo.github.io/3288749768/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="woo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Woo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                  <span class="post-sticky-flag" title="置顶">
-                    <i class="fa fa-thumb-tack"></i>
-                  </span>
-                
-                
-                <a href="/3288749768/" class="post-title-link" itemprop="url">类加载器与双亲委派模型</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-11-02 22:11:29" itemprop="dateCreated datePublished" datetime="2018-11-02T22:11:29+01:00">2018-11-02</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-02-02 22:24:55" itemprop="dateModified" datetime="2019-02-02T22:24:55+01:00">2019-02-02</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-          
-
-          
-          
-            <span id="/3288749768/" class="leancloud_visitors" data-flag-title="类加载器与双亲委派模型">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">5.6k</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">5 分钟</span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a><strong>类加载器</strong></h1><h2 id="加载类的开放性"><a href="#加载类的开放性" class="headerlink" title="加载类的开放性"></a><strong>加载类的开放性</strong></h2><p>类加载器（ClassLoader）是 Java 语言的一项创新，也是 Java 流行的一个重要原因。在类加载的第一阶段 “加载” 过程中，需要通过一个类的全限定名来获取定义此类的二进制字节流，完成这个动作的代码块就是<strong>类加载器</strong>。这一动作是放在 Java 虚拟机外部去实现的，以便让应用程序自己决定如何获取所需的类。</p>
-<p>虚拟机规范并没有指明二进制字节流要从一个 Class 文件获取，或者说根本没有指明从哪里获取、怎样获取。这种开放使得 Java 在很多领域得到充分运用，例如：</p>
-<ul>
-<li>从 ZIP 包中读取，这很常见，成为 JAR，EAR，WAR 格式的基础</li>
-<li>从网络中获取，最典型的应用就是 Applet</li>
-<li>运行时计算生成，最典型的是动态代理技术，在 java.lang.reflect.Proxy 中，就是用了 ProxyGenerator.generateProxyClass 来为特定接口生成形式为 “*$Proxy” 的代理类的二进制字节流</li>
-<li>有其他文件生成，最典型的 JSP 应用，由 JSP 文件生成对应的 Class 类<br>……</li>
-</ul>
-<h2 id="类加载器与类的唯一性"><a href="#类加载器与类的唯一性" class="headerlink" title="类加载器与类的唯一性"></a><strong>类加载器与类的唯一性</strong></h2><p>类加载器虽然只用于实现类的加载动作，但是对于任意一个类，都需要由加载它的类加载器和这个类本身共同确立其在 Java 虚拟机中的<strong>唯一性</strong>。通俗的说，JVM 中两个类是否 “相等”，首先就必须是同一个类加载器加载的，否则，即使这两个类来源于同一个 Class 文件，被同一个虚拟机加载，只要类加载器不同，那么这两个类必定是不相等的。</p>
-<p>这里的 “相等”，包括代表类的 Class 对象的 equals() 方法、isAssignableFrom()方法、isInstance()方法的返回结果，也包括使用 instanceof 关键字做对象所属关系判定等情况。</p>
-<p>以下代码说明了不同的类加载器对 instanceof 关键字运算的结果的影响。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">package com.jvm.classloading;</span><br><span class="line"></span><br><span class="line">import java.io.IOException;</span><br><span class="line">import java.io.InputStream;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 类加载器在类相等判断中的影响</span><br><span class="line"> * </span><br><span class="line"> * instanceof关键字</span><br><span class="line"> * </span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">public class ClassLoaderTest &#123;</span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        // 自定义类加载器</span><br><span class="line">        ClassLoader myLoader = new ClassLoader() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public Class&lt;?&gt; loadClass(String name) throws ClassNotFoundException &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    String fileName = name.substring(name.lastIndexOf(&quot;.&quot;) + 1) + &quot;.class&quot;;</span><br><span class="line">                    InputStream is = getClass().getResourceAsStream(fileName);</span><br><span class="line">                    if (is == null) &#123;</span><br><span class="line">                        return super.loadClass(fileName);</span><br><span class="line">                    &#125;</span><br><span class="line">                    byte[] b = new byte[is.available()];</span><br><span class="line">                    is.read(b);</span><br><span class="line">                    return defineClass(name, b, 0, b.length);   </span><br><span class="line">                &#125; catch (IOException e) &#123;</span><br><span class="line">                    throw new ClassNotFoundException();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        // 使用ClassLoaderTest的类加载器加载本类</span><br><span class="line">        Object obj1 = ClassLoaderTest.class.getClassLoader().loadClass(&quot;com.jvm.classloading.ClassLoaderTest&quot;).newInstance();</span><br><span class="line">        System.out.println(obj1.getClass());</span><br><span class="line">        System.out.println(obj1 instanceof com.jvm.classloading.ClassLoaderTest);</span><br><span class="line"></span><br><span class="line">        // 使用自定义类加载器加载本类</span><br><span class="line">        Object obj2 = myLoader.loadClass(&quot;com.jvm.classloading.ClassLoaderTest&quot;).newInstance();</span><br><span class="line">        System.out.println(obj2.getClass());</span><br><span class="line">        System.out.println(obj2 instanceof com.jvm.classloading.ClassLoaderTest);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>输出结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class com.jvm.classloading.ClassLoaderTest</span><br><span class="line">true</span><br><span class="line">class com.jvm.classloading.ClassLoaderTest</span><br><span class="line">false</span><br></pre></td></tr></table></figure>
-<p>myLoader 是自定义的类加载器，可以用来加载与自己在同一路径下的 Class 文件。main 函数的第一部分使用系统加载主类 ClassLoaderTest 的类加载器加载 ClassLoaderTest，输出显示，obj1 的所属类型检查正确，这是虚拟机中有 2 个 ClassLoaderTest 类，一个是主类，另一个是 main() 方法中加载的类，由于这两个类使用同一个类加载器加载并且来源于同一个 Class 文件，因此这两个类是完全相同的。</p>
-<p>第二部分使用自定义的类加载器加载 ClassLoaderTest，<code>class com.jvm.classloading.ClassLoderTest</code>显示，obj2 确实是类<code>com.jvm.classloading.ClassLoaderTest</code>实例化出来的对象，但是第二句输出 false。此时虚拟机中有 3 个 ClassLoaderTest 类，由于第 3 个类的类加载器与前面 2 个类加载器不同，虽然来源于同一个 Class 文件，但它是一个独立的类，所属类型检查是返回结果自然是 false。</p>
-<h1 id="双亲委派模型"><a href="#双亲委派模型" class="headerlink" title="双亲委派模型"></a><strong>双亲委派模型</strong></h1><h2 id="类加载器种类"><a href="#类加载器种类" class="headerlink" title="类加载器种类"></a><strong>类加载器种类</strong></h2><p>从 Java 虚拟机的角度来说，只存在两种不同的类加载器：一种是启动类加载器（Bootstrap ClassLoader），这个类加载器使用 C++ 语言实现（HotSpot 虚拟机中），是虚拟机自身的一部分；另一种就是所有其他的类加载器，这些类加载器都有 Java 语言实现，独立于虚拟机外部，并且全部继承自 java.lang.ClassLoader。</p>
-<p>从开发者的角度，类加载器可以细分为：</p>
-<ul>
-<li><p>启动（Bootstrap）类加载器：负责将 Java_Home/lib 下面的类库加载到内存中（比如 rt.jar）。由于引导类加载器涉及到虚拟机本地实现细节，开发者无法直接获取到启动类加载器的引用，所以不允许直接通过引用进行操作。</p>
-</li>
-<li><p>标准扩展（Extension）类加载器：是由 Sun 的 ExtClassLoader（sun.misc.Launcher$ExtClassLoader）实现的。它负责将 Java_Home /lib/ext 或者由系统变量 java.ext.dir 指定位置中的类库加载到内存中。开发者可以直接使用标准扩展类加载器。</p>
-</li>
-<li><p>应用程序（Application）类加载器：是由 Sun 的 AppClassLoader（sun.misc.Launcher$AppClassLoader）实现的。它负责将系统类路径（CLASSPATH）中指定的类库加载到内存中。开发者可以直接使用系统类加载器。由于这个类加载器是 ClassLoader 中的 getSystemClassLoader() 方法的返回值，因此一般称为<strong>系统（System）加载器</strong>。</p>
-</li>
-</ul>
-<p>除此之外，还有自定义的类加载器，它们之间的层次关系被称为类加载器的<strong>双亲委派模型</strong>。该模型要求除了顶层的启动类加载器外，其余的类加载器都应该有自己的父类加载器，而这种父子关系一般通过<strong>组合（Composition）关系</strong>来实现，而不是通过继承（Inheritance）。</p>
-<p><img src="https://img-blog.csdn.net/20160506184936657" alt=""></p>
-<h2 id="双亲委派模型-1"><a href="#双亲委派模型-1" class="headerlink" title="双亲委派模型"></a><strong>双亲委派模型</strong></h2><p><strong>双亲委派模型过程</strong></p>
-<p>某个特定的类加载器在接到加载类的请求时，首先将加载任务委托给父类加载器，依次递归，如果父类加载器可以完成类加载任务，就成功返回；只有父类加载器无法完成此加载任务时，才自己去加载。</p>
-<p>使用双亲委派模型的好处在于 <strong>Java 类随着它的类加载器一起具备了一种带有优先级的层次关系</strong>。例如类 java.lang.Object，它存在在 rt.jar 中，无论哪一个类加载器要加载这个类，最终都是委派给处于模型最顶端的 Bootstrap ClassLoader 进行加载，因此 Object 类在程序的各种类加载器环境中都是同一个类。相反，如果没有双亲委派模型而是由各个类加载器自行加载的话，如果用户编写了一个 java.lang.Object 的同名类并放在 ClassPath 中，那系统中将会出现多个不同的 Object 类，程序将混乱。因此，如果开发者尝试编写一个与 rt.jar 类库中重名的 Java 类，可以正常编译，但是永远无法被加载运行。</p>
-<p><strong>双亲委派模型的系统实现</strong></p>
-<p>在 java.lang.ClassLoader 的 loadClass() 方法中，先检查是否已经被加载过，若没有加载则调用父类加载器的 loadClass() 方法，若父加载器为空则默认使用启动类加载器作为父加载器。如果父加载失败，则抛出 ClassNotFoundException 异常后，再调用自己的 findClass() 方法进行加载。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">protected synchronized Class&lt;?&gt; loadClass(String name,boolean resolve)throws ClassNotFoundException&#123;</span><br><span class="line">    //check the class has been loaded or not</span><br><span class="line">    Class c = findLoadedClass(name);</span><br><span class="line">    if(c == null)&#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            if(parent != null)&#123;</span><br><span class="line">                c = parent.loadClass(name,false);</span><br><span class="line">            &#125;else&#123;</span><br><span class="line">                c = findBootstrapClassOrNull(name);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;catch(ClassNotFoundException e)&#123;</span><br><span class="line">            //if throws the exception ,the father can not complete the load</span><br><span class="line">        &#125;</span><br><span class="line">        if(c == null)&#123;</span><br><span class="line">            c = findClass(name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if(resolve)&#123;</span><br><span class="line">        resolveClass(c);</span><br><span class="line">    &#125;</span><br><span class="line">    return c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>注意，双亲委派模型是 Java 设计者推荐给开发者的类加载器的实现方式，并不是强制规定的。大多数的类加载器都遵循这个模型，但是 JDK 中也有较大规模破坏双亲模型的情况，例如线程上下文类加载器（Thread Context ClassLoader）的出现，具体分析可以参见周志明著《深入理解 Java 虚拟机》。</p>
-<p>参考<br>1、周志明，深入理解 Java 虚拟机：JVM 高级特性与最佳实践，机械工业出版社<br>2、Alexia(minmin) 博客，<a href="http://www.cnblogs.com/lanxuezaipiao/p/4138511.html" target="_blank" rel="noopener">http://www.cnblogs.com/lanxuezaipiao/p/4138511.html</a></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
 
   
 
@@ -944,14 +365,8 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">
-                
-                  <span class="post-sticky-flag" title="置顶">
-                    <i class="fa fa-thumb-tack"></i>
-                  </span>
-                
-                
-                <a href="/4125998541/" class="post-title-link" itemprop="url">蓄水池抽样算法（Reservoir Sampling）</a>
+          <h2 class="post-title" itemprop="name headline">蓄水池抽样算法（Reservoir Sampling）
+
               
             
           </h2>
@@ -1066,9 +481,7 @@
       
 
       
-        
-          
-            <h1 id="蓄水池抽样算法（Reservoir-Sampling）"><a href="#蓄水池抽样算法（Reservoir-Sampling）" class="headerlink" title="蓄水池抽样算法（Reservoir Sampling）"></a>蓄水池抽样算法（Reservoir Sampling）</h1><p>许多年以后，当听说蓄水池抽样算法时,将会想起，那个小学数学老师带他做 “小明对水池边加水边放水，求何时能加满水” 应用题的下午。</p>
+        <h1 id="蓄水池抽样算法（Reservoir-Sampling）"><a href="#蓄水池抽样算法（Reservoir-Sampling）" class="headerlink" title="蓄水池抽样算法（Reservoir Sampling）"></a>蓄水池抽样算法（Reservoir Sampling）</h1><p>许多年以后，当听说蓄水池抽样算法时,将会想起，那个小学数学老师带他做 “小明对水池边加水边放水，求何时能加满水” 应用题的下午。</p>
 <h2 id="一、问题"><a href="#一、问题" class="headerlink" title="一、问题"></a>一、问题</h2><p>我是在一次失败的面试经历中听说蓄水池算法的。之后上网搜了搜，知道是一个数据抽样算法，寥寥几行，却暗藏玄机。主要用来解决如下问题。</p>
 <p><strong>给定一个数据流，数据流长度 N 很大，且 N 直到处理完所有数据之前都不可知，请问如何在只遍历一遍数据（O(N)）的情况下，能够随机选取出 m 个不重复的数据。</strong></p>
 <p>这个场景强调了 3 件事：</p>
@@ -1127,8 +540,6 @@
 <li><a href="https://link.jianshu.com?t=https%3A%2F%2Fballsandbins.wordpress.com%2F2014%2F04%2F13%2Fdistributedparallel-reservoir-sampling%2F" target="_blank" rel="noopener">Distributed/Parallel Reservoir Sampling</a></li>
 </ol>
 
-          
-        
       
     </div>
 
@@ -1144,6 +555,35 @@
       
     
     
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>多谢支持</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/img/wechatpay.jpeg" alt="woo 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/img/alipay.jpeg" alt="woo 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
 
     
 
@@ -1151,231 +591,32 @@
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-    
-  
-
-  
-
-  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://stamwoo.github.io/766337335/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="woo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Woo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                  <span class="post-sticky-flag" title="置顶">
-                    <i class="fa fa-thumb-tack"></i>
-                  </span>
-                
-                
-                <a href="/766337335/" class="post-title-link" itemprop="url">单例模式–双重检验锁真的线程安全吗</a>
-              
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
+              <a href="/766337335/" rel="next" title="单例模式–双重检验锁真的线程安全吗">
+                <i class="fa fa-chevron-left"></i> 单例模式–双重检验锁真的线程安全吗
+              </a>
             
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
+              <a href="/3288749768/" rel="prev" title="类加载器与双亲委派模型">
+                类加载器与双亲委派模型 <i class="fa fa-chevron-right"></i>
+              </a>
             
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-11-02 12:12:08" itemprop="dateCreated datePublished" datetime="2018-11-02T12:12:08+01:00">2018-11-02</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-02-02 22:24:34" itemprop="dateModified" datetime="2019-02-02T22:24:34+01:00">2019-02-02</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-          
-
-          
-          
-            <span id="/766337335/" class="leancloud_visitors" data-flag-title="单例模式–双重检验锁真的线程安全吗">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">2.9k</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">3 分钟</span>
-              
-            </div>
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <h1 id="单例模式–双重检验锁真的线程安全吗"><a href="#单例模式–双重检验锁真的线程安全吗" class="headerlink" title="单例模式–双重检验锁真的线程安全吗"></a>单例模式–双重检验锁真的线程安全吗</h1><p>单例模式是我们最熟悉不过的一种设计模式，用来保证内存中只有一个对象的实例。虽然容易，但里面的坑也有很多，比如双重检验锁模式 (double checked locking pattern) 真的是线程安全的吗？</p>
-<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>在对项目进行 PMD 静态代码检测时，遇到了这样一个问题</p>
-<blockquote>
-<p>Partially created objects can be returned by the Double Checked Locking pattern when used in Java. An optimizing JRE may assign a reference to the baz variable before it calls the constructor of the object the reference points to.</p>
-<p>Note: With Java 5, you can make Double checked locking work, if you declare the variable to be volatile.</p>
-</blockquote>
-<p>大概意思是，使用双重检验锁模式，可能会返回一个部分初始化的对象。可能大家有些疑虑，什么是部分初始化的对象，我们下面继续分析</p>
-<h2 id="什么是双重检验锁模式"><a href="#什么是双重检验锁模式" class="headerlink" title="什么是双重检验锁模式"></a>什么是双重检验锁模式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public static Singleton getSingleton() &#123;</span><br><span class="line">    if (instance == null) &#123;</span><br><span class="line">        synchronized (Singleton.class) &#123;</span><br><span class="line">            if (instance == null) &#123;</span><br><span class="line">                instance = new Singleton();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们看到，在同步代码块的内部和外部都判断了 instance == null，这时因为，可能会有多个线程同时进入到同步代码块外的 if 判断中，如果在同步代码块内部不进行判空的话，可能会初始化多个实例。</p>
-<h2 id="问题所在"><a href="#问题所在" class="headerlink" title="问题所在"></a>问题所在</h2><p>这种写法看似完美无缺，但它却是有问题的，或者说它并不担保一定完美无缺。主要原因在于 instance = new Singleton(); 并不是原子性的操作。<br>创建一个对象可以分为三部：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.分配对象的内存空间</span><br><span class="line">2.初始化对象</span><br><span class="line">3.设置instance指向刚分配的内存地址,当instance指向分配地址时，instance不为空</span><br></pre></td></tr></table></figure>
-<p>但是，2、3 部之间，可能会被重排序，造成创建对象顺序变为 1-3-2. 试想一个场景：<br>线程 A 第一次创建对象 Singleton，对象创建顺序为 1-3-2；<br>当给 instance 分配完内存后，这时来了一个线程 B 调用了 getSingleton() 方法<br>这时候进行 instance == null 的判断，发现 instance 并不为 null。<br>但注意这时候 instance 并没有初始化对象，线程 B 则会将这个未初始化完成的对象返回。那 B 线程使用 instance 时就可能会出现问题，这就是双重检查锁问题所在。</p>
-<h2 id="使用-volatile"><a href="#使用-volatile" class="headerlink" title="使用 volatile"></a>使用 volatile</h2><p>对于上述的问题，我们可以通过把 instance 声明为 volatile 型来解决</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton &#123;</span><br><span class="line">    private volatile static Singleton instance;</span><br><span class="line"></span><br><span class="line">    public static Singleton getSingleton() &#123;</span><br><span class="line">        if (instance == null) &#123;</span><br><span class="line">            synchronized (Singleton.class) &#123;</span><br><span class="line">                if (instance == null) &#123;</span><br><span class="line">                    instance = new Singleton();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>有些人认为使用 volatile 的原因是可见性，也就是可以保证线程在本地不会存有 instance 的副本，每次都是去主内存中读取。但其实是不对的。使用 volatile 的主要原因是其另一个特性：禁止指令重排序优化。也就是说，在 volatile 变量的赋值操作后面会有一个内存屏障，读操作不会被重排序到内存屏障之前。比如上面的例子，取操作必须在执行完 1-2-3 之后或者 1-3-2 之后，不存在执行到 1-3 然后取到值的情况。从「先行发生原则」的角度理解的话，就是对于一个 volatile 变量的写操作都先行发生于后面对这个变量的读操作（这里的“后面”是时间上的先后顺序.   </p>
-<p>但是特别注意在 Java 5 以前的版本使用了 volatile 的双检锁还是有问题的。其原因是 Java 5 以前的 JMM （Java 内存模型）是存在缺陷的，即时将变量声明成 volatile 也不能完全避免重排序，主要是 volatile 变量前后的代码仍然存在重排序问题。这个 volatile 屏蔽重排序的问题在 Java 5 中才得以修复，所以在这之后才可以放心使用 volatile。</p>
-<p>必须在 JDK5 版本以上使用。</p>
-<h2 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton &#123;</span><br><span class="line">    private static class SingletonHolder &#123;</span><br><span class="line">        private static final Singleton INSTANCE = new Singleton();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private Singleton() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static final Singleton getInstance() &#123;</span><br><span class="line">        return SingletonHolder.INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这种写法是目前比较推荐的一种写法，采用静态内部类的方式，即实现了懒加载又不会出现线程安全问题。而且减少了 synchronized 的开销。</p>
-<h2 id="Learn-more"><a href="#Learn-more" class="headerlink" title="Learn more"></a><a href="#Learn-more" title="Learn more"></a>Learn more</h2><p><a href="http://www.infoq.com/cn/articles/double-checked-locking-with-delay-initialization" target="_blank" rel="noopener">双重检查锁定与延迟初始化</a><br><a href="https://pmd.github.io/pmd-5.5.4/pmd-java/rules/java/basic.html" target="_blank" rel="noopener">PMD-DoubleCheckedLocking</a><br><a href="http://www.javaworld.com/article/2074979/java-concurrency/double-checked-locking--clever--but-broken.html" target="_blank" rel="noopener">Double-checked locking: Clever, but broken</a></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -1385,18 +626,15 @@
   </article>
 
 
-    
-  </section>
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
-  </nav>
-
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -1417,8 +655,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -1506,6 +753,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#蓄水池抽样算法（Reservoir-Sampling）"><span class="nav-number">1.</span> <span class="nav-text">蓄水池抽样算法（Reservoir Sampling）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、问题"><span class="nav-number">1.1.</span> <span class="nav-text">一、问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、核心代码及原理"><span class="nav-number">1.2.</span> <span class="nav-text">二、核心代码及原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、深入一些——分布式蓄水池抽样（Distributed-Parallel-Reservoir-Sampling）"><span class="nav-number">1.3.</span> <span class="nav-text">三、深入一些——分布式蓄水池抽样（Distributed/Parallel Reservoir Sampling）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、算法验证"><span class="nav-number">1.4.</span> <span class="nav-text">四、算法验证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、应用场景"><span class="nav-number">1.5.</span> <span class="nav-text">五、应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、总结"><span class="nav-number">1.6.</span> <span class="nav-text">六、总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#七、参考文献"><span class="nav-number">1.7.</span> <span class="nav-text">七、参考文献</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -1658,6 +922,10 @@
 
 
   
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
 
   
 
@@ -1668,6 +936,8 @@
 
   
 
+
+  
 
 
   
@@ -2000,38 +1270,37 @@
   
   <script>
     
-    function showTime(Counter) {
-      var entries = [];
+    function addCount(Counter) {
       var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
 
-      $visitors.each(function() {
-        entries.push( $(this).attr('id').trim() );
-      });
-
-      Counter('get', '/classes/Counter', { where: JSON.stringify({ url: { '$in': entries } }) })
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
         .done(function({ results }) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.url;
-            var time = item.time;
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for (var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if (countSpan.text() == '') {
-              countSpan.text(0);
-            }
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
           }
         })
         .fail(function ({ responseJSON }) {
@@ -2056,9 +1325,7 @@
             });
           };
           
-            if ($('.post-title-link').length >= 1) {
-              showTime(Counter);
-            }
+            addCount(Counter);
           
         });
     });
