@@ -435,6 +435,18 @@
           
             
             
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/3714837258/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count gitment-comments-count" data-xid="/3714837258/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -595,8 +607,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2868978503/" rel="next" title="既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？">
-                <i class="fa fa-chevron-left"></i> 既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？
+              <a href="/3262901390/" rel="next" title="为什么你需要一个VPS">
+                <i class="fa fa-chevron-left"></i> 为什么你需要一个VPS
               </a>
             
           </div>
@@ -605,8 +617,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/522943020/" rel="prev" title="spring cloud 扫不到自定义controller">
-                spring cloud 扫不到自定义controller <i class="fa fa-chevron-right"></i>
+              <a href="/3162095545/" rel="prev" title="TCP为什么是三次握手">
+                TCP为什么是三次握手 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -628,6 +640,13 @@
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
 
   
 
@@ -933,6 +952,47 @@
 
   
 
+
+  
+    <!-- LOCAL: You can save these files to your site and update links -->
+
+  
+  <script src="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/gitmint.browser.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/default.css">
+<!-- END LOCAL -->
+
+<style>
+#gitment-container a {
+  border-bottom: none;
+}
+
+</style>
+
+<script>
+  function renderGitment() {
+    var gitment = new Gitmint({
+      id: '1541193089000',
+      owner: 'stamwoo',
+      repo: 'hexo-gitment',
+      
+        lang: '' || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+      
+      oauth: {
+      
+      
+        client_secret: '007dc92815b735a7697392131dae67e5574c1679',
+      
+        client_id: '996a45e19511d4be3f7a'
+      }
+    });
+    gitment.render('gitment-container');
+  }
+
+  
+    renderGitment();
+  
+</script>
 
   
 

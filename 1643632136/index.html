@@ -446,6 +446,18 @@
           
             
             
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/1643632136/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count gitment-comments-count" data-xid="/1643632136/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -716,8 +728,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/3288749768/" rel="next" title="类加载器与双亲委派模型">
-                <i class="fa fa-chevron-left"></i> 类加载器与双亲委派模型
+              <a href="/4125998541/" rel="next" title="蓄水池抽样算法（Reservoir Sampling）">
+                <i class="fa fa-chevron-left"></i> 蓄水池抽样算法（Reservoir Sampling）
               </a>
             
           </div>
@@ -726,8 +738,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/1328518056/" rel="prev" title="如何优雅的使用和理解线程池">
-                如何优雅的使用和理解线程池 <i class="fa fa-chevron-right"></i>
+              <a href="/3288749768/" rel="prev" title="类加载器与双亲委派模型">
+                类加载器与双亲委派模型 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -749,6 +761,13 @@
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
 
   
 
@@ -1054,6 +1073,47 @@
 
   
 
+
+  
+    <!-- LOCAL: You can save these files to your site and update links -->
+
+  
+  <script src="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/gitmint.browser.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/default.css">
+<!-- END LOCAL -->
+
+<style>
+#gitment-container a {
+  border-bottom: none;
+}
+
+</style>
+
+<script>
+  function renderGitment() {
+    var gitment = new Gitmint({
+      id: '1541193089000',
+      owner: 'stamwoo',
+      repo: 'hexo-gitment',
+      
+        lang: '' || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+      
+      oauth: {
+      
+      
+        client_secret: '007dc92815b735a7697392131dae67e5574c1679',
+      
+        client_id: '996a45e19511d4be3f7a'
+      }
+    });
+    gitment.render('gitment-container');
+  }
+
+  
+    renderGitment();
+  
+</script>
 
   
 
