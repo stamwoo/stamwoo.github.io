@@ -111,7 +111,7 @@
 <meta property="og:site_name" content="Blog of Woo">
 <meta property="og:description" content="曾经我在一场真实面试中被问到分布式锁的实现,只能简单回答上来根据redis的setnx去做,而不知这里面其实还有很多坑.也不知是否还有其他方式.面试结束后就有了下文. 分布式锁在单进程环境中,当多个线程产生资源竞争时.程序员们会采用 Synchronize 或 Lock 去对临界资源进行加锁,使得在修改临界资源时,能够线性执行以消除并发.那么由于多线程是挂在同一个进程下的,我们就必须在这个进程内设">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-11T20:14:37.362Z">
+<meta property="og:updated_time" content="2019-02-11T20:15:53.258Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式锁的实现-mysql&amp;redis">
 <meta name="twitter:description" content="曾经我在一场真实面试中被问到分布式锁的实现,只能简单回答上来根据redis的setnx去做,而不知这里面其实还有很多坑.也不知是否还有其他方式.面试结束后就有了下文. 分布式锁在单进程环境中,当多个线程产生资源竞争时.程序员们会采用 Synchronize 或 Lock 去对临界资源进行加锁,使得在修改临界资源时,能够线性执行以消除并发.那么由于多线程是挂在同一个进程下的,我们就必须在这个进程内设">
@@ -413,7 +413,7 @@
                 
               
 
-              <time title="创建时间：2019-02-11 19:11:29 / 修改时间：21:14:37" itemprop="dateCreated datePublished" datetime="2019-02-11T19:11:29+01:00">2019-02-11</time>
+              <time title="创建时间：2019-02-11 19:11:29 / 修改时间：21:15:53" itemprop="dateCreated datePublished" datetime="2019-02-11T19:11:29+01:00">2019-02-11</time>
             
 
             
@@ -548,7 +548,7 @@
 <p>运用Redis事务所支持的以上特性，可以实现一个分布式锁功能.</p>
 <p>通过WATCH命令监视redis锁键，当该键未被其他客户端修改值时，事务成功执行。当事务运行过程中，发现该值被其他客户端更新了值，任务失败，进行重试。</p>
 <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><blockquote>
-<p><a href="http://redisdoc.com/string/set.html" target="_blank" rel="noopener">http://redisdoc.com/string/set.html</a><br><a href="https://www.cnblogs.com/crossoverJie/p/9339354.html" target="_blank" rel="noopener">https://www.cnblogs.com/crossoverJie/p/9339354.html</a><br><a href="https://juejin.im/entry/5a502ac2518825732b19a595" target="_blank" rel="noopener">https://juejin.im/entry/5a502ac2518825732b19a595</a><br><a href="https://blog.csdn.net/jj546630576/article/details/74910343" target="_blank" rel="noopener">https://blog.csdn.net/jj546630576/article/details/74910343</a></p>
+<p><a href="http://redisdoc.com/string/set.html" target="_blank" rel="noopener">http://redisdoc.com/string/set.html</a><br><a href="https://www.cnblogs.com/crossoverJie/p/9339354.html" target="_blank" rel="noopener">https://www.cnblogs.com/crossoverJie/p/9339354.html</a><br><a href="https://juejin.im/entry/5a502ac2518825732b19a595" target="_blank" rel="noopener">https://juejin.im/entry/5a502ac2518825732b19a595</a><br><a href="https://blog.csdn.net/jj546630576/article/details/74910343" target="_blank" rel="noopener">https://blog.csdn.net/jj546630576/article/details/74910343</a><br><a href="https://blog.csdn.net/youbl/article/details/80273019" target="_blank" rel="noopener">https://blog.csdn.net/youbl/article/details/80273019</a></p>
 </blockquote>
 
       
