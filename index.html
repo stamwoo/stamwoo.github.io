@@ -415,7 +415,7 @@
                 
               
 
-              <time title="创建时间：2019-02-11 19:11:29 / 修改时间：20:46:18" itemprop="dateCreated datePublished" datetime="2019-02-11T19:11:29+01:00">2019-02-11</time>
+              <time title="创建时间：2019-02-11 19:11:29 / 修改时间：21:14:37" itemprop="dateCreated datePublished" datetime="2019-02-11T19:11:29+01:00">2019-02-11</time>
             
 
             
@@ -471,7 +471,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">2.3k</span>
+                <span title="本文字数">2.7k</span>
               
 
               
@@ -547,6 +547,10 @@
 </li>
 <li>假如另一个进程P5也检测到锁已超时，并在P4之前执行了 GETSET 操作，那么P4的 GETSET 操作返回的是一个大于当前时间的时间戳，这样P4就不会获得锁而继续等待。注意到，即使P4接下来将键 lock.foo 的值设置了比P5设置的更大的值也没影响。</li>
 </ul>
+<h4 id="如何解决单一进程执行时间超长-锁被抢走"><a href="#如何解决单一进程执行时间超长-锁被抢走" class="headerlink" title="如何解决单一进程执行时间超长,锁被抢走"></a>如何解决单一进程执行时间超长,锁被抢走</h4><h3 id="WATCH-MULTI-EXEC-DISCARD事务机制实现分布式锁"><a href="#WATCH-MULTI-EXEC-DISCARD事务机制实现分布式锁" class="headerlink" title="WATCH, MULTI, EXEC, DISCARD事务机制实现分布式锁"></a>WATCH, MULTI, EXEC, DISCARD事务机制实现分布式锁</h3><p>Redis支持基本的事务操作</p>
+<p>WATCH key<br>MULTI<br>some redis command<br>EXEC<br>以上被MULTI和EXEC包裹的redis命令，保证所有事务内的命令将会串行顺序执行，保证不会在事务的执行过程中被其他客户端打断。而WATCH命令能够监视某个键，当事务执行时，如果被监视的键被其他客户端修改了值，事务运行失败，返回相应错误（被事务运行客户端在事务内修改了值，不会造成事务运行失败）。</p>
+<p>运用Redis事务所支持的以上特性，可以实现一个分布式锁功能.</p>
+<p>通过WATCH命令监视redis锁键，当该键未被其他客户端修改值时，事务成功执行。当事务运行过程中，发现该值被其他客户端更新了值，任务失败，进行重试。</p>
 <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><blockquote>
 <p><a href="http://redisdoc.com/string/set.html" target="_blank" rel="noopener">http://redisdoc.com/string/set.html</a><br><a href="https://www.cnblogs.com/crossoverJie/p/9339354.html" target="_blank" rel="noopener">https://www.cnblogs.com/crossoverJie/p/9339354.html</a><br><a href="https://juejin.im/entry/5a502ac2518825732b19a595" target="_blank" rel="noopener">https://juejin.im/entry/5a502ac2518825732b19a595</a><br><a href="https://blog.csdn.net/jj546630576/article/details/74910343" target="_blank" rel="noopener">https://blog.csdn.net/jj546630576/article/details/74910343</a></p>
 </blockquote>
