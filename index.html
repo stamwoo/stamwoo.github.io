@@ -612,6 +612,241 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://stamwoo.github.io/2207048324/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="woo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Woo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                  <span class="post-sticky-flag" title="置顶">
+                    <i class="fa fa-thumb-tack"></i>
+                  </span>
+                
+                
+                <a href="/2207048324/" class="post-title-link" itemprop="url">令牌桶限流算法(Token Bucket))</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-10 22:11:29" itemprop="dateCreated datePublished" datetime="2019-02-10T22:11:29+01:00">2019-02-10</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-12 00:22:42" itemprop="dateModified" datetime="2019-02-12T00:22:42+01:00">2019-02-12</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/2207048324/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2207048324/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2207048324/" class="leancloud_visitors" data-flag-title="令牌桶限流算法(Token Bucket))">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">1.5k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">1 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>今天学习一下什么是令牌桶算法。</p>
+<h4 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h4><p>令牌桶算法最初来源于计算机网络。在网络传输数据时，为了防止网络拥塞，需限制流出网络的流量，使流量以比较均匀的速度向外发送。令牌桶算法就实现了这个功能，可控制发送到网络上数据的数目，并允许突发数据的发送。</p>
+<p>令牌桶算法是网络流量整形（Traffic Shaping）和速率限制（Rate Limiting）中最常使用的一种算法。典型情况下，令牌桶算法用来控制发送到网络上的数据的数目，并允许突发数据的发送。</p>
+<p>大小固定的令牌桶可自行以恒定的速率源源不断地产生令牌。如果令牌不被消耗，或者被消耗的速度小于产生的速度，令牌就会不断地增多，直到把桶填满。后面再产生的令牌就会从桶中溢出。最后桶中可以保存的最大令牌数永远不会超过桶的大小。</p>
+<p>传送到令牌桶的数据包需要消耗令牌。不同大小的数据包，消耗的令牌数量不一样。</p>
+<p>令牌桶这种控制机制基于令牌桶中是否存在令牌来指示什么时候可以发送流量。令牌桶中的每一个令牌都代表一个字节。如果令牌桶中存在令牌，则允许发送流量；而如果令牌桶中不存在令牌，则不允许发送流量。因此，如果突发门限被合理地配置并且令牌桶中有足够的令牌，那么流量就可以以峰值速率发送。</p>
+<h4 id="2-算法过程"><a href="#2-算法过程" class="headerlink" title="2 算法过程"></a>2 算法过程</h4><p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g035747pm1j30ib0dy0u7.jpg" alt=""></p>
+<p>算法描述：</p>
+<ul>
+<li><p>假如用户配置的平均发送速率为 r，则每隔 1/r 秒一个令牌被加入到桶中（每秒会有 r 个令牌放入桶中）；</p>
+</li>
+<li><p>假设桶中最多可以存放 b 个令牌。如果令牌到达时令牌桶已经满了，那么这个令牌会被丢弃；</p>
+</li>
+<li><p>当一个 n 个字节的数据包到达时，就从令牌桶中删除 n 个令牌（不同大小的数据包，消耗的令牌数量不一样），并且数据包被发送到网络；</p>
+</li>
+<li><p>如果令牌桶中少于 n 个令牌，那么不会删除令牌，并且认为这个数据包在流量限制之外（n 个字节，需要 n 个令牌。该数据包将被缓存或丢弃）；</p>
+</li>
+<li><p>算法允许最长 b 个字节的突发，但从长期运行结果看，数据包的速率被限制成常量 r。对于在流量限制外的数据包可以以不同的方式处理：（1）它们可以被丢弃；（2）它们可以排放在队列中以便当令牌桶中累积了足够多的令牌时再传输；（3）它们可以继续发送，但需要做特殊标记，网络过载的时候将这些特殊标记的包丢弃。</p>
+</li>
+</ul>
+<p><strong>注意：</strong></p>
+<p>令牌桶算法不能与另外一种常见算法漏桶算法相混淆。这两种算法的主要区别在于漏桶算法能够强行限制数据的传输速率，而令牌桶算法在能够限制数据的平均传输速率外，还允许某种程度的突发传输。在令牌桶算法中，只要令牌桶中存在令牌，那么就允许突发地传输数据直到达到用户配置的门限，因此它适合于具有突发特性的流量。</p>
+<h4 id="Java-实现"><a href="#Java-实现" class="headerlink" title="Java 实现"></a>Java 实现</h4><p>我们可以使用 Guava 的 RateLimiter 来实现基于令牌桶的流控，RateLimiter 令牌桶算法是单桶实现。RateLimiter 对简单的令牌桶算法做了一些工程上的优化，具体的实现是 SmoothBursty。需要注意的是，RateLimiter 的另一个实现 SmoothWarmingUp，就不是令牌桶了，而是漏桶算法。也许是出于简单起见，RateLimiter 中的时间窗口能且仅能为 1s。</p>
+<p>SmoothBursty 有一个可以放 N 个时间窗口产生的令牌的桶，系统空闲的时候令牌就一直攒着，最好情况下可以扛 N 倍于限流值的高峰而不影响后续请求。RateLimite 允许某次请求拿走超出剩余令牌数的令牌，但是下一次请求将为此付出代价，一直等到令牌亏空补上，并且桶中有足够本次请求使用的令牌为止。当某次请求不能得到所需要的令牌时，这时涉及到一个权衡，是让前一次请求干等到令牌够用才走掉呢，还是让它先走掉后面的请求等一等呢？Guava 的设计者选择的是后者，先把眼前的活干了，后面的事后面再说。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+    
+  
+
+  
+
+  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://stamwoo.github.io/421584197/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2470,227 +2705,6 @@
 
 <p><pre>@ComponentScan(basePackages = {“com.oskyhang”, “com.frames”})</pre></p>
 <p>注解就可以，注解指定扫描的包，就可以扫描到，更灵活方便。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-    
-  
-
-  
-
-  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://stamwoo.github.io/2008800739/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="woo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Woo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                  <span class="post-sticky-flag" title="置顶">
-                    <i class="fa fa-thumb-tack"></i>
-                  </span>
-                
-                
-                <a href="/2008800739/" class="post-title-link" itemprop="url">CPU100%问题定位实战</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-11-02 22:11:29" itemprop="dateCreated datePublished" datetime="2018-11-02T22:11:29+01:00">2018-11-02</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-02-05 22:02:56" itemprop="dateModified" datetime="2019-02-05T22:02:56+01:00">2019-02-05</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <a href="/2008800739/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2008800739/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2008800739/" class="leancloud_visitors" data-flag-title="CPU100%问题定位实战">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">776</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">1 分钟</span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>功能问题，通过日志，单步调试相对比较好定位。<br>性能问题，例如线上服务器 CPU100%，如何找到相关服务，如何定位问题代码，更考验技术人的功底<br>题目 某服务器上部署了若干 tomcat 实例，即若干垂直切分的 Java 站点服务，以及若干 Java 微服务，突然收到运维的 CPU 异常告警<br>问：如何定位是哪个服务进程导致 CPU 过载，哪个线程导致 CPU 过载，哪段代码导致 CPU 过载?   </p>
-<h3 id="步骤一、找到最耗-CPU-的进程"><a href="#步骤一、找到最耗-CPU-的进程" class="headerlink" title="步骤一、找到最耗 CPU 的进程"></a>步骤一、找到最耗 CPU 的进程</h3><p>工具：top<br>方法： </p>
-<ul>
-<li>执行 top -c ，显示进程运行信息列表 </li>
-<li>键入 P (大写 p)，进程按照 CPU 使用率排序<br>最耗 CPU 的进程 PID 为 10765   <h3 id="步骤二：找到最耗-CPU-的线程"><a href="#步骤二：找到最耗-CPU-的线程" class="headerlink" title="步骤二：找到最耗 CPU 的线程"></a>步骤二：找到最耗 CPU 的线程</h3>工具：top<br>方法： </li>
-<li>top -Hp 10765 ，显示一个进程的线程运行信息列表 </li>
-<li>键入 P (大写 p)，线程按照 CPU 使用率排序，进程 10765 内，最耗 CPU 的线程 PID 为 10804 <h3 id="步骤三：将线程-PID-转化为-16-进制"><a href="#步骤三：将线程-PID-转化为-16-进制" class="headerlink" title="步骤三：将线程 PID 转化为 16 进制"></a>步骤三：将线程 PID 转化为 16 进制</h3>工具：printf 方法：printf “%x\n” 10804 ，10804 对应的 16 进制是 0x2a34，当然，这一步可以用计算器。 之所以要转化为 16 进制，是因为堆栈里，线程 id 是用 16 进制表示的。 <h3 id="步骤四：查看堆栈，找到线程在干嘛"><a href="#步骤四：查看堆栈，找到线程在干嘛" class="headerlink" title="步骤四：查看堆栈，找到线程在干嘛"></a>步骤四：查看堆栈，找到线程在干嘛</h3>工具：pstack/jstack/grep<br>方法：jstack 10765 | grep ‘0x2a34’ -C5 –color </li>
-<li>打印进程堆栈 </li>
-<li>通过线程 id，过滤得到线程堆栈<br>找到了耗 CPU 高的线程对应的线程名称 “AsyncLogger-1”，以及看到了该线程正在执行代码的堆栈。<br>希望对经常进行线上 CPU 问题排查的同学有帮助，如果有更好的实践，也欢迎分享。 想要印象深刻，请大家务必线上实操练习哟。</li>
-</ul>
 
           
         
