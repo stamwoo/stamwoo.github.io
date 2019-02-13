@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[mysql四种事务隔离级别]]></title>
+    <title><![CDATA[mysql 四种事务隔离级别]]></title>
     <url>%2F3386238287%2F</url>
-    <content type="text"></content>
+    <content type="text"><![CDATA[我们可以为数据库或分别的会话设置四种事务隔离级别. READ UNCOMMITTED（读取未提交数据） READ COMMITTED（可以读取其他事务提交的数据） REPEATABLE READ（可重读）—MySQL默认的隔离级别 SERIALIZABLE（串行化） 事务隔离级别里的名词解释 脏读: 脏读就是指当一个事务正在访问数据，并且对数据进行了修改，而这种修改还没有提交到数据库中，这时，另外一个事务也访问这个数据，然后使用了这个数据. 不可重复读: 是指在一个事务内，多次读同一数据.在这个事务还没有结束时，另外一个事务也访问该同一数据.那么，在第一个事务中的两次读数据之间，由于第二个事务的修改，那么第一个事务两次读到的的数据可能是不一样的.这样就发生了在一个事务内两次读到的数据是不一样的，因此称为是不可重复读. 幻读: 第一个事务对一个表中的数据进行了修改，这种修改涉及到表中的全部数据行.同时，第二个事务也修改这个表中的数据，这种修改是向表中插入一行新数据.那么，以后就会发生操作第一个事务的用户发现表中还有没有修改的数据行，就好象发生了幻觉一样. 采用不同事务隔离级别所造成的效果有表account.结构和初始数据如下: id account 1 1000 2 1000 READ UNCOMMITTED允许脏读，也就是可能读取到其他会话中未提交事务修改的数据 会话A进行如下操作:123set session transaction isolation level read uncommitted;start transaction;select * from account; 结果如下: id account 1 1000 2 1000 会话B进行如下操作 123set session transaction isolation level read uncommitted；start transaction;update account set account=account+200 where id = 1; 会话A再进行查询 id account 1 1200 2 1000 结论即便是事务没有commit，但是我们仍然能读到未提交的数据，这是所有隔离级别中最低的一种. READ COMMITTED只能读取到已经提交的数据.Oracle数据库默认都是该级别 (不重复读) 会话B进行如下操作 1set session transaction isolation level read committed 会话A进行如下操作: 12update account set account=account-200 where id=1;select * from account; 得到结果: id account 1 800 2 1000 会话B进行查询 1select * from account; 得到结果: id account 1 1000 2 1000 会话A提交事务 1commit; 会话B进行查询 得到结果: id account 1 1000 2 1000 结论当我们将当前会话的隔离级别设置为READ COMMITTED的时候，当前会话只能读取到其他事务提交的数据，未提交的数据读不到. 同样会出现一个问题:会话B在同一个事务中，读取到两次不同的结果.这就造成了不可重复读，就是两次读取的结果不同.这种现象叫不可重复读. REPEATABLE READ为了在同一个事务中多次查询结果必须保持一致,出现了可重复读.这也是mysql默认的隔离级别. 会话B设置隔离级别为可重复读,然后查询 123set session transaction isolation level repeatable read;start transaction;select * from account; 得到结果: id account 1 1000 2 1000 会话A插入一条数据 12insert into account(id,account) value(3,1000);commit; 得到结果: id account 1 1000 2 1000 3 1000 会话B再次查询,结果与第一次是一样的: id account 1 1000 2 1000 但是 当会话B想要插入id为3的记录时: 12insert into account(id,account) value(3,1000);commit; mysql 肯定会报错,说数据重复.因为A已经提交了事务,而B为了保证可重复读做了”手脚”.这就是幻读 SERIALIZABLE完全串行化的读，每次读都需要获得表级共享锁，读写相互都会阻塞 会话B设置事务隔离级别,并查询,但不提交事务. 123set session transaction isolation level serializable;start transaction;select * from account; 得到结果: id account 1 1000 2 1000 会话A向表中写数据: 1insert into account(id,account) value(3,1000); 则在B未commit之前,这条插入会阻塞.当阻塞时间超时时,则会出现Lock wait time out提示. 结论当我们将当前会话的隔离级别设置为SERIALIZABLE的时候，其他会话对该表的写操作将被挂起.可以看到，这是隔离级别中最严格的，但是这样做势必对性能造成影响.所以在实际的选用上，我们要根据当前具体的情况选用合适的. 那么 mysql 5.5之后所采用的InnoDB是如何支持事务隔离级别的呢?作为扩展可以参考: MySQL事务隔离级别的实现原理 引用 https://www.jianshu.com/p/4e3edbedb9a8https://www.cnblogs.com/zhoujinyi/p/3437475.html]]></content>
+      <tags>
+        <tag>mysql</tag>
+      </tags>
   </entry>
   <entry>
     <title><![CDATA[为什么是InnoDB]]></title>
