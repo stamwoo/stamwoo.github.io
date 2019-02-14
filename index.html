@@ -507,22 +507,27 @@
       
         
           
-            <p>
-              
-什么是301转向?什么是301重定向?
+            <ol>
+<li>什么是301转向?什么是301重定向?</li>
+</ol>
+<p>　　301转向(或叫301重定向，301跳转)是当用户或搜索引擎向网站服务器发出浏览请求时，服务器返回的HTTP数据流中头信息(header)中的状态码的一种，表示本网页永久性转移到另一个地址。</p>
+<ol start="2">
+<li>什么是302重定向?</li>
+</ol>
+<p>　　302重定向又称之为302代表暂时性转移(Temporarily Moved )，英文名称：302 redirect。 也被认为是暂时重定向(temporary redirect)，一条对网站浏览器的指令来显示浏览器被要求显示的不同的URL，当一个网页经历过短期的URL的变化时使用。一个暂时重定向是一种服务器端的重定向，能够被搜索引擎蜘蛛正确地处理。</p>
+<ol start="3">
+<li>301重定向与302重定向的区别</li>
+</ol>
+<p>　　302重定向是暂时的重定向，搜索引擎会抓取新的内容而保留旧的网址。因为服务器返回302代码，搜索引擎认为新的网址只是暂时的。</p>
+<p>　　301重定向是永久的重定向，搜索引擎在抓取新内容的同时也将旧的网址替换为重定向之后的网址。</p>
+<ol start="4">
+<li>为什么302 重定向和网址劫持有关联</li>
+</ol>
+<p>　　从网址A 做一个302 重定向到网址B 时，主机服务器的隐含意思是网址A 随时有可能改主意，重新显示本身的内容或转向其他的地方。大部分的搜索引擎在大部分情况下，当收到302 重定向时，一般只要去抓取目标网址就可以了，也就是说网址B。如果搜索引擎在遇到302 转向时，百分之百的都抓取目标网址B 的话，就不用担心网址URL 劫持了。问题就在于，有的时候搜索引擎，尤其是Google，并不能总是抓取目标网址。</p>
+<p>　　比如说，有的时候A 网址很短，但是它做了一个302 重定向到B 网址，而B 网址是一个很长的乱七八糟的URL 网址，甚至还有可能包含一些问号之类的参数。很自然的，A 网址更加用户友好，而B 网址既难看，又不用户友好。这时Google 很有可能会仍然显示网址A。由于搜索引擎排名算法只是程序而不是人，在遇到302 重定向的时候，并不能像人一样的去准确判定哪一个网址更适当，这就造成了网址URL 劫持的可能性。也就是说，一个不道德的人在他自己的网址A 做一个302 重定向到你的网址B，出于某种原因， Google 搜索结果所显示的仍然是网址A，但是所用的网页内容却是你的网址B 上的内容，这种情况就叫做网址URL 劫持。你辛辛苦苦所写的内容就这样被别人偷走了。</p>
+<p>　　302 重定向所造成的网址URL 劫持现象，已经存在一段时间了。不过到目前为止，似乎也没有什么更好的解决方法。在正在进行的数据中心转换中，302 重定向问题也是要被解决的目标之一。从一些搜索结果来看，网址劫持现象有所改善，但是并没有完全解决</p>
 
-　　301转向(或叫301重定向，301跳转)是当用户或
-              ...
-            </p>
-          <!--noindex-->
           
-            <div class="post-button text-center">
-              <a class="btn" href="/1320346412/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
         
       
     </div>
@@ -732,21 +737,279 @@
       
         
           
-            <p>
-              我们可以为数据库或分别的会话设置四种事务隔离级别.
+            <p>我们可以为数据库或分别的会话设置四种事务隔离级别.</p>
+<ul>
+<li>READ UNCOMMITTED（读取未提交数据）</li>
+<li>READ COMMITTED（可以读取其他事务提交的数据）</li>
+<li>REPEATABLE READ（可重读）—MySQL默认的隔离级别</li>
+<li>SERIALIZABLE（串行化）</li>
+</ul>
+<h2 id="事务隔离级别里的名词解释"><a href="#事务隔离级别里的名词解释" class="headerlink" title="事务隔离级别里的名词解释"></a>事务隔离级别里的名词解释</h2><ul>
+<li><strong>脏读</strong>: 脏读就是指当一个事务正在访问数据，并且对数据进行了修改，而这种修改还没有提交到数据库中，这时，另外一个事务也访问这个数据，然后使用了这个数据.</li>
+<li><strong>不可重复读</strong>: 是指在一个事务内，多次读同一数据.在这个事务还没有结束时，另外一个事务也访问该同一数据.那么，在第一个事务中的两次读数据之间，由于第二个事务的修改，那么第一个事务两次读到的的数据可能是不一样的.这样就发生了在一个事务内两次读到的数据是不一样的，因此称为是不可重复读.</li>
+<li><strong>幻读</strong>: 第一个事务对一个表中的数据进行了修改，这种修改涉及到表中的全部数据行.同时，第二个事务也修改这个表中的数据，这种修改是向表中插入一行新数据.那么，以后就会发生操作第一个事务的用户发现表中还有没有修改的数据行，就好象发生了幻觉一样.</li>
+</ul>
+<h2 id="采用不同事务隔离级别所造成的效果"><a href="#采用不同事务隔离级别所造成的效果" class="headerlink" title="采用不同事务隔离级别所造成的效果"></a>采用不同事务隔离级别所造成的效果</h2><p>有表account.结构和初始数据如下:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>account</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1000</td>
+</tr>
+</tbody>
+</table>
+<h3 id="READ-UNCOMMITTED"><a href="#READ-UNCOMMITTED" class="headerlink" title="READ UNCOMMITTED"></a>READ UNCOMMITTED</h3><p>允许脏读，也就是可能读取到其他会话中未提交事务修改的数据</p>
+<ol>
+<li>会话A进行如下操作:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set session transaction isolation level read uncommitted;</span><br><span class="line">start transaction;</span><br><span class="line">select * from account;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>结果如下:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>account</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1000</td>
+</tr>
+</tbody>
+</table>
+<ol start="2">
+<li>会话B进行如下操作</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set session transaction isolation level read uncommitted；</span><br><span class="line">start transaction;</span><br><span class="line">update account set account=account+200 where id = 1;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>会话A再进行查询</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>account</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1200</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1000</td>
+</tr>
+</tbody>
+</table>
+<h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><p>即便是事务没有commit，但是我们仍然能读到未提交的数据，这是所有隔离级别中最低的一种.</p>
+<h3 id="READ-COMMITTED"><a href="#READ-COMMITTED" class="headerlink" title="READ COMMITTED"></a>READ COMMITTED</h3><p>只能读取到已经提交的数据.Oracle数据库默认都是该级别 (不重复读)</p>
+<ol>
+<li>会话B进行如下操作</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set session transaction isolation level read committed</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>会话A进行如下操作:</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">update account set account=account-200 where id=1;</span><br><span class="line">select * from account;</span><br></pre></td></tr></table></figure>
+<p>得到结果:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>account</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>800</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1000</td>
+</tr>
+</tbody>
+</table>
+<ol start="3">
+<li>会话B进行查询</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from account;</span><br></pre></td></tr></table></figure>
+<p>得到结果:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>account</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1000</td>
+</tr>
+</tbody>
+</table>
+<ol start="4">
+<li>会话A提交事务</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">commit;</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>会话B进行查询</li>
+</ol>
+<p>得到结果:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>account</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1000</td>
+</tr>
+</tbody>
+</table>
+<h4 id="结论-1"><a href="#结论-1" class="headerlink" title="结论"></a>结论</h4><p>当我们将当前会话的隔离级别设置为READ COMMITTED的时候，当前会话只能读取到其他事务提交的数据，未提交的数据读不到.</p>
+<p>同样会出现一个问题:会话B在同一个事务中，读取到两次不同的结果.这就造成了不可重复读，就是两次读取的结果不同.这种现象叫不可重复读.</p>
+<h3 id="REPEATABLE-READ"><a href="#REPEATABLE-READ" class="headerlink" title="REPEATABLE READ"></a>REPEATABLE READ</h3><p>为了在同一个事务中多次查询结果必须保持一致,出现了可重复读.这也是mysql默认的隔离级别.</p>
+<ol>
+<li>会话B设置隔离级别为可重复读,然后查询</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set session transaction isolation level repeatable read;</span><br><span class="line">start transaction;</span><br><span class="line">select * from account;</span><br></pre></td></tr></table></figure>
+<p>得到结果:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>account</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1000</td>
+</tr>
+</tbody>
+</table>
+<ol start="2">
+<li>会话A插入一条数据</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">insert into account(id,account) value(3,1000);</span><br><span class="line">commit;</span><br></pre></td></tr></table></figure>
+<p>得到结果:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>account</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1000</td>
+</tr>
+</tbody>
+</table>
+<ol start="3">
+<li>会话B再次查询,结果与第一次是一样的:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>account</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1000</td>
+</tr>
+</tbody>
+</table>
+<ol start="4">
+<li><strong>但是</strong> 当会话B想要插入id为3的记录时:</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">insert into account(id,account) value(3,1000);</span><br><span class="line">commit;</span><br></pre></td></tr></table></figure>
+<p>mysql 肯定会报错,说数据重复.因为A已经提交了事务,而B为了保证可重复读做了”手脚”.这就是<strong>幻读</strong></p>
+<h3 id="SERIALIZABLE"><a href="#SERIALIZABLE" class="headerlink" title="SERIALIZABLE"></a>SERIALIZABLE</h3><p>完全串行化的读，每次读都需要获得表级共享锁，读写相互都会阻塞</p>
+<ol>
+<li>会话B设置事务隔离级别,并查询,但不提交事务.</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set session transaction isolation level serializable;</span><br><span class="line">start transaction;</span><br><span class="line">select * from account;</span><br></pre></td></tr></table></figure>
+<p>得到结果:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>account</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1000</td>
+</tr>
+</tbody>
+</table>
+<ol start="2">
+<li>会话A向表中写数据:</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">insert into account(id,account) value(3,1000);</span><br></pre></td></tr></table></figure>
+<p>则在B未commit之前,这条插入会阻塞.当阻塞时间超时时,则会出现Lock wait time out提示.</p>
+<h4 id="结论-2"><a href="#结论-2" class="headerlink" title="结论"></a>结论</h4><p>当我们将当前会话的隔离级别设置为SERIALIZABLE的时候，其他会话对该表的写操作将被挂起.可以看到，这是隔离级别中最严格的，但是这样做势必对性能造成影响.所以在实际的选用上，我们要根据当前具体的情况选用合适的.</p>
+<h2 id="那么-mysql-5-5之后所采用的InnoDB是如何支持事务隔离级别的呢"><a href="#那么-mysql-5-5之后所采用的InnoDB是如何支持事务隔离级别的呢" class="headerlink" title="那么 mysql 5.5之后所采用的InnoDB是如何支持事务隔离级别的呢?"></a>那么 mysql 5.5之后所采用的InnoDB是如何支持事务隔离级别的呢?</h2><p>作为扩展可以参考: <a href="https://www.linuxidc.com/Linux/2018-01/150610.htm" target="_blank" rel="noopener">MySQL事务隔离级别的实现原理</a></p>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><blockquote>
+<p><a href="https://www.jianshu.com/p/4e3edbedb9a8" target="_blank" rel="noopener">https://www.jianshu.com/p/4e3edbedb9a8</a><br><a href="https://www.cnblogs.com/zhoujinyi/p/3437475.html" target="_blank" rel="noopener">https://www.cnblogs.com/zhoujinyi/p/3437475.html</a></p>
+</blockquote>
 
-READ UNCOMMITTED（读取未提交数
-              ...
-            </p>
-          <!--noindex-->
           
-            <div class="post-button text-center">
-              <a class="btn" href="/3386238287/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
         
       
     </div>
@@ -956,19 +1219,33 @@ READ UNCOMMITTED（读取未提交数
       
         
           
-            <p>
-              InnoDB和MyISAM的区别索引InnoDB 是聚集索引,数据文件是和索引绑在一起的,必须要有主
-              ...
-            </p>
-          <!--noindex-->
+            <h2 id="InnoDB和MyISAM的区别"><a href="#InnoDB和MyISAM的区别" class="headerlink" title="InnoDB和MyISAM的区别"></a>InnoDB和MyISAM的区别</h2><h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><p>InnoDB 是聚集索引,数据文件是和索引绑在一起的,必须要有主键,通过主键索引效率很高,但是辅助索引需要两次查询,先查询到主键,然后再通过主键查询到数据.因此,主键不应该过大,否则其他索引也会很大.而 MyISAM 是非聚集索引,数据文件是分离的,索引保存的是数据文件的指针,主键索引和辅助索引是独立的.</p>
+<h3 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h3><p>InnoDB 支持事务功能,对于 InnoDB 每一条 SQL 语言都默认封装成事务,自动提交,这样会影响速度,所以最好把多条 SQL 语言放在 begin 和 commit 之间,组成一个事务.<br>MyISAM 不支持,也因此执行速度更快,性能更好.</p>
+<h3 id="锁机制"><a href="#锁机制" class="headerlink" title="锁机制"></a>锁机制</h3><p>InnoDB 为行级锁，myisam 为表级锁.<br>注意：当数据库无法确定，所找的行时，也会变为锁定整个表.<br>如： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update table set num = 10 where username like &quot;%test%&quot;;</span><br></pre></td></tr></table></figure>
+<h3 id="MVCC-Multi-Version-Concurrency-Control"><a href="#MVCC-Multi-Version-Concurrency-Control" class="headerlink" title="MVCC (Multi-Version Concurrency Control)"></a>MVCC (Multi-Version Concurrency Control)</h3><p><a href="http://mysql.taobao.org/monthly/2017/12/01/" target="_blank" rel="noopener">阿里数据库内核</a>‘2017/12’月报中对MVCC的解释是:<br>多版本控制: 指的是一种提高并发的技术.最早的数据库系统，只有读读之间可以并发，读写，写读，写写都要阻塞.引入多版本之后，只有写写之间相互阻塞，其他三种操作都可以并行，这样大幅度提高了InnoDB的并发度.在内部实现中，与Postgres在数据行上实现多版本不同，InnoDB是在undolog中实现的，通过undolog可以找回数据的历史版本.找回的数据历史版本可以提供给用户读(按照隔离级别的定义，有些读请求只能看到比较老的数据版本)，也可以在回滚的时候覆盖数据页上的数据.在InnoDB内部中，会记录一个全局的活跃读写事务数组，其主要用来判断事务的可见性.</p>
+<p>&lt;高性能MySQL&gt;中对MVCC的部分介绍</p>
+<ul>
+<li>MySQL的大多数事务型存储引擎实现的其实都不是简单的行级锁.基于提升并发性能的考虑,它们一般都同时实现了多版本并发控制(MVCC).不仅是MySQL,包括Oracle,PostgreSQL等其他数据库系统也都实现了MVCC,但各自的实现机制不尽相同,因为MVCC没有一个统一的实现标准.</li>
+<li>可以认为MVCC是行级锁的一个变种,但是它在很多情况下避免了加锁操作,因此开销更低.虽然实现机制有所不同,但大都实现了非阻塞的读操作，写操作也只锁定必要的行.</li>
+<li>MVCC的实现方式有多种,典型的有乐观(optimistic)并发控制 和 悲观(pessimistic)并发控制.</li>
+<li>MVCC只在 READ COMMITTED 和 REPEATABLE READ 两个隔离级别下工作.其他两个隔离级别够和MVCC不兼容,因为 READ UNCOMMITTED 总是读取最新的数据行,而不是符合当前事务版本的数据行.而 SERIALIZABLE 则会对所有读取的行都加锁.</li>
+</ul>
+<h4 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h4><p>根据<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-multi-versioning.html" target="_blank" rel="noopener">Mysql官方文档</a>,可以看到,InnoDB存储引擎在数据库每行数据的后面添加了<strong>三个字段</strong>来实现MVCC,网上流传的两个字段是错的!</p>
+<h3 id="外键"><a href="#外键" class="headerlink" title="外键"></a>外键</h3><p>InnoDB 支持外键，而 MyISAM 不支持.对一个包含外键的 InnoDB 表转为 MYISAM 会失败.</p>
+<h3 id="表行数"><a href="#表行数" class="headerlink" title="表行数"></a>表行数</h3><p>InnoDB 不保存表的具体行数，执行 select count(*) from table 时需要全表扫描.而 MyISAM 用一个变量保存了整个表的行数，执行上述语句时只需要读出该变量即可，速度很快，但如果上述语句还包含了 where 子句，那么两者执行效率是一样的.</p>
+<h2 id="选择InnoDB还是MyISAM的场景"><a href="#选择InnoDB还是MyISAM的场景" class="headerlink" title="选择InnoDB还是MyISAM的场景"></a>选择InnoDB还是MyISAM的场景</h2><p>两种存储引擎的选择，要结合你的业务场景来做选型，可以参考以下基本原则：</p>
+<ol>
+<li>是否要支持事务，如果要请选择 Innodb，如果不需要可以考虑 MyISAM。</li>
+<li>如果表中绝大多数都是读查询（有人总结出 读:写比率大于100:1），可以考虑 MyISAM，如果既有读又有写，而且也挺频繁，请使用 InnoDB。</li>
+<li>系统崩溃后，MyISAM 恢复起来更困难，能否接受。</li>
+<li>MySQL 5.5 开始 InnoDB 已经成为 MySQL 的默认引擎(之前是 MyISAM )，说明其优势是有目共睹的，如果你不知道用什么，那就用InnoDB吧，至少不会差。</li>
+</ol>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><blockquote>
+<p><a href="https://juejin.im/post/5c43ee36518825254b5a3c3a" target="_blank" rel="noopener">https://juejin.im/post/5c43ee36518825254b5a3c3a</a><br><a href="https://segmentfault.com/a/1190000012650596" target="_blank" rel="noopener">https://segmentfault.com/a/1190000012650596</a><br><a href="https://blog.csdn.net/u011114896/article/details/38580389" target="_blank" rel="noopener">https://blog.csdn.net/u011114896/article/details/38580389</a></p>
+</blockquote>
+
           
-            <div class="post-button text-center">
-              <a class="btn" href="/1557438233/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
         
       
     </div>
@@ -1166,19 +1443,35 @@ READ UNCOMMITTED（读取未提交数
       
         
           
-            <p>
-              众所周知，mySQL 有两种常见的存储引擎。一种是 MyISAM，一种是 InnoDB。而mysql
-              ...
-            </p>
-          <!--noindex-->
+            <p>众所周知，mySQL 有两种常见的存储引擎。一种是 MyISAM，一种是 InnoDB。<br>而mysql现在默认的存储引擎是InnoDB,那么为什么它选InnoDB作为存储引擎呢?网上很多回答会告诉是因为只有InnoDB使用了聚簇索引,那么聚簇索引究竟是啥东西?为了解答这个问题,笔者写下了这篇文章,除此之外也在文中解答了其他一些问题.</p>
+<h2 id="主键索引和聚簇索引是啥关系"><a href="#主键索引和聚簇索引是啥关系" class="headerlink" title="主键索引和聚簇索引是啥关系?"></a>主键索引和聚簇索引是啥关系?</h2><ol>
+<li>一般情况下主键会默认创建聚簇索引，且一张表只允许存在一个聚簇索引。</li>
+<li>没有主键时，会用一个唯一且不为空的索引列做为主键，成为此表的聚簇索引</li>
+<li>如果以上两个都不满足那innodb自己创建一个虚拟的聚集索引</li>
+</ol>
+<ul>
+<li>注意!用户不能在有主键的情况下指定非主键列为聚簇索引</li>
+</ul>
+<h2 id="聚簇索引"><a href="#聚簇索引" class="headerlink" title="聚簇索引"></a>聚簇索引</h2><p>聚簇索引并不是一种单独的索引类型，而是一种数据存储方式。比如，InnoDB的聚簇索引使用B+Tree的数据结构存储索引和数据。<br>当表有聚簇索引时，它的数据行实际上存放在索引的叶子页(leaf page)中。因为无法同时把数据行存放在两个不同的地方，所以一个表只能有一个聚簇索引（不过，覆盖索引可以模拟多个聚簇索引的情况）。</p>
+<ul>
+<li>术语“聚簇”表示数据行和相邻的键值紧凑地存储在一起。</li>
+<li>聚簇索引的二级索引：叶子节点不会保存引用的行的物理位置，而是保存行的主键值。</li>
+</ul>
+<h3 id="聚簇索引的列一定要是递增的"><a href="#聚簇索引的列一定要是递增的" class="headerlink" title="聚簇索引的列一定要是递增的!"></a>聚簇索引的列一定要是递增的!</h3><p>对于聚簇索引的存储引擎，数据的物理存放顺序与索引顺序是一致的，即：只要索引是相邻的，那么对应的数据一定也是相邻地存放在磁盘上的，如果主键不是自增id，可以想象，它会干些什么，不断地调整数据的物理地址、分页，当然也有其他一些措施来减少这些操作，但却无法彻底避免。但，如果是自增的，那就简单了，它只需要一页一页地写，索引结构相对紧凑，磁盘碎片少，效率也高。</p>
+<h2 id="辅助索引"><a href="#辅助索引" class="headerlink" title="辅助索引"></a>辅助索引</h2><p>辅助索引（secondary index，也称二级索引），叶子节点并不包含行记录的全部数据，叶子节点除了包含键值以外，每个叶子节点中的索引行中还包含了一个书签。该书签用来告诉Innodb存储引擎哪里可以找到与索引相对应的行数据。由于Innodb存储引擎是索引组织表，因此Innodb存储引擎的辅助索引的书签就是相应行数据的聚集索引键。</p>
+<p>辅助索引的存在并不影响数据在聚集索引中的组织，因此每张表上可以有多个辅助索引。当通过辅助索引来寻找数据时，InnoDB存储引擎会遍历辅助索引并通过叶级别的指针获得指向主键索引的主键，然后再通过主键索引来找到一个完整的行记录。</p>
+<p>举例来说，如果在一棵高度为3的辅助索引树中查找数据，那需要对这棵辅助索引树遍历3次找到指定主键，如果聚集索引树的高度同样为3，那么还需要对聚集索引树进行3次查找，最终找到一个完整的行数据所在的页。因此一共需要6次逻辑IO访问以得到最终的一个数据页。从二级索引回到主键的过程称之为“回表”，在数据量大的情况下开销还是很大。</p>
+<p>聚簇索引和非聚簇索引的图示 如下:</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g04cqa7gwwj30hl0ct40u.jpg" alt=""></p>
+<p>MyISAM是没有聚簇索引的,无论主键还是其他列都是用的非聚簇索引,并且它的叶子节点存储的也不是所有列数据,而是磁盘物理地址,这里不再展开说.</p>
+<h2 id="索引和操作系统页的关系"><a href="#索引和操作系统页的关系" class="headerlink" title="索引和操作系统页的关系"></a>索引和操作系统页的关系</h2><p>一般来说，索引本身也很大，不可能全部存储在内存中，因此索引往往以索引文件的形式存储的磁盘上。这样的话，索引查找过程中就要产生磁盘I/O消耗，相对于内存存取，I/O存取的消耗要高几个数量级，所以评价一个数据结构作为索引的优劣最重要的指标就是在查找过程中磁盘I/O操作次数的渐进复杂度。换句话说，索引的结构组织要尽量减少查找过程中磁盘I/O的存取次数。</p>
+<p>为了达到这个目的，磁盘按需读取，要求每次都会预读的长度一般为页的整数倍。而且数据库系统将一个节点的大小设为等于一个页，这样每个节点只需要一次I/O就可以完全载入。每次新建节点时，直接申请一个页的空间，这样就保证一个节点物理上也存储在一个页里，加之计算机存储分配都是按页对齐的，就实现了一个node只需一次I/O。并把B-tree中的m值设的非常大，就会让树的高度降低，有利于一次完全载入。</p>
+<h2 id="什么影响了B-树高度"><a href="#什么影响了B-树高度" class="headerlink" title="什么影响了B+树高度?"></a>什么影响了B+树高度?</h2><p>IO次数取决于B+数的高度h。假设当前数据表的数据量为N，每个磁盘块的数据项的数量是m，则有h=㏒(m+1)N，当数据量N一定的情况下，m越大，h越小。而m = 磁盘块的大小 / 数据项的大小，磁盘块的大小也就是一个数据页的大小，是固定的，如果数据项占的空间越小，数据项的数量越多，树的高度越低。这就是为什么每个数据项，即索引字段要尽量的小，比如int占4字节，要比bigint8字节少一半。这也是为什么b+树要求把真实的数据放到叶子节点而不是内层节点，一旦放到内层节点，磁盘块的数据项会大幅度下降，导致树增高。当数据项等于1时将会退化成线性表。</p>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><blockquote>
+<p><a href="http://www.ywnds.com/?p=9976" target="_blank" rel="noopener">http://www.ywnds.com/?p=9976</a><br><a href="https://blog.csdn.net/lisuyibmd/article/details/53004848" target="_blank" rel="noopener">https://blog.csdn.net/lisuyibmd/article/details/53004848</a><br><a href="https://blog.csdn.net/qq_16681169/article/details/50571952" target="_blank" rel="noopener">https://blog.csdn.net/qq_16681169/article/details/50571952</a><br><a href="https://www.jianshu.com/p/54c6d5db4fe6" target="_blank" rel="noopener">https://www.jianshu.com/p/54c6d5db4fe6</a></p>
+</blockquote>
+
           
-            <div class="post-button text-center">
-              <a class="btn" href="/232040800/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
         
       
     </div>
@@ -1376,19 +1669,55 @@ READ UNCOMMITTED（读取未提交数
       
         
           
-            <p>
-              曾经我在一场真实面试中被问到分布式锁的实现,只能简单回答上来根据redis的setnx去做,而不知这
-              ...
-            </p>
-          <!--noindex-->
+            <p>曾经我在一场真实面试中被问到分布式锁的实现,只能简单回答上来根据redis的setnx去做,而不知这里面其实还有很多坑.也不知是否还有其他方式.面试结束后就有了下文.</p>
+<h2 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h2><p>在单进程环境中,当多个线程产生资源竞争时.程序员们会采用 Synchronize 或 Lock 去对临界资源进行加锁,使得在修改临界资源时,能够线性执行以消除并发.那么由于多线程是挂在同一个进程下的,我们就必须在这个进程内设置一个标记变量,来让所有线程都可以发现.<br>而在分布式环境下,多进程可能会产生资源竞争,那么此时的锁就应该存放在多进程都能够看到的地方.由此我们想到了两种方式:数据库和redis.</p>
+<h3 id="基于数据库"><a href="#基于数据库" class="headerlink" title="基于数据库"></a>基于数据库</h3><p>基于数据库的锁实现也有两种方式，一是基于数据库表，另一种是基于数据库排他锁。</p>
+<h4 id="基于数据库表的增删"><a href="#基于数据库表的增删" class="headerlink" title="基于数据库表的增删"></a>基于数据库表的增删</h4><p>基于数据库表增删是最简单的方式，首先创建一张锁的表主要包含下列字段：方法名，时间戳等字段。</p>
+<p>具体使用的方法，当需要锁住某个方法时，往该表中插入一条相关的记录。这边需要注意，方法名是有唯一性约束的，如果有多个请求同时提交到数据库的话，数据库会保证只有一个操作可以成功，那么我们就可以认为操作成功的那个线程获得了该方法的锁，可以执行方法体内容。</p>
+<p>执行完毕，需要delete该记录。</p>
+<p>当然，笔者这边只是简单介绍一下。对于上述方案可以进行优化，如应用主从数据库，数据之间双向同步。一旦挂掉快速切换到备库上；做一个定时任务，每隔一定时间把数据库中的超时数据清理一遍；使用while循环，直到insert成功再返回成功，虽然并不推荐这样做；还可以记录当前获得锁的机器的主机信息和线程信息，那么下次再获取锁的时候先查询数据库，如果当前机器的主机信息和线程信息在数据库可以查到的话，直接把锁分配给他就可以了，实现可重入锁。</p>
+<h4 id="基于数据库排他锁"><a href="#基于数据库排他锁" class="headerlink" title="基于数据库排他锁"></a>基于数据库排他锁</h4><p>在查询语句后面增加for update，数据库会在查询过程中给数据库表增加排他锁。当某条记录被加上排他锁之后，其他线程无法再在该行记录上增加排他锁。其他没有获取到锁的就会阻塞在上述select语句上，可能的结果有2种，在超时之前获取到了锁，在超时之前仍未获取到锁。</p>
+<p>获得排它锁的线程即可获得分布式锁，当获取到锁之后，可以执行方法的业务逻辑，执行完方法之后，释放锁connection.commit()。</p>
+<p>存在的问题主要是性能不高和sql超时的异常。</p>
+<h4 id="基于数据库的优缺点"><a href="#基于数据库的优缺点" class="headerlink" title="基于数据库的优缺点"></a>基于数据库的优缺点</h4><p>上面两种方式都是依赖数据库的一张表，一种是通过表中的记录的存在情况确定当前是否有锁存在，另外一种是通过数据库的排他锁来实现分布式锁。</p>
+<ul>
+<li>优点是直接借助数据库，简单容易理解。</li>
+<li>缺点是操作数据库需要一定的开销，性能问题需要考虑。</li>
+</ul>
+<h3 id="基于-redis"><a href="#基于-redis" class="headerlink" title="基于 redis"></a>基于 redis</h3><h4 id="SETNX-加锁"><a href="#SETNX-加锁" class="headerlink" title="SETNX 加锁"></a>SETNX 加锁</h4><p>使用redis的SET命令实现分布式锁，多个进程执行以下Redis命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET key value PX time NX</span><br></pre></td></tr></table></figure>
+<p>这条命令是当key不存在时,将字符串值value关联到key,并设置过期时间为time毫秒.</p>
+<ul>
+<li>返回1，说明该进程获得锁.</li>
+<li>返回0，说明其他进程已经获得了锁，进程不能进入临界区。进程可以在一个循环中不断地尝试 SET 操作，以获得锁。</li>
+</ul>
+<h4 id="解锁"><a href="#解锁" class="headerlink" title="解锁"></a>解锁</h4><p>解锁很简单,直接把key删除就可以了.但是考虑一种情况.</p>
+<p>进程A设置了一个较短的过期时间,在还未执行完之前锁已经过期被释放了.此时进程B拿到了锁进来,而A刚好又将锁删除.那这样由于过期时间设置过短,直接造成了所有redis锁失效.</p>
+<p>为了避免这种情况,即错误删除了并非自己加的锁.我们需要在SET锁时,将UUID设置为value.在删除之前先确认这把锁是由自己加的,那么就需要有一个get的操作.</p>
+<p>那因为get和del并不是原子操作,我们就需要采用lua脚本来保证原子性.</p>
+<h4 id="死锁问题"><a href="#死锁问题" class="headerlink" title="死锁问题"></a>死锁问题</h4><p>死锁问题即由设置过期时间来解决,但过期时间设置会存在一个问题:</p>
+<p>当锁过期后，该进程还没执行完，可能造成同时多个进程取得锁。</p>
+<h4 id="另一种redis-加解锁方式-getset"><a href="#另一种redis-加解锁方式-getset" class="headerlink" title="另一种redis 加解锁方式-getset"></a>另一种redis 加解锁方式-getset</h4><p>我们同样假设进程P1已经首先获得了锁 lock.foo，然后进程P1挂掉了。接下来的情况：</p>
+<ul>
+<li>进程P4执行 SETNX lock.foo 以尝试获取锁</li>
+<li>由于进程P1已获得了锁，所以P4执行 SETNX lock.foo 返回0，即获取锁失败</li>
+<li>P4执行 GET lock.foo 来检测锁是否已超时，如果没超时，则等待一段时间，再次检测</li>
+<li><p>如果P4检测到锁已超时，即当前的时间大于键 lock.foo 的值，P4会执行以下操作 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GETSET lock.foo &lt;current Unix timestamp + lock timeout + 1&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>由于 GETSET 操作在设置键的值的同时，还会返回键的旧值，通过比较键 lock.foo 的旧值是否小于当前时间，可以判断进程是否已获得锁</p>
+</li>
+<li>假如另一个进程P5也检测到锁已超时，并在P4之前执行了 GETSET 操作，那么P4的 GETSET 操作返回的是一个大于当前时间的时间戳，这样P4就不会获得锁而继续等待。注意到，即使P4接下来将键 lock.foo 的值设置了比P5设置的更大的值也没影响。</li>
+</ul>
+<h4 id="如何解决单一进程执行时间超长-锁被抢走"><a href="#如何解决单一进程执行时间超长-锁被抢走" class="headerlink" title="如何解决单一进程执行时间超长,锁被抢走"></a>如何解决单一进程执行时间超长,锁被抢走</h4><h3 id="WATCH-MULTI-EXEC-DISCARD事务机制实现分布式锁"><a href="#WATCH-MULTI-EXEC-DISCARD事务机制实现分布式锁" class="headerlink" title="WATCH, MULTI, EXEC, DISCARD事务机制实现分布式锁"></a>WATCH, MULTI, EXEC, DISCARD事务机制实现分布式锁</h3><p>Redis支持基本的事务操作</p>
+<p>WATCH key<br>MULTI<br>some redis command<br>EXEC<br>以上被MULTI和EXEC包裹的redis命令，保证所有事务内的命令将会串行顺序执行，保证不会在事务的执行过程中被其他客户端打断。而WATCH命令能够监视某个键，当事务执行时，如果被监视的键被其他客户端修改了值，事务运行失败，返回相应错误（被事务运行客户端在事务内修改了值，不会造成事务运行失败）。</p>
+<p>运用Redis事务所支持的以上特性，可以实现一个分布式锁功能.</p>
+<p>通过WATCH命令监视redis锁键，当该键未被其他客户端修改值时，事务成功执行。当事务运行过程中，发现该值被其他客户端更新了值，任务失败，进行重试。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><blockquote>
+<p><a href="http://redisdoc.com/string/set.html" target="_blank" rel="noopener">http://redisdoc.com/string/set.html</a><br><a href="https://www.cnblogs.com/crossoverJie/p/9339354.html" target="_blank" rel="noopener">https://www.cnblogs.com/crossoverJie/p/9339354.html</a><br><a href="https://juejin.im/entry/5a502ac2518825732b19a595" target="_blank" rel="noopener">https://juejin.im/entry/5a502ac2518825732b19a595</a><br><a href="https://blog.csdn.net/jj546630576/article/details/74910343" target="_blank" rel="noopener">https://blog.csdn.net/jj546630576/article/details/74910343</a><br><a href="https://blog.csdn.net/youbl/article/details/80273019" target="_blank" rel="noopener">https://blog.csdn.net/youbl/article/details/80273019</a></p>
+</blockquote>
+
           
-            <div class="post-button text-center">
-              <a class="btn" href="/1727393489/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
         
       
     </div>
@@ -1598,20 +1927,32 @@ READ UNCOMMITTED（读取未提交数
       
         
           
-            <p>
-              今天学习一下什么是令牌桶算法。
-1 简介令牌桶算法最初来源于计算机网络。在网络传输数据时，为了防止网
-              ...
-            </p>
-          <!--noindex-->
+            <p>今天学习一下什么是令牌桶算法。</p>
+<h4 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h4><p>令牌桶算法最初来源于计算机网络。在网络传输数据时，为了防止网络拥塞，需限制流出网络的流量，使流量以比较均匀的速度向外发送。令牌桶算法就实现了这个功能，可控制发送到网络上数据的数目，并允许突发数据的发送。</p>
+<p>令牌桶算法是网络流量整形（Traffic Shaping）和速率限制（Rate Limiting）中最常使用的一种算法。典型情况下，令牌桶算法用来控制发送到网络上的数据的数目，并允许突发数据的发送。</p>
+<p>大小固定的令牌桶可自行以恒定的速率源源不断地产生令牌。如果令牌不被消耗，或者被消耗的速度小于产生的速度，令牌就会不断地增多，直到把桶填满。后面再产生的令牌就会从桶中溢出。最后桶中可以保存的最大令牌数永远不会超过桶的大小。</p>
+<p>传送到令牌桶的数据包需要消耗令牌。不同大小的数据包，消耗的令牌数量不一样。</p>
+<p>令牌桶这种控制机制基于令牌桶中是否存在令牌来指示什么时候可以发送流量。令牌桶中的每一个令牌都代表一个字节。如果令牌桶中存在令牌，则允许发送流量；而如果令牌桶中不存在令牌，则不允许发送流量。因此，如果突发门限被合理地配置并且令牌桶中有足够的令牌，那么流量就可以以峰值速率发送。</p>
+<h4 id="2-算法过程"><a href="#2-算法过程" class="headerlink" title="2 算法过程"></a>2 算法过程</h4><p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g035747pm1j30ib0dy0u7.jpg" alt=""></p>
+<p>算法描述：</p>
+<ul>
+<li><p>假如用户配置的平均发送速率为 r，则每隔 1/r 秒一个令牌被加入到桶中（每秒会有 r 个令牌放入桶中）；</p>
+</li>
+<li><p>假设桶中最多可以存放 b 个令牌。如果令牌到达时令牌桶已经满了，那么这个令牌会被丢弃；</p>
+</li>
+<li><p>当一个 n 个字节的数据包到达时，就从令牌桶中删除 n 个令牌（不同大小的数据包，消耗的令牌数量不一样），并且数据包被发送到网络；</p>
+</li>
+<li><p>如果令牌桶中少于 n 个令牌，那么不会删除令牌，并且认为这个数据包在流量限制之外（n 个字节，需要 n 个令牌。该数据包将被缓存或丢弃）；</p>
+</li>
+<li><p>算法允许最长 b 个字节的突发，但从长期运行结果看，数据包的速率被限制成常量 r。对于在流量限制外的数据包可以以不同的方式处理：（1）它们可以被丢弃；（2）它们可以排放在队列中以便当令牌桶中累积了足够多的令牌时再传输；（3）它们可以继续发送，但需要做特殊标记，网络过载的时候将这些特殊标记的包丢弃。</p>
+</li>
+</ul>
+<p><strong>注意：</strong></p>
+<p>令牌桶算法不能与另外一种常见算法漏桶算法相混淆。这两种算法的主要区别在于漏桶算法能够强行限制数据的传输速率，而令牌桶算法在能够限制数据的平均传输速率外，还允许某种程度的突发传输。在令牌桶算法中，只要令牌桶中存在令牌，那么就允许突发地传输数据直到达到用户配置的门限，因此它适合于具有突发特性的流量。</p>
+<h4 id="Java-实现"><a href="#Java-实现" class="headerlink" title="Java 实现"></a>Java 实现</h4><p>我们可以使用 Guava 的 RateLimiter 来实现基于令牌桶的流控，RateLimiter 令牌桶算法是单桶实现。RateLimiter 对简单的令牌桶算法做了一些工程上的优化，具体的实现是 SmoothBursty。需要注意的是，RateLimiter 的另一个实现 SmoothWarmingUp，就不是令牌桶了，而是漏桶算法。也许是出于简单起见，RateLimiter 中的时间窗口能且仅能为 1s。</p>
+<p>SmoothBursty 有一个可以放 N 个时间窗口产生的令牌的桶，系统空闲的时候令牌就一直攒着，最好情况下可以扛 N 倍于限流值的高峰而不影响后续请求。RateLimite 允许某次请求拿走超出剩余令牌数的令牌，但是下一次请求将为此付出代价，一直等到令牌亏空补上，并且桶中有足够本次请求使用的令牌为止。当某次请求不能得到所需要的令牌时，这时涉及到一个权衡，是让前一次请求干等到令牌够用才走掉呢，还是让它先走掉后面的请求等一等呢？Guava 的设计者选择的是后者，先把眼前的活干了，后面的事后面再说。</p>
+
           
-            <div class="post-button text-center">
-              <a class="btn" href="/2207048324/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
         
       
     </div>
@@ -1821,20 +2162,90 @@ READ UNCOMMITTED（读取未提交数
       
         
           
-            <p>
-              转 http://www.cnblogs.com/xiexj/p/6845029.html
-看了左潇
-              ...
-            </p>
-          <!--noindex-->
+            <p>转 <a href="http://www.cnblogs.com/xiexj/p/6845029.html" target="_blank" rel="noopener">http://www.cnblogs.com/xiexj/p/6845029.html</a></p>
+<p>看了左潇龙的《<a href="http://www.cnblogs.com/zuoxiaolong/p/life51.html" target="_blank" rel="noopener">回答阿里社招面试如何准备，顺便谈谈对于 Java 程序猿学习当中各个阶段的建议</a>》这篇文章，在想一个问题，从一个最简单的问题入手究竟能把问题问多深？下面就模拟一场面试问答，要是我是面试官，大概就只能问到下面的深度了。</p>
+<p>旁白：一般的面试都是从最简单基本的问题开始。</p>
+<p>面试官：请在黑板上写出一个线程安全的单例模式的例子。</p>
+<p>面试者：</p>
+<p>　　其实线程安全的实现有很多种，根据业务场景可以 new 一个实例作为私有静态成员变量，这样程序一启动，实例就生成，私有化构造函数，利用公用的静态函数 getInstance 返回实例。这种预加载的是能保证线程安全的但是如果不是确定会被使用，会造成内存的浪费，所以可以将实例放到私有静态类中作为成员变量。下面只写一种利用锁机制来保证的懒加载方法。</p>
+<pre>public class Singleton { 
+    private volatile static Singleton singleton; 
+    private Singleton (){} 
+    public static Singleton getSingleton() { 
+    if (singleton == null) { 
+        synchronized (Singleton.class) { 
+        if (singleton == null) { 
+            singleton = new Singleton(); 
+        } 
+        } 
+    } 
+    return singleton; 
+    } 
+}</pre>
+
+<p>或者</p>
+<pre>public class Singleton{    
+    private static Singletoninstance = new Singleton();
+    private Singleton(){}
+
+    public static Singleton getInstance() {
+        return instance;
+    }
+}</pre>
+
+<p>旁白：从这个例子上我能想到的知识点主要有三个</p>
+<p>　　   ☆　volatile 关键字，可深入到 Java VM 内存相关</p>
+<p>　　   ☆　synchronized 关键字，可深入到 Java 锁机制，高并发相关</p>
+<p>　　   ☆　new 关键字，可深入到 Java VM 类加载机制相关</p>
+<p>但是面试官一开始可能要先考察一下面试者是否真的理解自己写的代码</p>
+<p>面试官：你写的这个程序是怎么保证线程安全的？</p>
+<p>面试者：将类的构造方法私有起来，外部调用进行初始化的时候只能通过调用 getSingleton 这个静态方法来获得实例，静态方法是整个 Java 虚拟机中只有一个实例。在创建的时候首先进行非空判断，这时候如果实例不存在，对整个类进行加锁同步，为了避免过程中非空状态的改变，同步块内再进行一次判断，如果不存在实例则创建实例返回。使用 volatile 关键字，下次访问这个方法就能直接看到实例的最新非空状态，直接返回实例。</p>
+<p>面试官：volatile 起到了什么作用？</p>
+<p>面试者：volatile 这个英文单词意思是易变的，用在多线程中来同步变量。Java 的对象都是在内存堆中分配空间。但是 Java 有主内存和线程自己独有的内存拷贝。对于没有 volatile 修饰的局部变量，线程在运行过程中访问的是工作内存中的变量值，其修改对于主内存不是立即可见。而 volatile 修饰的值在线程独有的工作内存中无副本，线程直接和主内存交互，修改对主内存立即可见。</p>
+<p>面试官：synchronized 起到了什么作用？</p>
+<p>面试者：锁定对象，限制当前对象只能被一个线程访问。</p>
+<p>面试官：synchronized 里你传 Singleton.class 这个参数，起到什么作用，换成别的行不行？</p>
+<p>面试者：对当前类加锁，使得这个代码块一次只能被一个线程访问。这里 Singleton.class 可以换成一个常量字符串或者自己定义一个内部静态 Object。</p>
+<p>面试官：那传 Singleton.class，常量字符串，自己定义一个内部静态 Object 有区别吗？</p>
+<p>面试者：因为这是一个静态方法，相当于一个概念上的类锁，所以在这里起到的效果是一样的。但是如果是原型模式，或者直接每个类都是 new 出来的，实例不同的话，在一个非静态方法里加这三种锁，这时是一个对象锁，因为 Singleton.class 或者是静态的一个 Object 或者是 JVM 只存一份的字符串常量，这些对象线程间是共享的，会对所有的实例的同步块都加同一把锁，每个实例访问到此对象的同步代码块都会被阻塞。但是如果这时 synchronized 的参数是 this，或者是内部 new 出来的一个内部非静态 Object，则各个实例拥有不同的锁，访问同一个代码相同同步块也是互不干扰。只有实例内部使用了同一个对象锁才会同步等待。</p>
+<p>面试官：那你知道 synchronized 关键字实现同步的原理吗？</p>
+<p>面试者：synchronized 在 Java 虚拟机中使用监视器锁来实现。每个对象都有一个监视器锁，当监视器锁被占用时就会处于锁定状态。</p>
+<p>　　线程执行一条叫 monitorenter 的指令来获取监视器锁的所有权。如果此监视器锁的进入数为 0，则线程进入并将进入数设置为 1，成为线程所有者。如果线程已经拥有该锁，因为是可重入锁，可以重新进入，则进入数加 1. 如果线程的监视器锁被其他线程占用，则阻塞直到此监视器锁的进入数为 0 时才能进入该锁。</p>
+<p>　　线程执行一条叫 monitorexit 的指令来释放所有权。执行 monitorexit 的必须是线程的所有者。每次执行此指令，线程进入数减 1，直到进入数为 0。监视器锁被释放。</p>
+<p>面试官：你刚才提到的可重入锁是什么概念，有不可重入锁吗？</p>
+<p>面试者：我说的可重入锁是广义的可重入锁，当然 jdk1.5 引入了 concurrent 包，里面有 Lock 接口，它有一个实现叫 ReentrantLock。广义的可重入锁也叫递归锁，是指同一线程外层函数获得锁之后，内层还可以再次获得此锁。可重入锁的设计是为了避免死锁。sun 的 corba 里的 mutex 互斥锁是一种不可重入锁的实现。自旋锁也是一种不可重入锁，本质上是一种忙等锁，CPU 一直循环执行 “测试并设置” 直到可用并取得该锁，在递归的调用该锁时必然会引起死锁。另外，如果锁占用时间较长，自旋锁会过多的占用 CPU 资源，这时使用基于睡眠原理来实现的锁更加合适。</p>
+<p>面试官：你刚才提到了 concurrent 包，它里面有哪些锁的实现？</p>
+<p>面试者：常用的有 ReentrantLock, 它是一种独占锁。ReadWriteLock 接口也是一个锁接口，和 Lock 接口是一种关联关系，它返回一个只读的 Lock 和只写的 Lock。读写分离，在没有写锁的情况下，读锁是无阻塞的，提高了执行效率，它是一种共享锁。ReadWriteLock 的实现类为 ReentrantReadWriteLock。ReentrantLock 和 ReentrantReadWriteLock 实现都依赖于 AbstractQueuedSynchronizer 这种抽象队列同步器。</p>
+<p>面试官：锁还有其他维度的分类吗？</p>
+<p>面试者：还可以分为公平锁和非公平锁。非公平锁是如果一个线程尝试获取锁时可以获取锁，就直接成功获取。公平锁则在锁被释放后将锁分配给等待队列队首的线程。</p>
+<p>面试官：AQS 是什么？</p>
+<p>面试者：AQS 是一个简单的框架，这个框架为同步状态的原子性管理，线程的阻塞和非阻塞以及排队提供了一种通用机制。表现为一个同步器，主要支持获取锁和释放锁。获取锁的时候如果是独占锁就有可能阻塞，如果是共享锁就有可能失败。如果是阻塞，线程就要进入阻塞队列，当状态变成可获得锁就修改状态，已进入阻塞队列的要从阻塞队列中移除。释放锁时修改状态位及唤醒其他被阻塞的线程。</p>
+<p>AQS 本质是采用 CHL 模型完成了一个先进先出的队列。对于入队，采用 CAS 操作，每次比较尾节点是否一致，然后插入到尾节点中。对于出队列，因为每个节点缓存了一个状态位，不满足条件时自旋等待，直到满足条件时将头节点设置为下一个节点。</p>
+<p>面试官：那知道这个队列的数据结构吗？</p>
+<p>面试者：这个队列是用一个双向链表实现的。</p>
+<p>面试官：你刚才提到 AQS 是一种通用机制，那它还有哪些应用?</p>
+<p>面试者：AQS 除了刚才提到的可重入锁 ReentrantLock 和 ReentrantReadWriteLock 之外，还用于不可重入锁 Mutex 的实现。java 并发包中的同步器如：Semphore,CountDownLatch,FutureTask,CyclicBarrier 都是采用这个机制实现的。</p>
+<p>旁白：既然问到了并发工具包中的东西，每个都可以引出一堆，但是基本原理已经问出来了，其他的问下去没什么意思。转向下一个问题。</p>
+<p>面试官：你黑板上写的实例是通过 new 对象创建出来的，还可不可以采用别的方法来创建对象呢？</p>
+<p>面试者：还可以使用 class 类的 newInstance 方法，Constructor 构造器类的 newInstance 方法，克隆方法和反序列法方法。</p>
+<p>面试官：两种 newInstance 方法有没有区别？</p>
+<p>面试者：</p>
+<p>　　☆　Class 类位于 java 的 lang 包中，而构造器类是 java 反射机制的一部分。</p>
+<p>　　☆　Class 类的 newInstance 只能触发无参数的构造方法创建对象，而构造器类的 newInstance 能触发有参数或者任意参数的构造方法来创建对象。</p>
+<p>　　☆　Class 类的 newInstance 需要其构造方法是共有的或者对调用方法可见的，而构造器类的 newInstance 可以在特定环境下调用私有构造方法来创建对象。</p>
+<p>　　☆　Class 类的 newInstance 抛出类构造函数的异常，而构造器类的 newInstance 包装了一个 InvocationTargetException 异常。</p>
+<p>　　Class 类本质上调用了反射包构造器类中无参数的 newInstance 方法，捕获了 InvocationTargetException，将构造器本身的异常抛出。</p>
+<p>面试官：类加载的时候，自己定义了一个类和 java 自己的类类名和命名空间都一样，JVM 加载的是哪一个呢？</p>
+<p>面试者：调用的是 java 自身的，根据双亲委派模型，最委派 Bootstrap 的 ClassLoader 来加载，找不到才去使用 Extension 的 ClassLoader，还找不到才去用 Application 的 ClassLoader，这种机制利于保证 JVM 的安全。</p>
+<p>面试官：你刚才提到的 java 的反射机制是什么概念？</p>
+<p>面试者：java 的反射机制是在运行状态中，对于任何一个类，都能够知道它所有的属性和方法；对于任何一个对象，都能够调用它的任何一个方法和属性。这种动态的获取信息和动态调用对象的方法的功能就是 java 的反射机制。它是 jdk 动态代理的实现方法。</p>
+<p>面试官：java 还有没有其他的动态代理实现？</p>
+<p>面试者：还有 cglib 动态代理。</p>
+<p>面试官：这两种动态代理哪个比较好呢？</p>
+<p>面试者：AOP 源码中同时使用了这两种动态代理，因为他们各有优劣。jdk 动态代理是利用 java 内部的反射机制来实现，在生成类的过程中比较高效，cglib 动态代理则是借助 asm 来实现，可以利用 asm 将生成的类进行缓存，所以在类生成之后的相关执行过程中比较高效。但是 jdk 的动态代理前提是目标类必须基于统一的接口，所以有一定的局限性。</p>
+<p>旁白：面试者都已经提到 AOP 了，那么接下来横向，纵向，怎样都能问出一大堆问题，就不赘述。基于上面问题，读者也可以自己画出一棵知识树，然后就能找到能对答如流的终极方案：就是基本都没超过《深入理解 java 虚拟器》《java 并发编程实践》这两本书，大学学过的《数据结构与算法》《编译原理》掌握的好也可以在面试中加分哦。</p>
+
           
-            <div class="post-button text-center">
-              <a class="btn" href="/421584197/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
         
       
     </div>
@@ -2044,19 +2455,46 @@ READ UNCOMMITTED（读取未提交数
       
         
           
-            <p>
-              mysql explain 详解语法及描述语法在 select 语句前加上 explain 关键字就
-              ...
-            </p>
-          <!--noindex-->
+            <h1 id="mysql-explain-详解"><a href="#mysql-explain-详解" class="headerlink" title="mysql explain 详解"></a>mysql explain 详解</h1><h2 id="语法及描述"><a href="#语法及描述" class="headerlink" title="语法及描述"></a>语法及描述</h2><h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p>在 select 语句前加上 explain 关键字就可以</p>
+<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>获取查询操作的执行顺序<br>使用到的索引<br>成功返回结果需要执行的行数</p>
+<h2 id="字段含义"><a href="#字段含义" class="headerlink" title="字段含义"></a>字段含义</h2><h3 id="id"><a href="#id" class="headerlink" title="id"></a>id</h3><p>标识符, 表示执行顺序. id 一样则自上而下, 否则大的先执行.</p>
+<h3 id="select-type"><a href="#select-type" class="headerlink" title="select_type"></a>select_type</h3><p>查询类型</p>
+<ol>
+<li>simple: 不包含 union 操作或者不包含子查询的简单 select 查询</li>
+<li>primary: 需要 union 操作或者含有子查询的 select, 位于最外层的 select.type 即为 primary, 且只有一个.</li>
+<li>union:union 链接的两个 select 查询, 第一个是 primiary, 第二个之后的都是 union.</li>
+<li>Dependent union: 出现在 union 或 union all 语句, 但是这个查询要收到外部查询的影响.</li>
+<li>union result: 包含 union 的结果集, 在 union 和 union all 语句中, 因为它不需要参与查询,, 所以 id 字段为 null</li>
+<li>subquery: 除了 from 子句中包含的子查询外, 其他地方出现的子查询都可能是 subquery</li>
+<li>Dependent subquery: 与 dependent union 类似, 表示这个 subquery 的查询要受到外部表查询的影响</li>
+<li>derived:from 子句中出现的子查询, 也叫做派生表, 其他数据库中可能叫做内联师徒或嵌套 select</li>
+</ol>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//外层是primary,内层是subquery</span><br><span class="line">explain select * from student s where s. classid = (select id from classes where classno=&apos;2017001&apos;);</span><br><span class="line"></span><br><span class="line">//结果有三行,第一行是primary,第二行是union,第三行是union result</span><br><span class="line">explain select * from student where id = 1 union select * from student where id = 2;</span><br><span class="line"></span><br><span class="line">//结果有四行,分别是primary,dependent subquery,dependent union,union result</span><br><span class="line">explain select * from student s where s.classid in (select id from classes where classno=&apos;2017001&apos; union select id from classes where classno=&apos;2017002&apos;);</span><br><span class="line"></span><br><span class="line">//跟mysql版本有关</span><br><span class="line">explain select * from (select * from student) s;</span><br><span class="line">table</span><br><span class="line">显示查询语句所查询的表名,如果查询使用了别名,那么这里使用的是别名.如果不涉及对数据表的操作,显示为null;有一种特殊情况,如果显示为,,则都是临时表.M,N代表的id,表示结果来自于这个查询产生</span><br></pre></td></tr></table></figure>
+<h3 id="partitions"><a href="#partitions" class="headerlink" title="partitions"></a>partitions</h3><p>表是分区表才行</p>
+<h3 id="type"><a href="#type" class="headerlink" title="type"></a>type</h3><p>查询结果类型</p>
+<ol>
+<li>const: 返回结果只有一个匹配行</li>
+<li>range: 索引范围扫描，常见于使用 &gt;,&lt;,is null,between ,in ,like 等运算符的查询中</li>
+<li>index: 索引全表扫描，把索引从头到尾扫一遍，常见于使用索引列就可以处理不需要读取数据文件的查询、可以使用索引排序或者分组的查询。</li>
+<li>index_merge: 使用了一张表的多个索引, 实际上由于要读取所个索引，性能可能大部分时间都不如 range<br>全表扫描数据文件</li>
+<li><p>possible_keys &amp; key<br>possible_keys: 查询可能使用到的索引都会在这里列出来。</p>
+</li>
+<li><p>key: 查询真正使用到的索引，select_type 为 index_merge 时，这里可能出现两个以上的索引，其他的 select_type 这里只会出现一个。</p>
+</li>
+<li><p>key_len<br>用于处理查询的索引长度，如果是单列索引，那就整个索引长度算进去，如果是多列索引，那么查询不一定都能使用到所有的列，具体使用到了多少个列的索引，这里就会计算进去，没有使用到的列，这里不会计算进去。</p>
+</li>
+</ol>
+<p>留意下这个列的值，算一下你的多列索引总长度就知道有没有使用到所有的列了.</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过对上面 explain 中的每个字段的详细讲解。我们不难看出，对查询性能影响最大的几个列是：</p>
+<ul>
+<li>select_type：查询类型</li>
+<li>type: 连接使用了何种类型</li>
+<li>rows: 查询数据需要用到的行</li>
+<li>key: 查询真正使用到的索引</li>
+<li>extra: 额外的信息<br>尽量让自己的 SQL 用上索引，避免让 extra 里面出现 file sort(文件排序),using temporary(使用临时表)。</li>
+</ul>
+
           
-            <div class="post-button text-center">
-              <a class="btn" href="/3714837258/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
         
       
     </div>
@@ -2266,19 +2704,14 @@ READ UNCOMMITTED（读取未提交数
       
         
           
-            <p>
-              TCP为什么是三次握手TCP为什么建立连接是三次握手? 对于C和S来说,双方均需要确认对方和自己的发
-              ...
-            </p>
-          <!--noindex-->
+            <h1 id="TCP为什么是三次握手"><a href="#TCP为什么是三次握手" class="headerlink" title="TCP为什么是三次握手"></a>TCP为什么是三次握手</h1><p>TCP为什么建立连接是三次握手? 对于C和S来说,双方均需要确认对方和自己的发送信息能力和接受信息能力是OK的.<br>拿一次完整的三次握手来举例:   </p>
+<ul>
+<li>第一次握手:C和S什么都不能确认.</li>
+<li>第二次握手:C确认了自己的发送能力和接受能力,S确认了自己的接受能力.</li>
+<li>第三次握手:S确认了自己的发送能力.</li>
+</ul>
+
           
-            <div class="post-button text-center">
-              <a class="btn" href="/3162095545/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
         
       
     </div>
@@ -2488,19 +2921,20 @@ READ UNCOMMITTED（读取未提交数
       
         
           
-            <p>
-              警告！Eureka 可能存在维护了错误的实例列表（当它们没有启动的时候，Eureka 却把它当成启动
-              ...
-            </p>
-          <!--noindex-->
+            <p><strong>警告！Eureka 可能存在维护了错误的实例列表（当它们没有启动的时候，Eureka 却把它当成启动的了）；Renews 值小于 Threshold 值，因此剩下未过期的都是安全的。</strong></p>
+<p><strong>原因分析：</strong></p>
+<p>这个是 Eureka 的自我保护机制。Eureka Server 在运行期间，会统计心跳失败的比例在 15 分钟之内是否低于 85%，如果出现低于的情况（在单机调试的时候很容易满足，实际在生产环境上通常是由于网络不稳定导致），Eureka Server 会将当前的实例注册信息保护起来，同时提示这个警告。</p>
+<p>Eureka server 和 client 之间每隔 30 秒会进行一次心跳通信，告诉 server，client 还活着。由此引出两个名词：<br>Renews threshold：server 期望在每分钟中收到的心跳次数<br>Renews (last min)：上一分钟内收到的心跳次数。</p>
+<p>前文说到禁止注册 server 自己为 client，不管 server 是否禁止，阈值（threshold）是 1。client 个数为 n，阈值为 1+2<em>n（此为一个 server 且禁止自注册的情况）<br>如果是多个 server，且开启了自注册，那么就和 client 一样，是对于其他的 server 来说就是 client，是要 </em> 2 的</p>
+<p>我开了两个 server，自注册，相关数据如下<br><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fzw7rdn9hyj30hn03swei.jpg" alt=""><br>阈值：1+2<em>1<br>renews：<br>1）自注册 2 + 2</em>1<br>2）非自注册：2*1</p>
+<p>Eurake 有一个配置参数 eureka.server.renewalPercentThreshold，定义了 renews 和 renews threshold 的比值，默认值为 0.85。当 server 在 15 分钟内，比值低于 percent，即少了 15% 的微服务心跳，server 会进入自我保护状态，Self-Preservation。在此状态下，server 不会删除注册信息，这就有可能导致在调用微服务时，实际上服务并不存在。<br>这种保护状态实际上是考虑了 client 和 server 之间的心跳是因为网络问题，而非服务本身问题，不能简单的删除注册信息</p>
+<p>stackoverflow 上，有人给出的建议是：<br>1、在生产上可以开自注册，部署两个 server<br>2、在本机器上测试的时候，可以把比值调低，比如 0.49<br>3、或者简单粗暴把自我保护模式关闭</p>
+<pre>**`eureka.server.enableSelfPreservation=false`**</pre>
+
+<p><strong> 参考文档</strong></p>
+<p><a href="https://www.cnblogs.com/breath-taking/articles/7940364.html" target="_blank" rel="noopener">https://www.cnblogs.com/breath-taking/articles/7940364.html</a></p>
+
           
-            <div class="post-button text-center">
-              <a class="btn" href="/4205246882/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
         
       
     </div>
