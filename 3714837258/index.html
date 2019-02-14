@@ -103,18 +103,18 @@
 
 
 
-  <meta name="description" content="mysql explain 详解语法及描述语法在 select 语句前加上 explain 关键字就可以 描述获取查询操作的执行顺序使用到的索引成功返回结果需要执行的行数 字段含义id标识符, 表示执行顺序. id 一样则自上而下, 否则大的先执行. select_type查询类型  simple: 不包含 union 操作或者不包含子查询的简单 select 查询 primary: 需要 uni">
+  <meta name="description" content="mysql explain 详解语法及描述语法在 select 语句前加上 explain 关键字就可以 描述获取查询操作的执行顺序使用到的索引成功返回结果需要执行的行数">
 <meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql explain 详解">
 <meta property="og:url" content="https://stamwoo.github.io/3714837258/index.html">
 <meta property="og:site_name" content="Blog of Woo">
-<meta property="og:description" content="mysql explain 详解语法及描述语法在 select 语句前加上 explain 关键字就可以 描述获取查询操作的执行顺序使用到的索引成功返回结果需要执行的行数 字段含义id标识符, 表示执行顺序. id 一样则自上而下, 否则大的先执行. select_type查询类型  simple: 不包含 union 操作或者不包含子查询的简单 select 查询 primary: 需要 uni">
+<meta property="og:description" content="mysql explain 详解语法及描述语法在 select 语句前加上 explain 关键字就可以 描述获取查询操作的执行顺序使用到的索引成功返回结果需要执行的行数">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-12T21:37:59.738Z">
+<meta property="og:updated_time" content="2019-02-14T22:47:49.144Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql explain 详解">
-<meta name="twitter:description" content="mysql explain 详解语法及描述语法在 select 语句前加上 explain 关键字就可以 描述获取查询操作的执行顺序使用到的索引成功返回结果需要执行的行数 字段含义id标识符, 表示执行顺序. id 一样则自上而下, 否则大的先执行. select_type查询类型  simple: 不包含 union 操作或者不包含子查询的简单 select 查询 primary: 需要 uni">
+<meta name="twitter:description" content="mysql explain 详解语法及描述语法在 select 语句前加上 explain 关键字就可以 描述获取查询操作的执行顺序使用到的索引成功返回结果需要执行的行数">
 
 
 
@@ -430,7 +430,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-12 22:37:59" itemprop="dateModified" datetime="2019-02-12T22:37:59+01:00">2019-02-12</time>
+                <time title="修改时间：2019-02-14 23:47:49" itemprop="dateModified" datetime="2019-02-14T23:47:49+01:00">2019-02-14</time>
               
             
           </span>
@@ -517,6 +517,7 @@
       
         <h1 id="mysql-explain-详解"><a href="#mysql-explain-详解" class="headerlink" title="mysql explain 详解"></a>mysql explain 详解</h1><h2 id="语法及描述"><a href="#语法及描述" class="headerlink" title="语法及描述"></a>语法及描述</h2><h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p>在 select 语句前加上 explain 关键字就可以</p>
 <h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>获取查询操作的执行顺序<br>使用到的索引<br>成功返回结果需要执行的行数</p>
+<a id="more"></a>
 <h2 id="字段含义"><a href="#字段含义" class="headerlink" title="字段含义"></a>字段含义</h2><h3 id="id"><a href="#id" class="headerlink" title="id"></a>id</h3><p>标识符, 表示执行顺序. id 一样则自上而下, 否则大的先执行.</p>
 <h3 id="select-type"><a href="#select-type" class="headerlink" title="select_type"></a>select_type</h3><p>查询类型</p>
 <ol>

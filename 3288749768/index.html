@@ -112,7 +112,7 @@
 <meta property="og:description" content="类加载器加载类的开放性类加载器（ClassLoader）是 Java 语言的一项创新，也是 Java 流行的一个重要原因。在类加载的第一阶段 “加载” 过程中，需要通过一个类的全限定名来获取定义此类的二进制字节流，完成这个动作的代码块就是类加载器。这一动作是放在 Java 虚拟机外部去实现的，以便让应用程序自己决定如何获取所需的类。 虚拟机规范并没有指明二进制字节流要从一个 Class 文件获取，">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://img-blog.csdn.net/20160506184936657">
-<meta property="og:updated_time" content="2019-02-05T21:02:56.066Z">
+<meta property="og:updated_time" content="2019-02-14T22:50:02.465Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="类加载器与双亲委派模型">
 <meta name="twitter:description" content="类加载器加载类的开放性类加载器（ClassLoader）是 Java 语言的一项创新，也是 Java 流行的一个重要原因。在类加载的第一阶段 “加载” 过程中，需要通过一个类的全限定名来获取定义此类的二进制字节流，完成这个动作的代码块就是类加载器。这一动作是放在 Java 虚拟机外部去实现的，以便让应用程序自己决定如何获取所需的类。 虚拟机规范并没有指明二进制字节流要从一个 Class 文件获取，">
@@ -432,7 +432,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-05 22:02:56" itemprop="dateModified" datetime="2019-02-05T22:02:56+01:00">2019-02-05</time>
+                <time title="修改时间：2019-02-14 23:50:02" itemprop="dateModified" datetime="2019-02-14T23:50:02+01:00">2019-02-14</time>
               
             
           </span>
@@ -525,6 +525,7 @@
 <li>运行时计算生成，最典型的是动态代理技术，在 java.lang.reflect.Proxy 中，就是用了 ProxyGenerator.generateProxyClass 来为特定接口生成形式为 “*$Proxy” 的代理类的二进制字节流</li>
 <li>有其他文件生成，最典型的 JSP 应用，由 JSP 文件生成对应的 Class 类<br>……</li>
 </ul>
+<a id="more"></a>
 <h2 id="类加载器与类的唯一性"><a href="#类加载器与类的唯一性" class="headerlink" title="类加载器与类的唯一性"></a><strong>类加载器与类的唯一性</strong></h2><p>类加载器虽然只用于实现类的加载动作，但是对于任意一个类，都需要由加载它的类加载器和这个类本身共同确立其在 Java 虚拟机中的<strong>唯一性</strong>。通俗的说，JVM 中两个类是否 “相等”，首先就必须是同一个类加载器加载的，否则，即使这两个类来源于同一个 Class 文件，被同一个虚拟机加载，只要类加载器不同，那么这两个类必定是不相等的。</p>
 <p>这里的 “相等”，包括代表类的 Class 对象的 equals() 方法、isAssignableFrom()方法、isInstance()方法的返回结果，也包括使用 instanceof 关键字做对象所属关系判定等情况。</p>
 <p>以下代码说明了不同的类加载器对 instanceof 关键字运算的结果的影响。</p>

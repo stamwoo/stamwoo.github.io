@@ -103,18 +103,18 @@
 
 
 
-  <meta name="description" content="蓄水池抽样算法（Reservoir Sampling）许多年以后，当听说蓄水池抽样算法时,将会想起，那个小学数学老师带他做 “小明对水池边加水边放水，求何时能加满水” 应用题的下午。 一、问题我是在一次失败的面试经历中听说蓄水池算法的。之后上网搜了搜，知道是一个数据抽样算法，寥寥几行，却暗藏玄机。主要用来解决如下问题。 给定一个数据流，数据流长度 N 很大，且 N 直到处理完所有数据之前都不可知，">
+  <meta name="description" content="蓄水池抽样算法（Reservoir Sampling）许多年以后，当听说蓄水池抽样算法时,将会想起，那个小学数学老师带他做 “小明对水池边加水边放水，求何时能加满水” 应用题的下午。">
 <meta name="keywords" content="algorithm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="蓄水池抽样算法（Reservoir Sampling）">
 <meta property="og:url" content="https://stamwoo.github.io/4125998541/index.html">
 <meta property="og:site_name" content="Blog of Woo">
-<meta property="og:description" content="蓄水池抽样算法（Reservoir Sampling）许多年以后，当听说蓄水池抽样算法时,将会想起，那个小学数学老师带他做 “小明对水池边加水边放水，求何时能加满水” 应用题的下午。 一、问题我是在一次失败的面试经历中听说蓄水池算法的。之后上网搜了搜，知道是一个数据抽样算法，寥寥几行，却暗藏玄机。主要用来解决如下问题。 给定一个数据流，数据流长度 N 很大，且 N 直到处理完所有数据之前都不可知，">
+<meta property="og:description" content="蓄水池抽样算法（Reservoir Sampling）许多年以后，当听说蓄水池抽样算法时,将会想起，那个小学数学老师带他做 “小明对水池边加水边放水，求何时能加满水” 应用题的下午。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-11T20:31:37.676Z">
+<meta property="og:updated_time" content="2019-02-14T22:50:15.109Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="蓄水池抽样算法（Reservoir Sampling）">
-<meta name="twitter:description" content="蓄水池抽样算法（Reservoir Sampling）许多年以后，当听说蓄水池抽样算法时,将会想起，那个小学数学老师带他做 “小明对水池边加水边放水，求何时能加满水” 应用题的下午。 一、问题我是在一次失败的面试经历中听说蓄水池算法的。之后上网搜了搜，知道是一个数据抽样算法，寥寥几行，却暗藏玄机。主要用来解决如下问题。 给定一个数据流，数据流长度 N 很大，且 N 直到处理完所有数据之前都不可知，">
+<meta name="twitter:description" content="蓄水池抽样算法（Reservoir Sampling）许多年以后，当听说蓄水池抽样算法时,将会想起，那个小学数学老师带他做 “小明对水池边加水边放水，求何时能加满水” 应用题的下午。">
 
 
 
@@ -430,7 +430,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-11 21:31:37" itemprop="dateModified" datetime="2019-02-11T21:31:37+01:00">2019-02-11</time>
+                <time title="修改时间：2019-02-14 23:50:15" itemprop="dateModified" datetime="2019-02-14T23:50:15+01:00">2019-02-14</time>
               
             
           </span>
@@ -516,6 +516,7 @@
 
       
         <h1 id="蓄水池抽样算法（Reservoir-Sampling）"><a href="#蓄水池抽样算法（Reservoir-Sampling）" class="headerlink" title="蓄水池抽样算法（Reservoir Sampling）"></a>蓄水池抽样算法（Reservoir Sampling）</h1><p>许多年以后，当听说蓄水池抽样算法时,将会想起，那个小学数学老师带他做 “小明对水池边加水边放水，求何时能加满水” 应用题的下午。</p>
+<a id="more"></a>
 <h2 id="一、问题"><a href="#一、问题" class="headerlink" title="一、问题"></a>一、问题</h2><p>我是在一次失败的面试经历中听说蓄水池算法的。之后上网搜了搜，知道是一个数据抽样算法，寥寥几行，却暗藏玄机。主要用来解决如下问题。</p>
 <p><strong>给定一个数据流，数据流长度 N 很大，且 N 直到处理完所有数据之前都不可知，请问如何在只遍历一遍数据（O(N)）的情况下，能够随机选取出 m 个不重复的数据。</strong></p>
 <p>这个场景强调了 3 件事：</p>

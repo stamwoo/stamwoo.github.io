@@ -103,19 +103,19 @@
 
 
 
-  <meta name="description" content="众所周知，mySQL 有两种常见的存储引擎。一种是 MyISAM，一种是 InnoDB。而mysql现在默认的存储引擎是InnoDB,那么为什么它选InnoDB作为存储引擎呢?网上很多回答会告诉是因为只有InnoDB使用了聚簇索引,那么聚簇索引究竟是啥东西?为了解答这个问题,笔者写下了这篇文章,除此之外也在文中解答了其他一些问题. 主键索引和聚簇索引是啥关系? 一般情况下主键会默认创建聚簇索引，且">
+  <meta name="description" content="众所周知，mySQL 有两种常见的存储引擎。一种是 MyISAM，一种是 InnoDB。而mysql现在默认的存储引擎是InnoDB,那么为什么它选InnoDB作为存储引擎呢?网上很多回答会告诉是因为只有InnoDB使用了聚簇索引,那么聚簇索引究竟是啥东西?为了解答这个问题,笔者写下了这篇文章,除此之外也在文中解答了其他一些问题.">
 <meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql 聚簇索引和辅助索引">
 <meta property="og:url" content="https://stamwoo.github.io/232040800/index.html">
 <meta property="og:site_name" content="Blog of Woo">
-<meta property="og:description" content="众所周知，mySQL 有两种常见的存储引擎。一种是 MyISAM，一种是 InnoDB。而mysql现在默认的存储引擎是InnoDB,那么为什么它选InnoDB作为存储引擎呢?网上很多回答会告诉是因为只有InnoDB使用了聚簇索引,那么聚簇索引究竟是啥东西?为了解答这个问题,笔者写下了这篇文章,除此之外也在文中解答了其他一些问题. 主键索引和聚簇索引是啥关系? 一般情况下主键会默认创建聚簇索引，且">
+<meta property="og:description" content="众所周知，mySQL 有两种常见的存储引擎。一种是 MyISAM，一种是 InnoDB。而mysql现在默认的存储引擎是InnoDB,那么为什么它选InnoDB作为存储引擎呢?网上很多回答会告诉是因为只有InnoDB使用了聚簇索引,那么聚簇索引究竟是啥东西?为了解答这个问题,笔者写下了这篇文章,除此之外也在文中解答了其他一些问题.">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1g04cqa7gwwj30hl0ct40u.jpg">
-<meta property="og:updated_time" content="2019-02-12T21:38:07.026Z">
+<meta property="og:updated_time" content="2019-02-14T22:48:10.384Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql 聚簇索引和辅助索引">
-<meta name="twitter:description" content="众所周知，mySQL 有两种常见的存储引擎。一种是 MyISAM，一种是 InnoDB。而mysql现在默认的存储引擎是InnoDB,那么为什么它选InnoDB作为存储引擎呢?网上很多回答会告诉是因为只有InnoDB使用了聚簇索引,那么聚簇索引究竟是啥东西?为了解答这个问题,笔者写下了这篇文章,除此之外也在文中解答了其他一些问题. 主键索引和聚簇索引是啥关系? 一般情况下主键会默认创建聚簇索引，且">
+<meta name="twitter:description" content="众所周知，mySQL 有两种常见的存储引擎。一种是 MyISAM，一种是 InnoDB。而mysql现在默认的存储引擎是InnoDB,那么为什么它选InnoDB作为存储引擎呢?网上很多回答会告诉是因为只有InnoDB使用了聚簇索引,那么聚簇索引究竟是啥东西?为了解答这个问题,笔者写下了这篇文章,除此之外也在文中解答了其他一些问题.">
 <meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1g04cqa7gwwj30hl0ct40u.jpg">
 
 
@@ -415,12 +415,24 @@
                 
               
 
-              <time title="创建时间：2019-02-12 21:13:18 / 修改时间：22:38:07" itemprop="dateCreated datePublished" datetime="2019-02-12T21:13:18+01:00">2019-02-12</time>
+              <time title="创建时间：2019-02-12 21:13:18" itemprop="dateCreated datePublished" datetime="2019-02-12T21:13:18+01:00">2019-02-12</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-14 23:48:10" itemprop="dateModified" datetime="2019-02-14T23:48:10+01:00">2019-02-14</time>
               
             
           </span>
@@ -506,6 +518,7 @@
 
       
         <p>众所周知，mySQL 有两种常见的存储引擎。一种是 MyISAM，一种是 InnoDB。<br>而mysql现在默认的存储引擎是InnoDB,那么为什么它选InnoDB作为存储引擎呢?网上很多回答会告诉是因为只有InnoDB使用了聚簇索引,那么聚簇索引究竟是啥东西?为了解答这个问题,笔者写下了这篇文章,除此之外也在文中解答了其他一些问题.</p>
+<a id="more"></a>
 <h2 id="主键索引和聚簇索引是啥关系"><a href="#主键索引和聚簇索引是啥关系" class="headerlink" title="主键索引和聚簇索引是啥关系?"></a>主键索引和聚簇索引是啥关系?</h2><ol>
 <li>一般情况下主键会默认创建聚簇索引，且一张表只允许存在一个聚簇索引。</li>
 <li>没有主键时，会用一个唯一且不为空的索引列做为主键，成为此表的聚簇索引</li>
