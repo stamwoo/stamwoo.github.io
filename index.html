@@ -415,7 +415,7 @@
                 
               
 
-              <time title="创建时间：2019-02-16 18:41:02 / 修改时间：22:34:48" itemprop="dateCreated datePublished" datetime="2019-02-16T18:41:02+01:00">2019-02-16</time>
+              <time title="创建时间：2019-02-16 18:41:02 / 修改时间：22:35:49" itemprop="dateCreated datePublished" datetime="2019-02-16T18:41:02+01:00">2019-02-16</time>
             
 
             
@@ -506,8 +506,7 @@
 
       
         
-          
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><blockquote>
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><blockquote>
 <p>ReetrantLock? AQS?</p>
 </blockquote>
 <blockquote>
@@ -515,185 +514,15 @@
 </blockquote>
 <p><strong>因为有人的地方就有江湖，所以有并发的地方就有资源共享，有资源共享的地方就有线程安全，有线程安全的地方就有 “线程同步”，有线程同步的地方就有 “锁”（有点长，但是理是这个理）</strong></p>
 <p>AQS 就是 JDK 中为 “线程同步” 提供的一套基础工具类（网上其他帖子叫做 “框架” 我觉得这个就说的太大了，其实就是一个类而已（不算它衍生出来的子类）国内存在一些翻译会导致很多初学者很难理解，比如 classloader 的 parents 被翻译为 “双亲”，简直败笔，此处默哀 3 秒钟），因此 AQS 就成了非常重要的一个知识点，因为基于它可以写出 JAVA 中的很多“锁” 类。比如此文要分析的 ReetrantLock，它就是基于 AQS 而形成了一个“<strong>可重入锁</strong>”</p>
-<p><strong>ReetrantLock</strong></p>
-<p>它是一个 “可重入” 锁。</p>
-<blockquote>
-<p><strong>什么是 “可重入”？</strong></p>
-</blockquote>
-<p><strong>简单地讲</strong>就是：“同一个线程对于已经获得到的锁，可以多次继续申请到该锁的使用权”</p>
-<p><strong>正经地讲</strong>就是：假如访问一个资源 A 需要获得其锁 lock，如果之前没有其他线程获取该锁，那么当前线程就获锁成功，此时该线程对该锁后续所有 “请求” 都将立即得到 “获锁成功” 的返回，即同一个线程可以多次成功的获取到之前获得的锁。“可重入”可以解释成“同一个线程可多次获取”。</p>
-<p>我们来看一个使用 ReetrantLock 的例子，来一步步地理解和学习</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">//未使用ReetrantLock进行多线程累加操作</span><br><span class="line">public class ReetrantLockForIncrease &#123;</span><br><span class="line">    static int cnt = 0;</span><br><span class="line"></span><br><span class="line">    static ReentrantLock reentrantLock = new ReentrantLock();</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Runnable r = () -&gt; &#123;</span><br><span class="line">            int n = 10000;</span><br><span class="line">            while (n &gt; 0) &#123;</span><br><span class="line">                cnt++;</span><br><span class="line">                n--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        IntStream.range(0, 5)</span><br><span class="line">                .forEach(value -&gt; new Thread(r).start());</span><br><span class="line"></span><br><span class="line">        try &#123;</span><br><span class="line">            //等待足够长的时间 确保上述线程均执行完毕</span><br><span class="line">            Thread.sleep(10000);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(cnt);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//输出的结果会小于50000</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">//使用ReetrantLock的多线程累加操作</span><br><span class="line">public class ReetrantLockForIncrease &#123;</span><br><span class="line">    static int cnt = 0;</span><br><span class="line"></span><br><span class="line">    static ReentrantLock reentrantLock = new ReentrantLock();</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Runnable r = () -&gt; &#123;</span><br><span class="line">            int n = 10000;</span><br><span class="line">            while (n &gt; 0) &#123;</span><br><span class="line">                reentrantLock.lock();</span><br><span class="line">                cnt++;</span><br><span class="line">                reentrantLock.unlock();</span><br><span class="line">                n--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        IntStream.range(0, 5)</span><br><span class="line">                .forEach(value -&gt; new Thread(r).start());</span><br><span class="line"></span><br><span class="line">        try &#123;</span><br><span class="line">            //等待足够长的时间 确保上述线程均执行完毕</span><br><span class="line">            Thread.sleep(10000);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(cnt);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//输出结果将和预想中的一致:50000</span><br></pre></td></tr></table></figure>
-<p>通过上述的例子, 你可以在心里暂时把它看成 “<strong>就是一把普通的锁</strong>”(其他细节慢慢会讨论)，而作为一把锁, 当然要有锁的基本特性:</p>
-<ul>
-<li><strong>加锁</strong></li>
-<li><strong>解锁</strong></li>
-</ul>
-<p>至于什么指纹解锁、人脸解锁、虹膜解锁啥的，其实也逃不出 “加锁”、“解锁”，只不过是在这两个基本动作上做了一些个性化。</p>
-<p><em>同理，ReetrantLock 也不过就是在锁的基本特性上加了一些 “可重入”、“公平”、“非公平” 等特性。因此我们只要弄清楚基本锁是如何 “加锁” 和“解锁”，以及 ReetrantLock 如何实现 “可重入”、“公平” 和“非公平”，也就达到了对这个内容的理解和学习的目的。</em></p>
-<p>总结一下学习要点（大纲）：</p>
-<ul>
-<li><p><strong>基本锁的特性</strong></p>
-</li>
-<li><p><strong>加锁</strong></p>
-</li>
-<li><p><strong>解锁</strong></p>
-</li>
-<li><p><strong>ReetrantLock 的补充特性</strong></p>
-</li>
-<li><p><strong>可重入</strong></p>
-</li>
-<li><strong>公平</strong></li>
-<li><strong>非公平</strong></li>
-</ul>
-<p>接下去就按照大纲去梳理，就 OK 了</p>
-<h2 id="理解-ReetrantLock-的主要方法"><a href="#理解-ReetrantLock-的主要方法" class="headerlink" title="理解 ReetrantLock 的主要方法"></a><strong>理解 ReetrantLock 的主要方法</strong></h2><p>可以看出 ReetrantLock 对象实现了 Lock 接口</p>
-<p><img src="https://pic2.zhimg.com/v2-3dddcdb4f707e61d4bbd5d539101db95_b.jpg" alt=""><img src="https://pic2.zhimg.com/80/v2-3dddcdb4f707e61d4bbd5d539101db95_hd.jpg" alt=""> 图 3: ReetrantLock 的类继承结构</p>
-<p>而 Lock 接口的主要方法有以下几个</p>
-<p><img src="https://pic4.zhimg.com/v2-eb1dbe1eddce53bf7a0b186689930c47_b.jpg" alt=""><img src="https://pic4.zhimg.com/80/v2-eb1dbe1eddce53bf7a0b186689930c47_hd.jpg" alt=""> 图 4: Lock 接口包含的基本方法</p>
-<p>Lock 对象只是一个接口，上述方法具体的实现其实都在 ReetrantLock 中，因此我们只要在 ReetrantLock 对象中查看具体实现去理解锁的 “加锁” 和“解锁”操作是如何做的</p>
-<p><strong>ReetrantLock 的主要方法</strong></p>
-<p><img src="https://pic2.zhimg.com/v2-6f77582535a186301d212d869714edfd_b.jpg" alt=""><img src="https://pic2.zhimg.com/80/v2-6f77582535a186301d212d869714edfd_hd.jpg" alt=""> 图 5: ReetrantLock 的主要方法</p>
-<p><strong>其中加锁方法即为 lock()，解锁方法即为 unLock()</strong></p>
-<p>这两个方法在源码中的实现如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//加锁</span><br><span class="line">public void lock() &#123;</span><br><span class="line">    sync.lock();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//释放锁</span><br><span class="line">public void unlock() &#123;</span><br><span class="line">    sync.release(1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>从上述可以知道这两个方法实际上是操作了一个叫做 <strong>sync</strong> 的对象，调用该对象的 <strong>lock</strong> 和 <strong>release</strong> 操作来实现</p>
-<blockquote>
-<p>sync 是什么东西？</p>
-</blockquote>
-<p>我拷了一段 ReetrantLock 类的源码片段</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public class ReentrantLock implements Lock, java.io.Serializable &#123;</span><br><span class="line">    private static final long serialVersionUID = 7373984872572414699L;</span><br><span class="line">    private final Sync sync;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看出，<strong>sync</strong> 是 ReetrantLock 中的一个<strong>私有的成员变</strong>量，且<strong>类型是 Sync 对象</strong></p>
-<blockquote>
-<p>Sync 是什么类？做啥的？是什么时候初始化的？</p>
-</blockquote>
-<p>不着急，我们先看简单的 “sync 是在什么时候初始化的”</p>
-<p>在源码中，只有在 2 个构造函数的地方对 sync 对象做了初始化，可分别初始化为 NonfairSync 和 NonfairSync</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/** 所有锁操作都是基于这个字段 */</span><br><span class="line">private final Sync sync;</span><br><span class="line">/**</span><br><span class="line"> * 通过该构造函数创建额ReetrantLock是一个非公平锁</span><br><span class="line"> */</span><br><span class="line">public ReentrantLock() &#123;</span><br><span class="line">    sync = new NonfairSync();</span><br><span class="line">&#125;</span><br><span class="line">/**</span><br><span class="line"> * 如果入参为true，则创建公平的ReetrantLock；</span><br><span class="line"> * 否则，创建非公平锁</span><br><span class="line"> */</span><br><span class="line">public ReentrantLock(boolean fair) &#123;</span><br><span class="line">    sync = fair ? new FairSync() : new NonfairSync();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这两个对象（NonfairSync 和 NonfairSync）也是 ReetrantLock 的内部类</p>
-<p><img src="https://pic2.zhimg.com/v2-188e638b8d7c15a9c2fa0b39b8411cb9_b.jpg" alt=""><img src="https://pic2.zhimg.com/80/v2-188e638b8d7c15a9c2fa0b39b8411cb9_hd.jpg" alt=""> 图 6: NonfairSync 和 FairSync 类继承结构</p>
-<p>从上图可以看书 <strong>FairSync 和 NonFairSync 在类结构上完全一样且均继承于 Sync</strong></p>
-<p>而 Sync 对象的继承关系如下</p>
-<p><img src="https://pic2.zhimg.com/v2-21b8eb01de84d9113b92330757142d3d_b.jpg" alt=""><img src="https://pic2.zhimg.com/80/v2-21b8eb01de84d9113b92330757142d3d_hd.jpg" alt=""> 图 7: ReetrantLock 的内部类 Sync 实现于 AQS 类</p>
-<p>以上我们可以得出这么一个初步结论</p>
-<blockquote>
-<p><strong>ReetrantLock 实现了 Lock 接口, 操作其成员变量 sync 这个 AQS 的子类, 来完成锁的相关功能。而 sync 这个成员变量有 2 种形态：</strong>NonfairSync 和 FairSync</p>
-</blockquote>
-<p>ReentrantLock 的构造函数中，默认的无参构造函数将会把 Sync 对象创建为 NonfairSync 对象，这是一个 “非公平锁”；而另一个构造函数 ReentrantLock(boolean fair) 传入参数为 true 时将会把 Sync 对象创建为“公平锁”FairSync</p>
-<p><strong>FairSync、NonfairSync、Sync 之间的关系</strong></p>
-<p>在上文中我们提到 ReetrantLock 的 lock 操作是调用 sync 的 lock 方法。而 sync 有 2 种形态，那么我们可以分别对比一下 NonfairSync 的 lock 方法和 FairSync 的 lock 方法有什么异同。</p>
-<p>NoFairSync 的 lock() 方法的执行时序图</p>
-<p><img src="https://pic4.zhimg.com/v2-62ca231bf74083907d6058f3e7caa07b_b.jpg" alt=""><img src="https://pic4.zhimg.com/80/v2-62ca231bf74083907d6058f3e7caa07b_hd.jpg" alt=""> 图 8: NoFairSync 的 lock() 方法执行时序图</p>
-<p>FairSync 的 lock() 方法的执行时序图</p>
-<p><img src="https://pic2.zhimg.com/v2-b650894202d738b15fb12d08de10c021_b.jpg" alt=""><img src="https://pic2.zhimg.com/80/v2-b650894202d738b15fb12d08de10c021_hd.jpg" alt=""> 图 9: FairSync 的 lock() 方法的执行时序图</p>
-<p>通过对比 NofairSync 和 FairSync 的 lock 方法时序图可以看出两者的操作基本上是大同小异。FairSync 在 tryAquire 方法中，<strong>当判断到锁状态字段 state == 0 时，不会立马将当前线程设置为该锁的占用线程，而是去判断是在此线程之前是否有其他线程在等待这个锁（执行 hasQueuedPredecessors() 方法）</strong>，如果是的话，则该线程会加入到等待队列中，进行排队（FIFO，先进先出的排队形式）。这也就是为什么 FairSync 可以让线程之间公平获得该锁。</p>
-<p>NoFairSync 的 tryAquire 方法中，没有判断是否有在此之前的排队线程，而是直接进行获锁操作，因此多个线程之间同时争用一把锁的时候，谁先获取到就变得随机了，很有可能线程 A 比线程 B 更早等待这把锁，但是 B 却获取到了锁，A 继续等待（这种现象叫做：<strong>线程饥饿</strong>）</p>
-<p>到此，我们已经大致理解了 ReetrantLock 是如何做到不同线程如何 “公平” 和“非公平”获锁。</p>
-<blockquote>
-<p>线程之间是什么时候知道要排队的，如何排队的？排队的线程什么时候能获得到锁？排队的线程怎么感知到 “锁空闲”？</p>
-</blockquote>
-<p>我们一个个解答上面的疑问</p>
-<h2 id="线程是什么时候排队的？"><a href="#线程是什么时候排队的？" class="headerlink" title="线程是什么时候排队的？"></a><em><strong>线程是什么时候排队的？</strong></em></h2><p>我们可以猜想一下，应该在获锁的时候，无法成功获取到该锁，然后进行排队等待。是不是这样的呢？</p>
-<p>源码贴上来！</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public final void acquire(int arg) &#123;</span><br><span class="line">    if (!tryAcquire(arg) &amp;&amp;</span><br><span class="line">        acquireQueued(addWaiter(Node.EXCLUSIVE), arg))</span><br><span class="line">        selfInterrupt();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>各位客官，看到了没，acquireQueued(<strong>addWaiter(Node.EXCLUSIVE)</strong>, arg)</p>
-<p>这个 <strong>addWaiter(Node.EXCLUSIVE)</strong> 就是请求排队的，通过上面的时序图（图 8，9）可知该动作是在 FairSync 或者 NoFairSync 调用 AQS 的 aquire(1) 方法时触发的，而且由该方法中的 if 块可知，只有当 if 中的 tryAcquire 为 false 的时候（也就是获锁失败的时候），才会执行后续的 acquireQueued 方法</p>
-<h2 id="线程是如何排队的？"><a href="#线程是如何排队的？" class="headerlink" title="线程是如何排队的？"></a><strong><em>线程是如何排队的？</em></strong></h2><p>想要知道如何排队，那也就是去理解 <strong>addWaiter(Node.EXCLUSIVE)</strong> 这个方法具体是如何实现的</p>
-<p>而在看源码解析前，各位同学可以思考一下，如果是你来实现一个队列来对线程进行排队和管理，你需要关心什么信息呢？</p>
-<ol>
-<li><strong>线程</strong>，肯定要知道我是哪个线程（因为连哪个线程都不知道，你还排啥队，管理个球球？）</li>
-<li><strong>队列中线程状态</strong>，既然知道是哪一个线程，肯定还要知道线程当前处在什么状态，是已经取消了 “获锁” 请求，还是在 “” 等待中”，或者说“即将得到锁”</li>
-<li><strong>前驱和后继线程</strong>，因为是一个等待队列，那么也就需要知道当前线程前面的是哪个线程，当前线程后面的是哪个线程（因为当前线程释放锁以后，理当立马通知后继线程去获取锁）</li>
-</ol>
-<p>而上述的数据，在 AQS 中被组织到了一个叫做 <strong>Node</strong> 的数据结构（内部类）中</p>
-<p><img src="https://pic4.zhimg.com/v2-e7a70a34a5139fda082a018235be417f_b.jpg" alt=""><img src="https://pic4.zhimg.com/80/v2-e7a70a34a5139fda082a018235be417f_hd.jpg" alt=""> 图 11：Node 类的内部结构</p>
-<p>线程的 2 种等待模式：</p>
-<ul>
-<li><strong>SHARED</strong>：表示线程以共享的模式等待锁（如 ReadLock）</li>
-<li><strong>EXCLUSIVE</strong>：表示线程以互斥的模式等待锁（如 ReetrantLock），互斥就是一把锁只能由一个线程持有，不能同时存在多个线程使用同一个锁</li>
-</ul>
-<p>线程在队列中的状态枚举：</p>
-<ul>
-<li><strong>CANCELLED</strong>：值为 1，表示线程的获锁请求已经 “取消”</li>
-<li><strong>SIGNAL</strong>：值为 - 1，表示该线程一切都准备好了, 就等待锁空闲出来给我</li>
-<li><strong>CONDITION</strong>：值为 - 2，表示线程等待某一个条件（Condition）被满足</li>
-<li><strong>PROPAGATE</strong>：值为 - 3，当线程处在 “SHARED” 模式时，该字段才会被使用上（在后续讲共享锁的时候再细聊）</li>
-</ul>
-<p><strong>初始化 Node 对象时，默认为 0</strong></p>
-<p>成员变量：</p>
-<ul>
-<li><strong>waitStatus</strong>：该 int 变量表示线程在队列中的状态，其值就是上述提到的 CANCELLED、SIGNAL、CONDITION、PROPAGATE</li>
-<li><strong>prev</strong>：该变量类型为 Node 对象，表示该节点的前一个 Node 节点（前驱）</li>
-<li><strong>next</strong>：该变量类型为 Node 对象，表示该节点的后一个 Node 节点（后继）</li>
-<li><strong>thread</strong>：该变量类型为 Thread 对象，表示该节点的代表的线程</li>
-<li><strong>nextWaiter</strong>：该变量类型为 Node 对象，表示等待 condition 条件的 Node 节点（暂时不用管它，不影响我们理解主要知识点）</li>
-</ul>
-<p>解释了 Node 的数据结构，那么我用几张图来表示多线程竞争下 ReetrantLock 锁时是如何排队的</p>
-<ol>
-<li>初始状态（也就是锁未被任何线程占用的时候）线程 A 申请锁<br><strong>此时，成功获取到锁，无排队线程</strong></li>
-<li>线程 B 申请该锁，且上一个线程未释放</li>
-</ol>
-<p><img src="https://pic3.zhimg.com/v2-859b2abdb8fb6a3599f86391faab5a76_b.jpg" alt=""><img src="https://pic3.zhimg.com/80/v2-859b2abdb8fb6a3599f86391faab5a76_hd.jpg" alt=""> 图 12：第一个进入排队的线程</p>
-<p>这里需要关注的是 Head 节点，这个节点是一个空的 Node 节点，不存储任何线程相关的信息</p>
-<p>3. 线程 C 申请该锁，且占有该锁的线程未释放</p>
-<p><img src="https://pic1.zhimg.com/v2-6e934606abac8ce1a57b78fed0063e90_b.jpg" alt=""><img src="https://pic1.zhimg.com/80/v2-6e934606abac8ce1a57b78fed0063e90_hd.jpg" alt=""> 图 13：第二个进入排队的线程</p>
-<p>4. 线程 D 申请该锁，且占有该锁的线程未释放</p>
-<p><img src="https://pic3.zhimg.com/v2-7c7541a220d6631398d307434936fcca_b.jpg" alt=""><img src="https://pic3.zhimg.com/80/v2-7c7541a220d6631398d307434936fcca_hd.jpg" alt=""> 图 14：第三个进入排队的线程</p>
-<p>通过以上几幅图，就可以大致了解该队列是链表的形式组织不同 Node（每一个 Node 代表一个线程）之间的先后顺序。Tips: <strong>强烈建议没有学习过 “数据结构” 的同学先去学习一下数据结构！框架和花哨的知识点千变万化层出不穷，唯有底层的计算机原理是共通和基本不变的</strong></p>
-<h2 id="等待中的线程如何感知到锁空闲并获得锁？"><a href="#等待中的线程如何感知到锁空闲并获得锁？" class="headerlink" title="等待中的线程如何感知到锁空闲并获得锁？"></a><strong><em>等待中的线程如何感知到锁空闲并获得锁？</em></strong></h2><p>上文我们提到 acquireQueued(<strong>addWaiter(Node.EXCLUSIVE)</strong>, arg) 中的 addWaiter(Node.EXCLUSIVE) 方法是对<strong>获锁失败的线程</strong>放入到队列中排队等待，而该方法的外层方法 <strong>acquireQueued()</strong> 就是对已经排队中的线程进行 “获锁” 操作</p>
-<p>简单地讲：就是一个线程获取锁失败了，被放到了线程等待队列中，而 acquireQueued 方法就是把放入队列中的这个线程不断进行 “获锁”, 直到它 <strong>“成功获锁”</strong> 或者 “<strong>不再需要锁（如被中断）</strong>”</p>
-<p>这个方法的主要流程</p>
-<p><img src="https://pic4.zhimg.com/v2-dd55991c49b0ca8043a953590dd5bdbb_b.jpg" alt=""><img src="https://pic4.zhimg.com/80/v2-dd55991c49b0ca8043a953590dd5bdbb_hd.jpg" alt=""> 图 15：排队中的 Node 获锁流程</p>
-<p>这里需要注意的是：紫色箭头所在的流程实际上是一个 <strong>“while 循环”*</strong>，跳出该循环的<strong>唯一出</strong>口就是 <strong>“p 是 head 节点，并且当前线程获锁成功”</strong></p>
-<p>为什么要这个条件呢？因为这个条件满足就代表 <strong>“这个线程是排队线程中的最前面的节点（线程）了</strong>”</p>
-<p>再提一句，别嫌啰嗦：“不管<strong>公平</strong>还是<strong>非公平</strong>模式下，ReetrantLock 对于排队中的线程都能保证，排在前面的一定比排在后面的线程优先获得锁” <strong>但是，这里有个但是</strong>，非公平模式<strong>不保证</strong> “队列中的第一个线程一定就比新来的（未加入到队列）的线程优先获锁” 因为队列中的第一个线程尝试获得锁时，可能刚好来了一个线程也要获取锁，而这个刚来的线程都还未加入到等待队列，此时两个线程同时随机竞争，很有可能，队列中的第一个线程竞争失败（而该线程等待的时间其实比这个刚来的线程等待时间要久）。拗口吗？哈哈，好好理解一下。我尽力了。</p>
-<p>这里就有小伙伴问了:“如果就是那么不恰巧, 就是不符合这个唯一跳出循环的条件”, 那就一直在循环里面空跑了吗! 那 CPU 使用率不就会飙升?!</p>
-<p><strong><em>注意!!</em></strong></p>
-<p>流程图里有一个步骤 “判断当前线程是否需要被阻塞”，如果是的话，就</p>
-<p>“<strong>阻塞</strong>线程”！</p>
-<p>“<strong>阻塞</strong>线程”！</p>
-<p>“<strong>阻塞</strong>线程”！</p>
-<p>当线程被阻塞了，也就没有循环什么事情了（阻塞的线程将会让出 CPU 资源，该线程不会被 CPU 运行）。直到下次被唤醒，该线程才会继续进行循环体内的操作</p>
-<p>重点来了！<strong>“什么时候线程需要被阻塞呢？”</strong></p>
-<p>我们来看一下这个判断的执行流程</p>
-<p><img src="https://pic1.zhimg.com/v2-a9f87db22807c9c435b61975055b3d58_b.jpg" alt=""><img src="https://pic1.zhimg.com/80/v2-a9f87db22807c9c435b61975055b3d58_hd.jpg" alt=""> 图 19：AQS 判断线程是否应该被阻塞</p>
-<p>问题来了:</p>
-<blockquote>
-<p>流程图中 “CAS 设置 pred 节点状态为 SIGNAL“并表示该线程“不应该” 被阻塞, 那么该线程就会继续在上述提到的 <strong>“while 循环”*</strong> 一直空跑吗?</p>
-</blockquote>
-<p>其实认真看的同学应该就能知道, While 循环中必须要这个 node 符合 “<strong>它就是该队列中最早的 Node 并且获锁成功</strong>” 才会跳出 While 循环体, 如果不是, 则会继续执行到 <strong>“判断这个线程是否应该被阻塞”</strong>, 此时, 原本状态不是 SIGNAL 的线程, 因为在上一次 <strong>“判断这个线程是否应该被阻塞”</strong> 这个方法时被设置成了 SIGNAL, 那么第二次执行这个判断时, 就会被成功阻塞。也就不会出现 “空跑” 的情况</p>
-<p>综上所述呢，只要有其他线程因为释放了锁，那么 “线程等待队列中的第一个 Node 节点就可以成功获取到锁（如果没有队列外的线程同时竞争这个锁）”</p>
-<h2 id="解锁"><a href="#解锁" class="headerlink" title="解锁"></a><strong>解锁</strong></h2><p>在上一个知识点我提到</p>
-<blockquote>
-<p>只要有其他线程因为释放了锁，那么 “线程等待队列中的第一个 Node 节点就可以成功获取到锁（如果没有队列外的线程同时竞争这个锁）”</p>
-</blockquote>
-<p>实际上这并不是一个很准确的结论，因为 “线程等待队列” 中的第一个 Node 节点在其他线程未释放锁时，因为获取不到锁，那么也会被“阻塞”</p>
-<p>这个时候，实际上所有在等待队列中的 Node 节点里代表的线程都是处于 “阻塞” 状态。</p>
-<blockquote>
-<p>那什么时候唤醒这些阻塞的线程呢？</p>
-</blockquote>
-<p>哈哈，既然申请锁的时候会导致线程在得不到锁时被 “阻塞”</p>
-<p>那么，肯定就是其他线程在<strong>释放锁时 “唤醒”</strong> 被阻塞着的线程去 “拿锁”。</p>
-<p>ReetrantLock 中的源码走一个</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public void unlock() &#123;</span><br><span class="line">    sync.release(1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public final boolean release(int arg) &#123;</span><br><span class="line">        if (tryRelease(arg)) &#123;</span><br><span class="line">            Node h = head;</span><br><span class="line">            if (h != null &amp;&amp; h.waitStatus != 0)</span><br><span class="line">                unparkSuccessor(h);</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>其中，unparkSuccessor(h) 方法就是 “唤醒操作”，主要流程如代码所示</p>
-<ol>
-<li>尝试释放当前线程持有的锁</li>
-<li>如果成功释放，那么去唤醒头结点的后继节点（因为头节点 head 是不保存线程信息的节点，仅仅是因为数据结构设计上的需要，在数据结构上，这种做法往往叫做 “空头节点链表”。对应的就有 “非空头结点链表”）</li>
-</ol>
-<p>unparkSuccessor(h) 的执行流程源码解析</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">private void unparkSuccessor(Node node) &#123;</span><br><span class="line">    /*</span><br><span class="line">     * If status is negative (i.e., possibly needing signal) try</span><br><span class="line">     * to clear in anticipation of signalling.  It is OK if this</span><br><span class="line">     * fails or if status is changed by waiting thread.</span><br><span class="line">     */</span><br><span class="line">    int ws = node.waitStatus;</span><br><span class="line">    if (ws &lt; 0)</span><br><span class="line">        compareAndSetWaitStatus(node, ws, 0);</span><br><span class="line"></span><br><span class="line">    //如果head节点的下一个节点它是null或者已经被cancelled了（status&gt;0）</span><br><span class="line">    //那么就从队列的尾巴往前找，找到一个最前面的并且状态不是cancelled的线程</span><br><span class="line">    //至于为什么要从后往前找，不是从前往后找，谁能跟我说一下，这点我也不知道为什么</span><br><span class="line">    Node s = node.next;</span><br><span class="line">    if (s == null || s.waitStatus &gt; 0) &#123;</span><br><span class="line">        s = null;</span><br><span class="line">        for (Node t = tail; t != null &amp;&amp; t != node; t = t.prev)</span><br><span class="line">            if (t.waitStatus &lt;= 0)</span><br><span class="line">                s = t;</span><br><span class="line">    &#125;</span><br><span class="line">    //将找到的队列中符合条件的第一个线程“唤醒”</span><br><span class="line">    if (s != null)</span><br><span class="line">        LockSupport.unpark(s.thread);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>至此，申请锁的 “阻塞” 和释放锁的 “唤醒” 操作中 <strong>“队列什么时候进行排队”</strong>、<strong>“如何排队”</strong>、<strong>“什么时候移除队列”</strong>、<strong>“何时阻塞线程”</strong>、<strong>“何时唤醒线程”</strong> 基本都已经解释清楚了。</p>
-<h2 id="如何实现可重入"><a href="#如何实现可重入" class="headerlink" title="如何实现可重入"></a><strong>如何实现可重入</strong></h2><p>在讲解 lock() 方法的图 8、图 9 中，我们有提到<strong>加锁</strong>操作会对 <strong>state 字段进行 + 1 操作</strong></p>
-<p>这里需要注意到 AQS 中很多内部变量的修饰符都是采用的 <a href="https://zhuanlan.zhihu.com/p/54327635" target="_blank" rel="noopener">volitale</a>, 然后配合 <strong>CAS 操作</strong>来保证 AQS 本身的线程安全 (因为 AQS 自己线程安全, 基于它的衍生类才能更好地保证线程安全), 这里的 state 字段就是 AQS 类中的一个用 volitale 修饰的 int 变量</p>
-<p>state 字段初始化时, 值为 0。表示目前没有任何线程持有该锁。当一个线程每次获得该锁时，值就会在原来的基础上加 1，多次获锁就会多次加 1（指同一个线程），这里就是可重入。因为可以同一个线程多次获锁，只是对这个字段的值在原来基础上加 1; 相反 unlock 操作也就是解锁操作，实际是是调用 AQS 的 release 操作，而每执行一次这个操作，就会对 state 字段在原来的基础上减 1，当 state==0 的时候就表示当前线程已经完全释放了该锁。那么就会如上文提到的那样去调用 “唤醒” 动作，去把在 “线程等待队列中的线程” 叫醒</p>
-<p>为了加深对个 AQS 的大致工作流程的理解，我对对 AQS 重点的几个内容画了一个粗略的流程图</p>
-<p><img src="https://pic1.zhimg.com/v2-f32f8a732f601c285c44f95f981a5b20_b.jpg" alt=""><img src="https://pic1.zhimg.com/80/v2-f32f8a732f601c285c44f95f981a5b20_hd.jpg" alt=""> 图 20</p>
-<p>以上就是全部，无法巨细，希望能帮到大家。有错误之处，留言，我会及时修改</p>
-<p>如果充分理解了 AQS 那么很多 JDK 中的同步和锁的其他实现类理解起来就非常简单愉快了, 比如 CountDownLatch 这个不要太简单~ 小伙伴们可以自行看一下源码哦, 不超过 10 分钟, 你就能知道是怎么回事</p>
-
+          <!--noindex-->
           
+            <div class="post-button text-center">
+              <a class="btn" href="/2870231089/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>

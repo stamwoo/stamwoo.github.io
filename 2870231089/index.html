@@ -139,7 +139,7 @@
 <meta property="og:image" content="https://pic1.zhimg.com/80/v2-a9f87db22807c9c435b61975055b3d58_hd.jpg">
 <meta property="og:image" content="https://pic1.zhimg.com/v2-f32f8a732f601c285c44f95f981a5b20_b.jpg">
 <meta property="og:image" content="https://pic1.zhimg.com/80/v2-f32f8a732f601c285c44f95f981a5b20_hd.jpg">
-<meta property="og:updated_time" content="2019-02-16T21:34:48.452Z">
+<meta property="og:updated_time" content="2019-02-16T21:35:49.242Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="扒一扒ReentrantLock利用AQS实现原理">
 <meta name="twitter:description" content="前言 ReetrantLock? AQS?   为什么会有 AQS 呢？(其中 AQS 是 AbstractQueuedSynchronizer 的缩写)  因为有人的地方就有江湖，所以有并发的地方就有资源共享，有资源共享的地方就有线程安全，有线程安全的地方就有 “线程同步”，有线程同步的地方就有 “锁”（有点长，但是理是这个理） AQS 就是 JDK 中为 “线程同步” 提供的一套基础工具类（网">
@@ -442,7 +442,7 @@
                 
               
 
-              <time title="创建时间：2019-02-16 18:41:02 / 修改时间：22:34:48" itemprop="dateCreated datePublished" datetime="2019-02-16T18:41:02+01:00">2019-02-16</time>
+              <time title="创建时间：2019-02-16 18:41:02 / 修改时间：22:35:49" itemprop="dateCreated datePublished" datetime="2019-02-16T18:41:02+01:00">2019-02-16</time>
             
 
             
@@ -540,6 +540,7 @@
 </blockquote>
 <p><strong>因为有人的地方就有江湖，所以有并发的地方就有资源共享，有资源共享的地方就有线程安全，有线程安全的地方就有 “线程同步”，有线程同步的地方就有 “锁”（有点长，但是理是这个理）</strong></p>
 <p>AQS 就是 JDK 中为 “线程同步” 提供的一套基础工具类（网上其他帖子叫做 “框架” 我觉得这个就说的太大了，其实就是一个类而已（不算它衍生出来的子类）国内存在一些翻译会导致很多初学者很难理解，比如 classloader 的 parents 被翻译为 “双亲”，简直败笔，此处默哀 3 秒钟），因此 AQS 就成了非常重要的一个知识点，因为基于它可以写出 JAVA 中的很多“锁” 类。比如此文要分析的 ReetrantLock，它就是基于 AQS 而形成了一个“<strong>可重入锁</strong>”</p>
+<a id="more"></a>
 <p><strong>ReetrantLock</strong></p>
 <p>它是一个 “可重入” 锁。</p>
 <blockquote>
