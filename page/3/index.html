@@ -103,25 +103,20 @@
 
 
 
-  <meta name="description" content="曾经我在一场真实面试中被问到分布式锁的实现,只能简单回答上来根据redis的setnx去做,而不知这里面其实还有很多坑.也不知是否还有其他方式.面试结束后就有了下文. 分布式锁在单进程环境中,当多个线程产生资源竞争时.程序员们会采用 Synchronize 或 Lock 去对临界资源进行加锁,使得在修改临界资源时,能够线性执行以消除并发.那么由于多线程是挂在同一个进程下的,我们就必须在这个进程内设">
-<meta name="keywords" content="redis">
-<meta property="og:type" content="article">
-<meta property="og:title" content="分布式锁的实现-mysql&amp;redis">
-<meta property="og:url" content="https://stamwoo.github.io/1727393489/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Blog of Woo">
+<meta property="og:url" content="https://stamwoo.github.io/page/3/index.html">
 <meta property="og:site_name" content="Blog of Woo">
-<meta property="og:description" content="曾经我在一场真实面试中被问到分布式锁的实现,只能简单回答上来根据redis的setnx去做,而不知这里面其实还有很多坑.也不知是否还有其他方式.面试结束后就有了下文. 分布式锁在单进程环境中,当多个线程产生资源竞争时.程序员们会采用 Synchronize 或 Lock 去对临界资源进行加锁,使得在修改临界资源时,能够线性执行以消除并发.那么由于多线程是挂在同一个进程下的,我们就必须在这个进程内设">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-14T22:49:34.587Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="分布式锁的实现-mysql&amp;redis">
-<meta name="twitter:description" content="曾经我在一场真实面试中被问到分布式锁的实现,只能简单回答上来根据redis的setnx去做,而不知这里面其实还有很多坑.也不知是否还有其他方式.面试结束后就有了下文. 分布式锁在单进程环境中,当多个线程产生资源竞争时.程序员们会采用 Synchronize 或 Lock 去对临界资源进行加锁,使得在修改临界资源时,能够线性执行以消除并发.那么由于多线程是挂在同一个进程下的,我们就必须在这个进程内设">
+<meta name="twitter:title" content="Blog of Woo">
 
 
 
 
 
 
-  <link rel="canonical" href="https://stamwoo.github.io/1727393489/">
+  <link rel="canonical" href="https://stamwoo.github.io/page/3/">
 
 
 
@@ -131,7 +126,7 @@
   };
 </script>
 
-  <title>分布式锁的实现-mysql&redis | Blog of Woo</title>
+  <title> Blog of Woo</title>
   
 
 
@@ -179,7 +174,8 @@
     
   
 
-  <div class="container sidebar-position-right page-post-detail">
+  <div class="container sidebar-position-right 
+  page-home">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -351,9 +347,9 @@
           
           <div id="content" class="content">
             
-
-  <div id="posts" class="posts-expand">
+  <section id="posts" class="posts-expand">
     
+      
 
   
 
@@ -370,7 +366,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://stamwoo.github.io/1727393489/">
+    <link itemprop="mainEntityOfPage" href="https://stamwoo.github.io/766337335/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="woo">
@@ -387,8 +383,14 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">分布式锁的实现-mysql&redis
-
+          <h2 class="post-title" itemprop="name headline">
+                
+                  <span class="post-sticky-flag" title="置顶">
+                    <i class="fa fa-thumb-tack"></i>
+                  </span>
+                
+                
+                <a href="/766337335/" class="post-title-link" itemprop="url">单例模式–双重检验锁真的线程安全吗</a>
               
             
           </h2>
@@ -413,7 +415,7 @@
                 
               
 
-              <time title="创建时间：2019-02-11 19:11:29" itemprop="dateCreated datePublished" datetime="2019-02-11T19:11:29+01:00">2019-02-11</time>
+              <time title="创建时间：2018-11-02 12:12:08" itemprop="dateCreated datePublished" datetime="2018-11-02T12:12:08+01:00">2018-11-02</time>
             
 
             
@@ -430,7 +432,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-14 23:49:34" itemprop="dateModified" datetime="2019-02-14T23:49:34+01:00">2019-02-14</time>
+                <time title="修改时间：2019-02-14 23:49:39" itemprop="dateModified" datetime="2019-02-14T23:49:39+01:00">2019-02-14</time>
               
             
           </span>
@@ -447,8 +449,8 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
             
-                <a href="/1727393489/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count disqus-comment-count" data-disqus-identifier="1727393489/" itemprop="commentCount"></span>
+                <a href="/766337335/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count disqus-comment-count" data-disqus-identifier="766337335/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -456,7 +458,7 @@
 
           
           
-            <span id="/1727393489/" class="leancloud_visitors" data-flag-title="分布式锁的实现-mysql&redis">
+            <span id="/766337335/" class="leancloud_visitors" data-flag-title="单例模式–双重检验锁真的线程安全吗">
               <span class="post-meta-divider">|</span>
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -481,7 +483,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">2.7k</span>
+                <span title="本文字数">2.9k</span>
               
 
               
@@ -495,7 +497,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">2 分钟</span>
+                <span title="阅读时长">3 分钟</span>
               
             </div>
           
@@ -515,55 +517,18 @@
       
 
       
-        <p>曾经我在一场真实面试中被问到分布式锁的实现,只能简单回答上来根据redis的setnx去做,而不知这里面其实还有很多坑.也不知是否还有其他方式.面试结束后就有了下文.</p>
-<h2 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h2><p>在单进程环境中,当多个线程产生资源竞争时.程序员们会采用 Synchronize 或 Lock 去对临界资源进行加锁,使得在修改临界资源时,能够线性执行以消除并发.那么由于多线程是挂在同一个进程下的,我们就必须在这个进程内设置一个标记变量,来让所有线程都可以发现.<br>而在分布式环境下,多进程可能会产生资源竞争,那么此时的锁就应该存放在多进程都能够看到的地方.由此我们想到了两种方式:数据库和redis.</p>
-<a id="more"></a>
-<h3 id="基于数据库"><a href="#基于数据库" class="headerlink" title="基于数据库"></a>基于数据库</h3><p>基于数据库的锁实现也有两种方式，一是基于数据库表，另一种是基于数据库排他锁。</p>
-<h4 id="基于数据库表的增删"><a href="#基于数据库表的增删" class="headerlink" title="基于数据库表的增删"></a>基于数据库表的增删</h4><p>基于数据库表增删是最简单的方式，首先创建一张锁的表主要包含下列字段：方法名，时间戳等字段。</p>
-<p>具体使用的方法，当需要锁住某个方法时，往该表中插入一条相关的记录。这边需要注意，方法名是有唯一性约束的，如果有多个请求同时提交到数据库的话，数据库会保证只有一个操作可以成功，那么我们就可以认为操作成功的那个线程获得了该方法的锁，可以执行方法体内容。</p>
-<p>执行完毕，需要delete该记录。</p>
-<p>当然，笔者这边只是简单介绍一下。对于上述方案可以进行优化，如应用主从数据库，数据之间双向同步。一旦挂掉快速切换到备库上；做一个定时任务，每隔一定时间把数据库中的超时数据清理一遍；使用while循环，直到insert成功再返回成功，虽然并不推荐这样做；还可以记录当前获得锁的机器的主机信息和线程信息，那么下次再获取锁的时候先查询数据库，如果当前机器的主机信息和线程信息在数据库可以查到的话，直接把锁分配给他就可以了，实现可重入锁。</p>
-<h4 id="基于数据库排他锁"><a href="#基于数据库排他锁" class="headerlink" title="基于数据库排他锁"></a>基于数据库排他锁</h4><p>在查询语句后面增加for update，数据库会在查询过程中给数据库表增加排他锁。当某条记录被加上排他锁之后，其他线程无法再在该行记录上增加排他锁。其他没有获取到锁的就会阻塞在上述select语句上，可能的结果有2种，在超时之前获取到了锁，在超时之前仍未获取到锁。</p>
-<p>获得排它锁的线程即可获得分布式锁，当获取到锁之后，可以执行方法的业务逻辑，执行完方法之后，释放锁connection.commit()。</p>
-<p>存在的问题主要是性能不高和sql超时的异常。</p>
-<h4 id="基于数据库的优缺点"><a href="#基于数据库的优缺点" class="headerlink" title="基于数据库的优缺点"></a>基于数据库的优缺点</h4><p>上面两种方式都是依赖数据库的一张表，一种是通过表中的记录的存在情况确定当前是否有锁存在，另外一种是通过数据库的排他锁来实现分布式锁。</p>
-<ul>
-<li>优点是直接借助数据库，简单容易理解。</li>
-<li>缺点是操作数据库需要一定的开销，性能问题需要考虑。</li>
-</ul>
-<h3 id="基于-redis"><a href="#基于-redis" class="headerlink" title="基于 redis"></a>基于 redis</h3><h4 id="SETNX-加锁"><a href="#SETNX-加锁" class="headerlink" title="SETNX 加锁"></a>SETNX 加锁</h4><p>使用redis的SET命令实现分布式锁，多个进程执行以下Redis命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET key value PX time NX</span><br></pre></td></tr></table></figure>
-<p>这条命令是当key不存在时,将字符串值value关联到key,并设置过期时间为time毫秒.</p>
-<ul>
-<li>返回1，说明该进程获得锁.</li>
-<li>返回0，说明其他进程已经获得了锁，进程不能进入临界区。进程可以在一个循环中不断地尝试 SET 操作，以获得锁。</li>
-</ul>
-<h4 id="解锁"><a href="#解锁" class="headerlink" title="解锁"></a>解锁</h4><p>解锁很简单,直接把key删除就可以了.但是考虑一种情况.</p>
-<p>进程A设置了一个较短的过期时间,在还未执行完之前锁已经过期被释放了.此时进程B拿到了锁进来,而A刚好又将锁删除.那这样由于过期时间设置过短,直接造成了所有redis锁失效.</p>
-<p>为了避免这种情况,即错误删除了并非自己加的锁.我们需要在SET锁时,将UUID设置为value.在删除之前先确认这把锁是由自己加的,那么就需要有一个get的操作.</p>
-<p>那因为get和del并不是原子操作,我们就需要采用lua脚本来保证原子性.</p>
-<h4 id="死锁问题"><a href="#死锁问题" class="headerlink" title="死锁问题"></a>死锁问题</h4><p>死锁问题即由设置过期时间来解决,但过期时间设置会存在一个问题:</p>
-<p>当锁过期后，该进程还没执行完，可能造成同时多个进程取得锁。</p>
-<h4 id="另一种redis-加解锁方式-getset"><a href="#另一种redis-加解锁方式-getset" class="headerlink" title="另一种redis 加解锁方式-getset"></a>另一种redis 加解锁方式-getset</h4><p>我们同样假设进程P1已经首先获得了锁 lock.foo，然后进程P1挂掉了。接下来的情况：</p>
-<ul>
-<li>进程P4执行 SETNX lock.foo 以尝试获取锁</li>
-<li>由于进程P1已获得了锁，所以P4执行 SETNX lock.foo 返回0，即获取锁失败</li>
-<li>P4执行 GET lock.foo 来检测锁是否已超时，如果没超时，则等待一段时间，再次检测</li>
-<li><p>如果P4检测到锁已超时，即当前的时间大于键 lock.foo 的值，P4会执行以下操作 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GETSET lock.foo &lt;current Unix timestamp + lock timeout + 1&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>由于 GETSET 操作在设置键的值的同时，还会返回键的旧值，通过比较键 lock.foo 的旧值是否小于当前时间，可以判断进程是否已获得锁</p>
-</li>
-<li>假如另一个进程P5也检测到锁已超时，并在P4之前执行了 GETSET 操作，那么P4的 GETSET 操作返回的是一个大于当前时间的时间戳，这样P4就不会获得锁而继续等待。注意到，即使P4接下来将键 lock.foo 的值设置了比P5设置的更大的值也没影响。</li>
-</ul>
-<h4 id="如何解决单一进程执行时间超长-锁被抢走"><a href="#如何解决单一进程执行时间超长-锁被抢走" class="headerlink" title="如何解决单一进程执行时间超长,锁被抢走"></a>如何解决单一进程执行时间超长,锁被抢走</h4><h3 id="WATCH-MULTI-EXEC-DISCARD事务机制实现分布式锁"><a href="#WATCH-MULTI-EXEC-DISCARD事务机制实现分布式锁" class="headerlink" title="WATCH, MULTI, EXEC, DISCARD事务机制实现分布式锁"></a>WATCH, MULTI, EXEC, DISCARD事务机制实现分布式锁</h3><p>Redis支持基本的事务操作</p>
-<p>WATCH key<br>MULTI<br>some redis command<br>EXEC<br>以上被MULTI和EXEC包裹的redis命令，保证所有事务内的命令将会串行顺序执行，保证不会在事务的执行过程中被其他客户端打断。而WATCH命令能够监视某个键，当事务执行时，如果被监视的键被其他客户端修改了值，事务运行失败，返回相应错误（被事务运行客户端在事务内修改了值，不会造成事务运行失败）。</p>
-<p>运用Redis事务所支持的以上特性，可以实现一个分布式锁功能.</p>
-<p>通过WATCH命令监视redis锁键，当该键未被其他客户端修改值时，事务成功执行。当事务运行过程中，发现该值被其他客户端更新了值，任务失败，进行重试。</p>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><blockquote>
-<p><a href="http://redisdoc.com/string/set.html" target="_blank" rel="noopener">http://redisdoc.com/string/set.html</a><br><a href="https://www.cnblogs.com/crossoverJie/p/9339354.html" target="_blank" rel="noopener">https://www.cnblogs.com/crossoverJie/p/9339354.html</a><br><a href="https://juejin.im/entry/5a502ac2518825732b19a595" target="_blank" rel="noopener">https://juejin.im/entry/5a502ac2518825732b19a595</a><br><a href="https://blog.csdn.net/jj546630576/article/details/74910343" target="_blank" rel="noopener">https://blog.csdn.net/jj546630576/article/details/74910343</a><br><a href="https://blog.csdn.net/youbl/article/details/80273019" target="_blank" rel="noopener">https://blog.csdn.net/youbl/article/details/80273019</a></p>
-</blockquote>
-
+        
+          <h1 id="单例模式–双重检验锁真的线程安全吗"><a href="#单例模式–双重检验锁真的线程安全吗" class="headerlink" title="单例模式–双重检验锁真的线程安全吗"></a>单例模式–双重检验锁真的线程安全吗</h1><p>单例模式是我们最熟悉不过的一种设计模式，用来保证内存中只有一个对象的实例。虽然容易，但里面的坑也有很多，比如双重检验锁模式 (double checked locking pattern) 真的是线程安全的吗？</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/766337335/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
       
     </div>
 
@@ -579,74 +544,19 @@
       
     
     
-      <div>
-        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
-  <div>多谢支持</div>
-  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
-    <span>打赏</span>
-  </button>
-  <div id="QR" style="display: none;">
-
-    
-      <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/img/wechatpay.jpg" alt="woo 微信支付">
-        <p>微信支付</p>
-      </div>
-    
-
-    
-      <div id="alipay" style="display: inline-block">
-        <img id="alipay_qr" src="/img/alipay.jpg" alt="woo 支付宝">
-        <p>支付宝</p>
-      </div>
-    
-
-    
-
-  </div>
-</div>
-
-      </div>
-    
 
     
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/redis/" rel="tag"># redis</a>
-          
-        </div>
+
+      
+
       
 
       
       
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2207048324/" rel="next" title="令牌桶限流算法(Token Bucket))">
-                <i class="fa fa-chevron-left"></i> 令牌桶限流算法(Token Bucket))
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/232040800/" rel="prev" title="mysql 聚簇索引和辅助索引">
-                mysql 聚簇索引和辅助索引 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
+        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -656,22 +566,18 @@
   </article>
 
 
-  </div>
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+  </nav>
+
 
 
           </div>
           
-
-  
-    <div class="comments" id="comments">
-      <div id="disqus_thread">
-        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
-      </div>
-    </div>
-
-  
-
-
 
         </div>
         
@@ -692,17 +598,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <div class="site-overview-wrap sidebar-panel">
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -831,23 +728,6 @@
         </div>
       </div>
 
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式锁"><span class="nav-number">1.</span> <span class="nav-text">分布式锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于数据库"><span class="nav-number">1.1.</span> <span class="nav-text">基于数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基于数据库表的增删"><span class="nav-number">1.1.1.</span> <span class="nav-text">基于数据库表的增删</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于数据库排他锁"><span class="nav-number">1.1.2.</span> <span class="nav-text">基于数据库排他锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于数据库的优缺点"><span class="nav-number">1.1.3.</span> <span class="nav-text">基于数据库的优缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于-redis"><span class="nav-number">1.2.</span> <span class="nav-text">基于 redis</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SETNX-加锁"><span class="nav-number">1.2.1.</span> <span class="nav-text">SETNX 加锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解锁"><span class="nav-number">1.2.2.</span> <span class="nav-text">解锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#死锁问题"><span class="nav-number">1.2.3.</span> <span class="nav-text">死锁问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#另一种redis-加解锁方式-getset"><span class="nav-number">1.2.4.</span> <span class="nav-text">另一种redis 加解锁方式-getset</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何解决单一进程执行时间超长-锁被抢走"><span class="nav-number">1.2.5.</span> <span class="nav-text">如何解决单一进程执行时间超长,锁被抢走</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WATCH-MULTI-EXEC-DISCARD事务机制实现分布式锁"><span class="nav-number">1.3.</span> <span class="nav-text">WATCH, MULTI, EXEC, DISCARD事务机制实现分布式锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">1.4.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
       
 
       
@@ -1005,10 +885,6 @@
 
 
   
-  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
-<script src="/js/src/post-details.js?v=7.0.0"></script>
-
-
 
   
 
@@ -1022,28 +898,9 @@
   <script id="dsq-count-scr" src="https://stamwoo.disqus.com/count.js" async></script>
 
 
-<script>
-  var disqus_config = function() {
-    this.page.url = "https://stamwoo.github.io/1727393489/";
-    this.page.identifier = "1727393489/";
-    this.page.title = '分布式锁的实现-mysql&redis';
-    };
-  function loadComments() {
-    var d = document, s = d.createElement('script');
-    s.src = 'https://stamwoo.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', '' + +new Date());
-    (d.head || d.body).appendChild(s);
-  }
-  
-    loadComments();
-  
-</script>
 
 
 
-
-
-  
 
 
   
@@ -1376,37 +1233,38 @@
   
   <script>
     
-    function addCount(Counter) {
+    function showTime(Counter) {
+      var entries = [];
       var $visitors = $('.leancloud_visitors');
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
 
-      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+      $visitors.each(function() {
+        entries.push( $(this).attr('id').trim() );
+      });
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url: { '$in': entries } }) })
         .done(function({ results }) {
-          if (results.length > 0) {
-            var counter = results[0];
-            
-            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
-            
-              .done(function() {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.time + 1);
-              })
-            
-              .fail(function ({ responseJSON }) {
-                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
-              })
-          } else {
-            
-              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
-                .done(function() {
-                  var $element = $(document.getElementById(url));
-                  $element.find('.leancloud-visitors-count').text(1);
-                })
-                .fail(function() {
-                  console.log('Failed to create');
-                });
-            
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.url;
+            var time = item.time;
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for (var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if (countSpan.text() == '') {
+              countSpan.text(0);
+            }
           }
         })
         .fail(function ({ responseJSON }) {
@@ -1431,7 +1289,9 @@
             });
           };
           
-            addCount(Counter);
+            if ($('.post-title-link').length >= 1) {
+              showTime(Counter);
+            }
           
         });
     });
