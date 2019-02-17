@@ -103,20 +103,26 @@
 
 
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Blog of Woo">
-<meta property="og:url" content="https://stamwoo.github.io/archives/2018/11/index.html">
+  <meta name="description" content="在使用Java之前,我在大学使用过两年多的C++.刚接触Java时,肯定会下意识的与cpp去比较.譬如说:指针,单继承,值传递引用传递和垃圾回收. 众所周知,在写cpp时最重要的工作之一就是delete ptr,稍有不慎就会造成内存泄漏,出现大的问题.也正因为此,对java的GC机制感到时候神奇.Java是怎么做到垃圾回收的,它的垃圾回收机制是如何实现的,Java有了GC机制之后是否就不可能发生内">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java_GC是如何做的">
+<meta property="og:url" content="https://stamwoo.github.io/3421010594/index.html">
 <meta property="og:site_name" content="Blog of Woo">
+<meta property="og:description" content="在使用Java之前,我在大学使用过两年多的C++.刚接触Java时,肯定会下意识的与cpp去比较.譬如说:指针,单继承,值传递引用传递和垃圾回收. 众所周知,在写cpp时最重要的工作之一就是delete ptr,稍有不慎就会造成内存泄漏,出现大的问题.也正因为此,对java的GC机制感到时候神奇.Java是怎么做到垃圾回收的,它的垃圾回收机制是如何实现的,Java有了GC机制之后是否就不可能发生内">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0a73olq3gj30fy0913yw.jpg">
+<meta property="og:updated_time" content="2019-02-17T23:08:08.869Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Blog of Woo">
+<meta name="twitter:title" content="java_GC是如何做的">
+<meta name="twitter:description" content="在使用Java之前,我在大学使用过两年多的C++.刚接触Java时,肯定会下意识的与cpp去比较.譬如说:指针,单继承,值传递引用传递和垃圾回收. 众所周知,在写cpp时最重要的工作之一就是delete ptr,稍有不慎就会造成内存泄漏,出现大的问题.也正因为此,对java的GC机制感到时候神奇.Java是怎么做到垃圾回收的,它的垃圾回收机制是如何实现的,Java有了GC机制之后是否就不可能发生内">
+<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0a73olq3gj30fy0913yw.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="https://stamwoo.github.io/archives/2018/11/">
+  <link rel="canonical" href="https://stamwoo.github.io/3421010594/">
 
 
 
@@ -126,7 +132,7 @@
   };
 </script>
 
-  <title>归档 | Blog of Woo</title>
+  <title>java_GC是如何做的 | Blog of Woo</title>
   
 
 
@@ -174,7 +180,7 @@
     
   
 
-  <div class="container sidebar-position-right page-archive">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -246,7 +252,7 @@
         
         
           
-          <li class="menu-item menu-item-archives menu-item-active">
+          <li class="menu-item menu-item-archives">
 
     
     
@@ -343,420 +349,307 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+    
+  
+
+  
+
+  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://stamwoo.github.io/3421010594/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="woo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Woo">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h2 class="post-title" itemprop="name headline">java_GC是如何做的
+
+              
+            
+          </h2>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-17 23:41:13" itemprop="dateCreated datePublished" datetime="2019-02-17T23:41:13+01:00">2019-02-17</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-18 00:08:08" itemprop="dateModified" datetime="2019-02-18T00:08:08+01:00">2019-02-18</time>
+              
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 22 篇日志。 继续努力。
-      </span>
-      
 
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h2 class="archive-year" id="archive-year-2018">2018</h2>
-          </div>
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/4205246882/" itemprop="url">
             
-              <span itemprop="name">EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE</span>
             
-          </a>
-        
-      </h3>
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/3421010594/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count disqus-comment-count" data-disqus-identifier="3421010594/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
+          
+          
+            <span id="/3421010594/" class="leancloud_visitors" data-flag-title="java_GC是如何做的">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
 
-    </header>
-  </article>
+          
 
+          
+            <div class="post-symbolscount">
+              
 
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">1.4k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">1 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/3162095545/" itemprop="url">
-            
-              <span itemprop="name">TCP为什么是三次握手</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/3714837258/" itemprop="url">
-            
-              <span itemprop="name">mysql explain 详解</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <p>在使用Java之前,我在大学使用过两年多的C++.刚接触Java时,肯定会下意识的与cpp去比较.譬如说:指针,单继承,值传递引用传递和垃圾回收.</p>
+<p>众所周知,在写cpp时最重要的工作之一就是<code>delete ptr</code>,稍有不慎就会造成内存泄漏,出现大的问题.也正因为此,对java的GC机制感到时候神奇.Java是怎么做到垃圾回收的,它的垃圾回收机制是如何实现的,Java有了GC机制之后是否就不可能发生内存泄漏了呢?</p>
+<p>在去回答这几个问题之前,我们先想一下以下三个问题:</p>
+<ul>
+<li>Java GC 一般说不依靠程序员手动调用,那它是什么时候发生的?</li>
+<li>对于cpp来说,可以通过<code>delete</code>或<code>free</code>的方式释放指定区域内存,那Java GC怎么知道哪些内存是可以被释放掉的呢,换言之,Java GC是如何发现’垃圾’的?</li>
+<li>在发现’垃圾’之后,Java GC又是通过哪些操作/算法去’清除’掉垃圾的呢?</li>
+</ul>
+<h2 id="GC-发生时机"><a href="#GC-发生时机" class="headerlink" title="GC 发生时机"></a>GC 发生时机</h2><h3 id="程序调用System-gc时可以触发"><a href="#程序调用System-gc时可以触发" class="headerlink" title="程序调用System.gc时可以触发"></a>程序调用System.gc时可以触发</h3><h3 id="系统自身决定-一般无法精准预测"><a href="#系统自身决定-一般无法精准预测" class="headerlink" title="系统自身决定,一般无法精准预测"></a>系统自身决定,一般无法精准预测</h3><p>那么问题就来了,系统是怎么决定的呢?</p>
+<p>再说这个之前,你必须要清楚的知道Jvm的内存结构.</p>
+<p>当代主流虚拟机（Hotspot VM）的垃圾回收都采用“分代回收”的算法。“分代回收”是基于这样一个事实：对象的生命周期不同，所以针对不同生命周期的对象可以采取不同的回收方式，以便提高回收效率。</p>
+<p>Hotspot VM将内存划分为不同的物理区，就是“分代”思想的体现。如图所示，JVM内存主要由新生代、老年代、永久代构成。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0a73olq3gj30fy0913yw.jpg" alt=""></p>
+<p>简单了解了jvm内存结构之后,继续说何时发生GC.</p>
+<p>其实在主流jvm(HotSpot Vm)中,GC分为两种:</p>
+<ol>
+<li>Minor GC: 发生在新生代的垃圾收集动作，因为Java对象大多都具备朝生夕灭的特性，所以Minor GC非常频繁，一般回收速度也比较快。</li>
+<li>Full GC: 发生在老年代的GC，出现一次Full GC尝尝伴随至少一次Minor GC（只有Minor GC仍然满足不了空间分配才会触发Full GC）。</li>
+</ol>
+<p>知道了Java GC 包含两种之后,我们再看下分别他们发生的时机:</p>
+<ol>
+<li>Minor GC: 当Eden区满了之后,触发MinorGC</li>
+<li>Full GC: <ol>
+<li>调用System.gc时，系统建议执行Full GC，但是不必然执行</li>
+<li>老年代空间不足</li>
+<li>持久代空间不足</li>
+<li>通过Minor GC后进入老年代的平均大小大于老年代的可用内存</li>
+<li>由Eden区、From Space区向To Space区复制时，对象大小大于To Space可用内存，则把该对象转存到老年代，且老年代的可用内存小于该对象大小</li>
+</ol>
+</li>
+</ol>
+<p>虽然Full GC发生的场景看着比Minor GC多不少,但实际它发生的频率是要大大少于Minor GC的.最重要的原因是:Java 里绝大多数对象都是’朝生夕死’,这导致老年代一般情况根本不会占多大空间.而一旦老年代或持久代空间占用过多,Full GC频繁,影响生产环境.那99%是程序有问题,需要通过排查gc日志去解决问题了</p>
+<h2 id="Java-GC-是如何发生’垃圾’的呢"><a href="#Java-GC-是如何发生’垃圾’的呢" class="headerlink" title="Java GC 是如何发生’垃圾’的呢?"></a>Java GC 是如何发生’垃圾’的呢?</h2><h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><blockquote>
+<p><a href="https://tech.meituan.com/2017/12/29/jvm-optimize.html" target="_blank" rel="noopener">https://tech.meituan.com/2017/12/29/jvm-optimize.html</a><br><a href="https://blog.csdn.net/wk51920/article/details/51550470" target="_blank" rel="noopener">https://blog.csdn.net/wk51920/article/details/51550470</a></p>
+</blockquote>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/3262901390/" itemprop="url">
-            
-              <span itemprop="name">为什么你需要一个VPS</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/522943020/" itemprop="url">
-            
-              <span itemprop="name">spring cloud 扫不到自定义controller</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/775929552/" itemprop="url">
-            
-              <span itemprop="name">为什么匿名内部类访问局部变量必须是final?</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/2868978503/" itemprop="url">
-            
-              <span itemprop="name">既然Java反射可以访问和修改私有成员变量，那封装成private还有意义么？</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/2008800739/" itemprop="url">
-            
-              <span itemprop="name">CPU100%问题定位实战</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/1328518056/" itemprop="url">
-            
-              <span itemprop="name">如何优雅的使用和理解线程池</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/1643632136/" itemprop="url">
-            
-              <span itemprop="name">理解B树,B+树特点及使用场景</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-02T22:11:29+01:00" content="2018-11-02">
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>多谢支持</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/img/wechatpay.jpg" alt="woo 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/img/alipay.jpg" alt="woo 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2870231089/" rel="next" title="扒一扒ReentrantLock利用AQS实现原理">
+                <i class="fa fa-chevron-left"></i> 扒一扒ReentrantLock利用AQS实现原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/2018/11/page/2/">2</a><a class="extend next" rel="next" href="/archives/2018/11/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
+  </article>
 
 
+  </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -777,8 +670,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -907,6 +809,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#GC-发生时机"><span class="nav-number">1.</span> <span class="nav-text">GC 发生时机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#程序调用System-gc时可以触发"><span class="nav-number">1.1.</span> <span class="nav-text">程序调用System.gc时可以触发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统自身决定-一般无法精准预测"><span class="nav-number">1.2.</span> <span class="nav-text">系统自身决定,一般无法精准预测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-GC-是如何发生’垃圾’的呢"><span class="nav-number">2.</span> <span class="nav-text">Java GC 是如何发生’垃圾’的呢?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引用"><span class="nav-number">3.</span> <span class="nav-text">引用</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -1064,6 +983,10 @@
 
 
   
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
 
   
 
@@ -1077,9 +1000,28 @@
   <script id="dsq-count-scr" src="https://stamwoo.disqus.com/count.js" async></script>
 
 
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://stamwoo.github.io/3421010594/";
+    this.page.identifier = "3421010594/";
+    this.page.title = 'java_GC是如何做的';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://stamwoo.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    loadComments();
+  
+</script>
 
 
 
+
+
+  
 
 
   
@@ -1412,38 +1354,37 @@
   
   <script>
     
-    function showTime(Counter) {
-      var entries = [];
+    function addCount(Counter) {
       var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
 
-      $visitors.each(function() {
-        entries.push( $(this).attr('id').trim() );
-      });
-
-      Counter('get', '/classes/Counter', { where: JSON.stringify({ url: { '$in': entries } }) })
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
         .done(function({ results }) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.url;
-            var time = item.time;
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for (var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if (countSpan.text() == '') {
-              countSpan.text(0);
-            }
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
           }
         })
         .fail(function ({ responseJSON }) {
@@ -1468,9 +1409,7 @@
             });
           };
           
-            if ($('.post-title-link').length >= 1) {
-              showTime(Counter);
-            }
+            addCount(Counter);
           
         });
     });
