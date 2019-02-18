@@ -111,7 +111,7 @@
 <meta property="og:description" content="在使用Java之前,我在大学使用过两年多的C++.刚接触Java时,肯定会下意识的与cpp去比较.譬如说:指针,单继承,值传递引用传递和垃圾回收. 众所周知,在写cpp时最重要的工作之一就是delete ptr,稍有不慎就会造成内存泄漏,出现大的问题.也正因为此,对java的GC机制感到十分神奇.Java是怎么做到垃圾回收的,它的垃圾回收机制是如何实现的,Java有了GC机制之后是否就不可能发生内">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0a73olq3gj30fy0913yw.jpg">
-<meta property="og:updated_time" content="2019-02-18T13:00:36.076Z">
+<meta property="og:updated_time" content="2019-02-18T13:09:11.021Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java_GC是如何做的">
 <meta name="twitter:description" content="在使用Java之前,我在大学使用过两年多的C++.刚接触Java时,肯定会下意识的与cpp去比较.譬如说:指针,单继承,值传递引用传递和垃圾回收. 众所周知,在写cpp时最重要的工作之一就是delete ptr,稍有不慎就会造成内存泄漏,出现大的问题.也正因为此,对java的GC机制感到十分神奇.Java是怎么做到垃圾回收的,它的垃圾回收机制是如何实现的,Java有了GC机制之后是否就不可能发生内">
@@ -195,6 +195,10 @@
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">woo's blog</h1>
+      
     
     
   </div>
@@ -375,7 +379,7 @@
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="woo">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="摆脱冷气，只是向上走，不必听自暴自弃者流的话。">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
@@ -431,7 +435,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-18 14:00:36" itemprop="dateModified" datetime="2019-02-18T14:00:36+01:00">2019-02-18</time>
+                <time title="修改时间：2019-02-18 14:09:11" itemprop="dateModified" datetime="2019-02-18T14:09:11+01:00">2019-02-18</time>
               
             
           </span>
@@ -551,7 +555,7 @@
 <p>虽然Full GC发生的场景看着比Minor GC多不少,但实际它发生的频率是要大大少于Minor GC的.最重要的原因是:Java 里绝大多数对象都是’朝生夕死’,这导致老年代一般情况根本不会占多大空间.而一旦老年代或持久代空间占用过多,Full GC频繁,影响生产环境.那99%是程序有问题,需要通过排查gc日志去解决问题了</p>
 <h2 id="Java-GC-是如何发现’垃圾’的呢"><a href="#Java-GC-是如何发现’垃圾’的呢" class="headerlink" title="Java GC 是如何发现’垃圾’的呢?"></a>Java GC 是如何发现’垃圾’的呢?</h2><p>未完待续…</p>
 <h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><blockquote>
-<p><a href="https://tech.meituan.com/2017/12/29/jvm-optimize.html" target="_blank" rel="noopener">https://tech.meituan.com/2017/12/29/jvm-optimize.html</a><br><a href="https://blog.csdn.net/wk51920/article/details/51550470" target="_blank" rel="noopener">https://blog.csdn.net/wk51920/article/details/51550470</a></p>
+<p><a href="https://tech.meituan.com/2017/12/29/jvm-optimize.html" target="_blank" rel="noopener">https://tech.meituan.com/2017/12/29/jvm-optimize.html</a><br><a href="https://blog.csdn.net/wk51920/article/details/51550470" target="_blank" rel="noopener">https://blog.csdn.net/wk51920/article/details/51550470</a><br><a href="https://www.zhihu.com/question/35164211/answer/68265045" target="_blank" rel="noopener">https://www.zhihu.com/question/35164211/answer/68265045</a></p>
 </blockquote>
 
       
@@ -622,6 +626,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/4127594812/" rel="prev" title="jvm调优总结">
+                jvm调优总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -687,7 +695,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">woo</p>
-              <p class="site-description motion-element" itemprop="description"></p>
+              <p class="site-description motion-element" itemprop="description">摆脱冷气，只是向上走，不必听自暴自弃者流的话。</p>
           </div>
 
           
@@ -697,7 +705,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-count">23</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -861,7 +869,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">75k</span>
+    <span title="站点总字数">76k</span>
   
 
   
