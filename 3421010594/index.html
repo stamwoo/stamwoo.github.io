@@ -104,6 +104,7 @@
 
 
   <meta name="description" content="在使用Java之前,我在大学使用过两年多的C++.刚接触Java时,肯定会下意识的与cpp去比较.譬如说:指针,单继承,值传递引用传递和垃圾回收. 众所周知,在写cpp时最重要的工作之一就是delete ptr,稍有不慎就会造成内存泄漏,出现大的问题.也正因为此,对java的GC机制感到十分神奇.Java是怎么做到垃圾回收的,它的垃圾回收机制是如何实现的,Java有了GC机制之后是否就不可能发生内">
+<meta name="keywords" content="java,jvm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java_GC是如何做的">
 <meta property="og:url" content="https://stamwoo.github.io/3421010594/index.html">
@@ -111,7 +112,11 @@
 <meta property="og:description" content="在使用Java之前,我在大学使用过两年多的C++.刚接触Java时,肯定会下意识的与cpp去比较.譬如说:指针,单继承,值传递引用传递和垃圾回收. 众所周知,在写cpp时最重要的工作之一就是delete ptr,稍有不慎就会造成内存泄漏,出现大的问题.也正因为此,对java的GC机制感到十分神奇.Java是怎么做到垃圾回收的,它的垃圾回收机制是如何实现的,Java有了GC机制之后是否就不可能发生内">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0a73olq3gj30fy0913yw.jpg">
-<meta property="og:updated_time" content="2019-02-18T13:09:11.021Z">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0b6qqmtumj30iy0cjwf3.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0b6ug8lfhj30kt0c8q3m.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0b6wknbgej30iv0cfdgd.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0a73olq3gj30fy0913yw.jpg">
+<meta property="og:updated_time" content="2019-02-18T19:47:05.794Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java_GC是如何做的">
 <meta name="twitter:description" content="在使用Java之前,我在大学使用过两年多的C++.刚接触Java时,肯定会下意识的与cpp去比较.譬如说:指针,单继承,值传递引用传递和垃圾回收. 众所周知,在写cpp时最重要的工作之一就是delete ptr,稍有不慎就会造成内存泄漏,出现大的问题.也正因为此,对java的GC机制感到十分神奇.Java是怎么做到垃圾回收的,它的垃圾回收机制是如何实现的,Java有了GC机制之后是否就不可能发生内">
@@ -431,7 +436,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-18 14:09:11" itemprop="dateModified" datetime="2019-02-18T14:09:11+01:00">2019-02-18</time>
+                <time title="修改时间：2019-02-18 20:47:05" itemprop="dateModified" datetime="2019-02-18T20:47:05+01:00">2019-02-18</time>
               
             
           </span>
@@ -482,7 +487,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">1.4k</span>
+                <span title="本文字数">4.7k</span>
               
 
               
@@ -496,7 +501,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">1 分钟</span>
+                <span title="阅读时长">4 分钟</span>
               
             </div>
           
@@ -527,31 +532,71 @@
 <a id="more"></a>
 <h2 id="GC-发生时机"><a href="#GC-发生时机" class="headerlink" title="GC 发生时机"></a>GC 发生时机</h2><h3 id="程序调用System-gc时可以触发"><a href="#程序调用System-gc时可以触发" class="headerlink" title="程序调用System.gc时可以触发"></a>程序调用System.gc时可以触发</h3><h3 id="系统自身决定-一般无法精准预测"><a href="#系统自身决定-一般无法精准预测" class="headerlink" title="系统自身决定,一般无法精准预测"></a>系统自身决定,一般无法精准预测</h3><p>那么问题就来了,系统是怎么决定的呢?</p>
 <p>再说这个之前,你必须要清楚的知道Jvm的内存结构.</p>
-<p>当代主流虚拟机（Hotspot VM）的垃圾回收都采用“分代回收”的算法。“分代回收”是基于这样一个事实：对象的生命周期不同，所以针对不同生命周期的对象可以采取不同的回收方式，以便提高回收效率。</p>
-<p>Hotspot VM将内存划分为不同的物理区，就是“分代”思想的体现。如图所示，JVM内存主要由新生代、老年代、永久代构成。</p>
+<p>当代主流虚拟机(Hotspot VM)的垃圾回收都采用“分代回收”的算法.“分代回收”是基于这样一个事实：对象的生命周期不同,所以针对不同生命周期的对象可以采取不同的回收方式,以便提高回收效率.</p>
+<p>Hotspot VM将堆内存划分为不同的物理区,就是“分代”思想的体现.如图所示,JVM堆内存主要由新生代、老年代、永久代构成.</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0a73olq3gj30fy0913yw.jpg" alt=""></p>
 <p>简单了解了jvm内存结构之后,继续说何时发生GC.</p>
 <p>其实在主流jvm(HotSpot Vm)中,GC分为两种:</p>
 <ol>
-<li>Minor GC: 发生在新生代的垃圾收集动作，因为Java对象大多都具备朝生夕灭的特性，所以Minor GC非常频繁，一般回收速度也比较快。</li>
-<li>Full GC: 发生在老年代的GC，出现一次Full GC尝尝伴随至少一次Minor GC。</li>
+<li>Minor GC: 发生在新生代的垃圾收集动作,因为Java对象大多都具备朝生夕灭的特性,所以Minor GC非常频繁,一般回收速度也比较快.</li>
+<li>Full GC: 发生在老年代的GC,出现一次Full GC尝尝伴随至少一次Minor GC.</li>
 </ol>
 <p>知道了Java GC 包含两种之后,我们再看下分别他们发生的时机:</p>
 <ol>
 <li>Minor GC: 当Eden区满了之后,触发MinorGC</li>
 <li>Full GC: <ol>
-<li>调用System.gc时，系统建议执行Full GC，但是不必然执行</li>
+<li>调用System.gc时,系统建议执行Full GC,但是不必然执行</li>
 <li>老年代空间不足</li>
 <li>持久代空间不足</li>
 <li>通过Minor GC后进入老年代的平均大小大于老年代的可用内存</li>
-<li>由Eden区、From Space区向To Space区复制时，对象大小大于To Space可用内存，则把该对象转存到老年代，且老年代的可用内存小于该对象大小</li>
+<li>由Eden区、From Space区向To Space区复制时,对象大小大于To Space可用内存,则把该对象转存到老年代,且老年代的可用内存小于该对象大小</li>
 </ol>
 </li>
 </ol>
 <p>虽然Full GC发生的场景看着比Minor GC多不少,但实际它发生的频率是要大大少于Minor GC的.最重要的原因是:Java 里绝大多数对象都是’朝生夕死’,这导致老年代一般情况根本不会占多大空间.而一旦老年代或持久代空间占用过多,Full GC频繁,影响生产环境.那99%是程序有问题,需要通过排查gc日志去解决问题了</p>
-<h2 id="Java-GC-是如何发现’垃圾’的呢"><a href="#Java-GC-是如何发现’垃圾’的呢" class="headerlink" title="Java GC 是如何发现’垃圾’的呢?"></a>Java GC 是如何发现’垃圾’的呢?</h2><p>未完待续…</p>
+<h2 id="Java-GC-是如何发现’垃圾’的呢"><a href="#Java-GC-是如何发现’垃圾’的呢" class="headerlink" title="Java GC 是如何发现’垃圾’的呢?"></a>Java GC 是如何发现’垃圾’的呢?</h2><p>笼统的说,Java GC 通过GC Roots将无法搜索到的对象进行标记,经过一次标记后又经过可达性分析之后的对象就会被认为是’垃圾’.</p>
+<h3 id="可达性分析"><a href="#可达性分析" class="headerlink" title="可达性分析"></a>可达性分析</h3><p>每次回收都需要经历两次标记过程:</p>
+<h4 id="第一次标记"><a href="#第一次标记" class="headerlink" title="第一次标记"></a>第一次标记</h4><p>对象进行根搜索之后，如果发现没有与GC Roots 相连接的引用链，就会被第一次标记并进行筛选.</p>
+<p>所谓筛选，就是检查此对象是否有必要执行finalize方法，如果对象定义了该方法并且没有执行过。那么该对象就会被放入到一个队列F-Queue，随后会有一个低优先级的线程去执行这个队列里面对象的finalize方法</p>
+<h4 id="第二次标记"><a href="#第二次标记" class="headerlink" title="第二次标记"></a>第二次标记</h4><p>JVM 将对F-Queue队列里面的对象进行第二次标记。如果还是没有与GC Roots相连接,那么就要悲剧了.</p>
+<p>如果对象不想被回收，那么就得在finalize方法里面拯救自己，否则，这些对象就真的会被回收.</p>
+<p>下面有个小例子,说明了<code>finalize</code>是怎么拯救自己的.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">public class GCRootsTest &#123;</span><br><span class="line"></span><br><span class="line">    private static GCRootsTest obj;</span><br><span class="line"></span><br><span class="line">    protected void finalize() throws Throwable &#123;</span><br><span class="line">        super.finalize();</span><br><span class="line">        System.out.println(&quot;finalize方法被执行!&quot;);</span><br><span class="line">        obj = this;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws InterruptedException &#123;</span><br><span class="line">        obj = new GCRootsTest();</span><br><span class="line"></span><br><span class="line">        obj = null;</span><br><span class="line">        System.gc();</span><br><span class="line"></span><br><span class="line">        Thread.sleep(500);</span><br><span class="line">        if (null != obj) &#123;</span><br><span class="line">            System.out.println(&quot;1-obj还存活着！&quot;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            System.out.println(&quot;1-obj已经死了&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        obj = null;</span><br><span class="line">        System.gc();</span><br><span class="line"></span><br><span class="line">        Thread.sleep(500);</span><br><span class="line">        if (null != obj) &#123;</span><br><span class="line">            System.out.println(&quot;2-obj还存活着！&quot;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            System.out.println(&quot;2-obj已经死了&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="何为GC-Roots"><a href="#何为GC-Roots" class="headerlink" title="何为GC Roots"></a>何为GC Roots</h3><p>上面的内容多次提到了GC Roots,然而并没有说明什么对象才会被Java JVM认定为GC Roots.</p>
+<ul>
+<li>虚拟机栈中引用的对象：比如方法里面定义这种局部变量 <code>User user= new User();</code></li>
+<li>方法区中静态属性引用的对象：比如 <code>private static User user = new User();</code></li>
+<li>方法区中常量引用的对象：比如 <code>private static final User user = new User();</code></li>
+<li>本地方法栈JNI(Native方法)中引用的对象</li>
+</ul>
+<h2 id="Java-JVM通过哪些神奇操作清理掉’垃圾’的呢"><a href="#Java-JVM通过哪些神奇操作清理掉’垃圾’的呢" class="headerlink" title="Java JVM通过哪些神奇操作清理掉’垃圾’的呢"></a>Java JVM通过哪些神奇操作清理掉’垃圾’的呢</h2><p>最初是通过三种算法来实现清理’垃圾’的操作,而在实际中又会更复杂些:</p>
+<ul>
+<li>标记-清除</li>
+<li>复制</li>
+<li>标记-整理<br>对于标记过程其实和上述的标记过程是一样的,通过GC Roots和两次标记来标记出需要被清理的垃圾.下面具体点介绍三种算法:</li>
+</ul>
+<h3 id="标记-清除-Mark-Sweep-算法"><a href="#标记-清除-Mark-Sweep-算法" class="headerlink" title="标记-清除(Mark-Sweep)算法"></a>标记-清除(Mark-Sweep)算法</h3><p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0b6qqmtumj30iy0cjwf3.jpg" alt=""></p>
+<p>清除就只是释放掉被标记的对象占用的内存资源而已.可以看到,清除之后很容易产生内存碎片,导致无法为大对象分配空间,而很快触发下次GC</p>
+<h3 id="复制-Copying-算法"><a href="#复制-Copying-算法" class="headerlink" title="复制(Copying)算法"></a>复制(Copying)算法</h3><p>为了解决Mark-Sweep算法的缺陷，Copying算法就被提了出来。它将可用内存按容量划分为大小相等的两块，每次只使用其中的一块。当这一块的内存用完了，就将还存活着的对象复制到另外一块上面，然后再把已使用的内存空间一次清理掉，这样一来就不容易出现内存碎片的问题。具体过程如下图所示：</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0b6ug8lfhj30kt0c8q3m.jpg" alt=""></p>
+<p>这种算法虽然实现简单，运行高效且不容易产生内存碎片，但是却对内存空间的使用做出了高昂的代价，因为能够使用的内存缩减到原来的一半。</p>
+<p>很显然，Copying算法的效率跟存活对象的数目多少有很大的关系，如果存活对象很多，那么Copying算法的效率将会大大降低。</p>
+<h3 id="标记-整理-Mark-Compact-算法"><a href="#标记-整理-Mark-Compact-算法" class="headerlink" title="标记-整理(Mark-Compact)算法"></a>标记-整理(Mark-Compact)算法</h3><p>为了解决Copying算法的缺陷，充分利用内存空间，提出了Mark-Compact算法。该算法标记阶段和Mark-Sweep一样，但是在完成标记之后，它不是直接清理可回收对象，而是将存活对象都向一端移动，然后清理掉端边界以外的内存。具体过程如下图所示：</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0b6wknbgej30iv0cfdgd.jpg" alt=""></p>
+<p>当然标记-整理算法也不是没有缺点.将村话对象移动是需要耗费系统资源的.如果存活的对象多的话,无疑是不能被接受的.</p>
+<h3 id="Generational-Collection-分代收集-算法"><a href="#Generational-Collection-分代收集-算法" class="headerlink" title="Generational Collection(分代收集)算法"></a><strong>Generational Collection(分代收集)算法</strong></h3><p>分代收集算法是目前大部分JVM的垃圾收集器采用的算法。它的核心思想是根据对象存活的生命周期将内存划分为若干个不同的区域。一般情况下将堆区划分为新生代(Young Generation)和老年代(Tenured Generation)，老年代的特点是每次垃圾收集时只有少量对象需要被回收，而新生代的特点是每次垃圾回收时都有大量的对象需要被回收，那么就可以根据不同代的特点采取最适合的收集算法。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0a73olq3gj30fy0913yw.jpg" alt=""></p>
+<p>目前大部分垃圾收集器对于新生代都采取Copying算法，因为新生代中每次垃圾回收都要回收大部分对象，也就是说需要复制的操作次数较少，但是实际中并不是按照1：1的比例来划分新生代的空间的，一般来说是将新生代划分为一块较大的Eden空间和两块较小的Survivor空间，每次使用Eden空间和其中的一块Survivor空间，当进行回收时，将Eden和Survivor中还存活的对象复制到另一块Survivor空间中，然后清理掉Eden和刚才使用过的Survivor空间。</p>
+<p>而由于老年代的特点是每次回收都只回收少量对象，一般使用的是Mark-Compact算法。</p>
+<p>注意，在堆区之外还有一个代就是永久代(Permanet Generation)，它用来存储class类、常量、方法描述等。对永久代的回收主要回收两部分内容：废弃常量和无用的类。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过上面的三个问题和答案,其实已经解决了绝大部分有关Java GC的问题.至于一些细节的问题和没解答的问题,希望读者也能去找到答案.我这里也留几个问题:</p>
+<ol>
+<li>Java有了上述说的GC机制就万无一失,不会发生内存泄露了吗?</li>
+<li><code>System.gc()</code>引起Full GC,那么它的使用场景是啥呢</li>
+<li>只介绍了GC算法,其实它们都有具体的实现.叫做垃圾收集器.那么有哪些垃圾收集器,我们该怎么根据生产场景选择合适的垃圾收集器呢?</li>
+</ol>
+<p>上面算是留了三个坑,未来会在java-GC是如何做的(二)中一一解答,敬请期待.</p>
 <h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><blockquote>
-<p><a href="https://tech.meituan.com/2017/12/29/jvm-optimize.html" target="_blank" rel="noopener">https://tech.meituan.com/2017/12/29/jvm-optimize.html</a><br><a href="https://blog.csdn.net/wk51920/article/details/51550470" target="_blank" rel="noopener">https://blog.csdn.net/wk51920/article/details/51550470</a><br><a href="https://www.zhihu.com/question/35164211/answer/68265045" target="_blank" rel="noopener">https://www.zhihu.com/question/35164211/answer/68265045</a></p>
+<p><a href="https://tech.meituan.com/2017/12/29/jvm-optimize.html" target="_blank" rel="noopener">https://tech.meituan.com/2017/12/29/jvm-optimize.html</a><br><a href="https://blog.csdn.net/wk51920/article/details/51550470" target="_blank" rel="noopener">https://blog.csdn.net/wk51920/article/details/51550470</a><br><a href="https://www.zhihu.com/question/35164211/answer/68265045" target="_blank" rel="noopener">https://www.zhihu.com/question/35164211/answer/68265045</a><br><a href="https://www.jianshu.com/p/5261a62e4d29" target="_blank" rel="noopener">https://www.jianshu.com/p/5261a62e4d29</a><br><a href="https://blog.csdn.net/gzu_imis/article/details/38376429" target="_blank" rel="noopener">https://blog.csdn.net/gzu_imis/article/details/38376429</a><br><a href="http://www.cnblogs.com/dolphin0520/p/3783345.html" target="_blank" rel="noopener">http://www.cnblogs.com/dolphin0520/p/3783345.html</a></p>
 </blockquote>
 
       
@@ -602,6 +647,14 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/jvm/" rel="tag"># jvm</a>
+          
+        </div>
       
 
       
@@ -826,7 +879,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#GC-发生时机"><span class="nav-number">1.</span> <span class="nav-text">GC 发生时机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#程序调用System-gc时可以触发"><span class="nav-number">1.1.</span> <span class="nav-text">程序调用System.gc时可以触发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统自身决定-一般无法精准预测"><span class="nav-number">1.2.</span> <span class="nav-text">系统自身决定,一般无法精准预测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-GC-是如何发现’垃圾’的呢"><span class="nav-number">2.</span> <span class="nav-text">Java GC 是如何发现’垃圾’的呢?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引用"><span class="nav-number">3.</span> <span class="nav-text">引用</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#GC-发生时机"><span class="nav-number">1.</span> <span class="nav-text">GC 发生时机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#程序调用System-gc时可以触发"><span class="nav-number">1.1.</span> <span class="nav-text">程序调用System.gc时可以触发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统自身决定-一般无法精准预测"><span class="nav-number">1.2.</span> <span class="nav-text">系统自身决定,一般无法精准预测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-GC-是如何发现’垃圾’的呢"><span class="nav-number">2.</span> <span class="nav-text">Java GC 是如何发现’垃圾’的呢?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#可达性分析"><span class="nav-number">2.1.</span> <span class="nav-text">可达性分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一次标记"><span class="nav-number">2.1.1.</span> <span class="nav-text">第一次标记</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二次标记"><span class="nav-number">2.1.2.</span> <span class="nav-text">第二次标记</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#何为GC-Roots"><span class="nav-number">2.2.</span> <span class="nav-text">何为GC Roots</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-JVM通过哪些神奇操作清理掉’垃圾’的呢"><span class="nav-number">3.</span> <span class="nav-text">Java JVM通过哪些神奇操作清理掉’垃圾’的呢</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-清除-Mark-Sweep-算法"><span class="nav-number">3.1.</span> <span class="nav-text">标记-清除(Mark-Sweep)算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复制-Copying-算法"><span class="nav-number">3.2.</span> <span class="nav-text">复制(Copying)算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-整理-Mark-Compact-算法"><span class="nav-number">3.3.</span> <span class="nav-text">标记-整理(Mark-Compact)算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generational-Collection-分代收集-算法"><span class="nav-number">3.4.</span> <span class="nav-text">Generational Collection(分代收集)算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引用"><span class="nav-number">5.</span> <span class="nav-text">引用</span></a></li></ol></div>
             
 
           </div>
@@ -865,7 +918,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">76k</span>
+    <span title="站点总字数">79k</span>
   
 
   
@@ -874,7 +927,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">1:09</span>
+    <span title="站点阅读时长">1:12</span>
   
 </div>
 
