@@ -111,7 +111,7 @@
 <meta property="og:site_name" content="Blog of Woo">
 <meta property="og:description" content="转 http://www.cnblogs.com/xiexj/p/6845029.html 看了左潇龙的《回答阿里社招面试如何准备，顺便谈谈对于 Java 程序猿学习当中各个阶段的建议》这篇文章，在想一个问题，从一个最简单的问题入手究竟能把问题问多深？下面就模拟一场面试问答，要是我是面试官，大概就只能问到下面的深度了。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-17T23:09:41.492Z">
+<meta property="og:updated_time" content="2019-02-18T20:06:29.839Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="谈面试时从写一个单例开始究竟能问多深及终极解决方案">
 <meta name="twitter:description" content="转 http://www.cnblogs.com/xiexj/p/6845029.html 看了左潇龙的《回答阿里社招面试如何准备，顺便谈谈对于 Java 程序猿学习当中各个阶段的建议》这篇文章，在想一个问题，从一个最简单的问题入手究竟能把问题问多深？下面就模拟一场面试问答，要是我是面试官，大概就只能问到下面的深度了。">
@@ -428,7 +428,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-18 00:09:41" itemprop="dateModified" datetime="2019-02-18T00:09:41+01:00">2019-02-18</time>
+                <time title="修改时间：2019-02-18 21:06:29" itemprop="dateModified" datetime="2019-02-18T21:06:29+01:00">2019-02-18</time>
               
             
           </span>
@@ -479,7 +479,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">5.1k</span>
+                <span title="本文字数">5.2k</span>
               
 
               
@@ -520,31 +520,9 @@
 <p>面试官：请在黑板上写出一个线程安全的单例模式的例子。</p>
 <p>面试者：</p>
 <p>　　其实线程安全的实现有很多种，根据业务场景可以 new 一个实例作为私有静态成员变量，这样程序一启动，实例就生成，私有化构造函数，利用公用的静态函数 getInstance 返回实例。这种预加载的是能保证线程安全的但是如果不是确定会被使用，会造成内存的浪费，所以可以将实例放到私有静态类中作为成员变量。下面只写一种利用锁机制来保证的懒加载方法。</p>
-<pre>public class Singleton { 
-    private volatile static Singleton singleton; 
-    private Singleton (){} 
-    public static Singleton getSingleton() { 
-    if (singleton == null) { 
-        synchronized (Singleton.class) { 
-        if (singleton == null) { 
-            singleton = new Singleton(); 
-        } 
-        } 
-    } 
-    return singleton; 
-    } 
-}</pre>
-
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123; </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton singleton; </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span> <span class="params">()</span></span>&#123;&#125; </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getSingleton</span><span class="params">()</span> </span>&#123; </span><br><span class="line">    <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) &#123; </span><br><span class="line">        <span class="keyword">synchronized</span> (Singleton.class) &#123; </span><br><span class="line">        <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) &#123; </span><br><span class="line">            singleton = <span class="keyword">new</span> Singleton(); </span><br><span class="line">        &#125; </span><br><span class="line">        &#125; </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">return</span> singleton; </span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>或者</p>
-<pre>public class Singleton{    
-    private static Singletoninstance = new Singleton();
-    private Singleton(){}
-
-    public static Singleton getInstance() {
-        return instance;
-    }
-}</pre>
-
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singletoninstance = <span class="keyword">new</span> Singleton();</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>旁白：从这个例子上我能想到的知识点主要有三个</p>
 <p>　　   ☆　volatile 关键字，可深入到 Java VM 内存相关</p>
 <p>　　   ☆　synchronized 关键字，可深入到 Java 锁机制，高并发相关</p>
@@ -888,7 +866,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">79k</span>
+    <span title="站点总字数">69k</span>
   
 
   
@@ -897,7 +875,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">1:12</span>
+    <span title="站点阅读时长">1:03</span>
   
 </div>
 
