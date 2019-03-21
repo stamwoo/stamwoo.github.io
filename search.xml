@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[java_GC是如何做的(二)]]></title>
+    <url>%2F4065948361%2F</url>
+    <content type="text"><![CDATA[通过上文我们知道了Java GC的相关理论,那么在实际中,jvm是通过哪些垃圾收集器来完成GC的? Stop the World又是怎么一回事呢? 这是本文我们将解决的两个问题.]]></content>
+      <tags>
+        <tag>jvm</tag>
+        <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Lost in Europe 0.序]]></title>
     <url>%2F2566597183%2F</url>
     <content type="text"><![CDATA[2019.3.12日,我坐在郑州的家中,回忆着过去几个月发生的种种. 一切就像是一场梦,而我告诉自己梦该醒了. 过去几个月走过的路比我此前二十多年走过的还要多,所经历事情的复杂程度也远远大于以前.如果说过去的我像是一列在轨道上高速行驶的火车,那这几个月之后我更希望我像一艘帆船.帆船在海上行驶大多是有固定的航线,不过偶尔也可以停在某个荒岛. 这是一系列自说自话的博客文章,写下来只是为了记录.文章中的图片是我使用iphone 8所拍,也有一些是同路人帮我拍的,谢谢他们. I’m alone,but I’m not lonely.]]></content>
