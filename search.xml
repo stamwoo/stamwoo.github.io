@@ -101,7 +101,7 @@
   <entry>
     <title><![CDATA[jvm调优总结]]></title>
     <url>%2F4127594812%2F</url>
-    <content type="text"><![CDATA[GC相关 通过NewRatio控制新生代老年代比例 通过MaxTenuringThreshold控制进入老年前生存次数等]]></content>
+    <content type="text"><![CDATA[大多数调优参数都是调整堆内存的大小,以及根据实际情况选择最合适的垃圾收集器. GC相关 通过NewRatio控制新生代老年代比例 通过MaxTenuringThreshold控制进入老年前生存次数等]]></content>
       <tags>
         <tag>jvm</tag>
         <tag>java</tag>
