@@ -111,17 +111,17 @@
 <meta property="og:site_name" content="Blog of Woo">
 <meta property="og:description" content="一花一世界，一树一菩提：编码压缩探索与实践前言你可曾面临这种问题，高并发条件下数据必须99%cache命中才能满足性能需求？ 你可曾面对这种场景，对cache集群不断扩容是否让你感到厌烦? 那么是否有一种办法在提高缓存命中率的同时，又能提高缓存集群键个数，甚至于提高整个集群的吞吐？ 本文将从实践出发，对编码方式及压缩算法进行介绍，并分享了在真实项目中使用缓存压缩对性能的影响。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://img-blog.csdn.net/20150207113157954">
+<meta property="og:image" content="https://raw.githubusercontent.com/stamwoo/image/master/20150207113157954.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/stamwoo/image/master/20190711150240.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/stamwoo/image/master/Picture1.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/stamwoo/image/master/20190711161905.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/facebook/zstd/dev/doc/images/zstd_logo86.png">
 <meta property="og:image" content="https://o.aolcdn.com/images/dims?quality=85&image_uri=http%3A%2F%2Fo.aolcdn.com%2Fhss%2Fstorage%2Fmidas%2F3f1949218744ebc17bb36898448546ed%2F203285287%2Fgoogle-brotli-algorithm-2016-01-20-01.jpg&client=amp-blogside-v2&signature=e6f065ce925749f350b7ba5f73d80f12bb690325">
-<meta property="og:updated_time" content="2019-07-14T12:23:39.607Z">
+<meta property="og:updated_time" content="2019-07-14T12:27:42.523Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一花一世界，一树一菩提：编码压缩探索与实践">
 <meta name="twitter:description" content="一花一世界，一树一菩提：编码压缩探索与实践前言你可曾面临这种问题，高并发条件下数据必须99%cache命中才能满足性能需求？ 你可曾面对这种场景，对cache集群不断扩容是否让你感到厌烦? 那么是否有一种办法在提高缓存命中率的同时，又能提高缓存集群键个数，甚至于提高整个集群的吞吐？ 本文将从实践出发，对编码方式及压缩算法进行介绍，并分享了在真实项目中使用缓存压缩对性能的影响。">
-<meta name="twitter:image" content="https://img-blog.csdn.net/20150207113157954">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/stamwoo/image/master/20150207113157954.png">
 
 
 
@@ -437,7 +437,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-14 20:23:39" itemprop="dateModified" datetime="2019-07-14T20:23:39+08:00">2019-07-14</time>
+                <time title="修改时间：2019-07-14 20:27:42" itemprop="dateModified" datetime="2019-07-14T20:27:42+08:00">2019-07-14</time>
               
             
           </span>
@@ -532,7 +532,7 @@
 <p>在不扩容、不拆分item的前提下，便理所应当的想到了对item进行压缩存储。</p>
 <p>那么接下来需要确定的就是具体的压缩方案：即对何种数据进行压缩才是最有效的？采用何种压缩算法才是最适合我们的系统的？</p>
 <h3 id="编码方式"><a href="#编码方式" class="headerlink" title="编码方式"></a>编码方式</h3><p>不同的压缩算法之间区别最大的即在于编码方式。所谓编码其本质即把信息进行某种方式的转换，以便让信息能够装载进目标载体。从信息论的角度来说，编码的本意并非改变信息的熵密度，而只是改变信息的表现形式。</p>
-<h4 id="游程编码：最易理解的编码方式"><a href="#游程编码：最易理解的编码方式" class="headerlink" title="游程编码：最易理解的编码方式"></a>游程编码：最易理解的编码方式</h4><p>该算法的实现是用当前数据元素以及该元素连续出现的次数来取代字符串中连续出现的数据部分。<br><img src="https://img-blog.csdn.net/20150207113157954" alt="游程编码示例"></p>
+<h4 id="游程编码：最易理解的编码方式"><a href="#游程编码：最易理解的编码方式" class="headerlink" title="游程编码：最易理解的编码方式"></a>游程编码：最易理解的编码方式</h4><p>该算法的实现是用当前数据元素以及该元素连续出现的次数来取代字符串中连续出现的数据部分。<br><img src="https://raw.githubusercontent.com/stamwoo/image/master/20150207113157954.png" alt="游程编码示例"></p>
 <p><code>aaaaaaaaaabbbaxxxxyyyzyx</code></p>
 <p>字符串长度为24，使用游程算法，我们用较短的字符串后加一个计数值来替换游程对象。</p>
 <p><code>a10b3a1x4y3z1y1x1</code></p>
