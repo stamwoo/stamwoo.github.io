@@ -103,25 +103,32 @@
 
 
 
-  <meta name="description" content="转 http://www.cnblogs.com/xiexj/p/6845029.html 看了左潇龙的《回答阿里社招面试如何准备，顺便谈谈对于 Java 程序猿学习当中各个阶段的建议》这篇文章，在想一个问题，从一个最简单的问题入手究竟能把问题问多深？下面就模拟一场面试问答，要是我是面试官，大概就只能问到下面的深度了。">
-<meta name="keywords" content="interview">
+  <meta name="description" content="一花一世界，一树一菩提：编码压缩探索与实践前言你可曾面临这种问题，高并发条件下数据必须99%cache命中才能满足性能需求？ 你可曾面对这种场景，对cache集群不断扩容是否让你感到厌烦? 那么是否有一种办法在提高缓存命中率的同时，又能提高缓存集群键个数，甚至于提高整个集群的吞吐？ 本文将从实践出发，对编码方式及压缩算法进行介绍，并分享了在真实项目中使用缓存压缩对性能的影响。">
+<meta name="keywords" content="编码压缩">
 <meta property="og:type" content="article">
-<meta property="og:title" content="谈面试时从写一个单例开始究竟能问多深及终极解决方案">
-<meta property="og:url" content="https://stamwoo.github.io/421584197/index.html">
+<meta property="og:title" content="一花一世界，一树一菩提：编码压缩探索与实践">
+<meta property="og:url" content="https://stamwoo.github.io/290549738/index.html">
 <meta property="og:site_name" content="Blog of Woo">
-<meta property="og:description" content="转 http://www.cnblogs.com/xiexj/p/6845029.html 看了左潇龙的《回答阿里社招面试如何准备，顺便谈谈对于 Java 程序猿学习当中各个阶段的建议》这篇文章，在想一个问题，从一个最简单的问题入手究竟能把问题问多深？下面就模拟一场面试问答，要是我是面试官，大概就只能问到下面的深度了。">
+<meta property="og:description" content="一花一世界，一树一菩提：编码压缩探索与实践前言你可曾面临这种问题，高并发条件下数据必须99%cache命中才能满足性能需求？ 你可曾面对这种场景，对cache集群不断扩容是否让你感到厌烦? 那么是否有一种办法在提高缓存命中率的同时，又能提高缓存集群键个数，甚至于提高整个集群的吞吐？ 本文将从实践出发，对编码方式及压缩算法进行介绍，并分享了在真实项目中使用缓存压缩对性能的影响。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-05-06T16:00:31.257Z">
+<meta property="og:image" content="https://img-blog.csdn.net/20150207113157954">
+<meta property="og:image" content="https://raw.githubusercontent.com/stamwoo/image/master/20190711150240.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/stamwoo/image/master/Picture1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/stamwoo/image/master/20190711161905.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/facebook/zstd/dev/doc/images/zstd_logo86.png">
+<meta property="og:image" content="https://o.aolcdn.com/images/dims?quality=85&image_uri=http%3A%2F%2Fo.aolcdn.com%2Fhss%2Fstorage%2Fmidas%2F3f1949218744ebc17bb36898448546ed%2F203285287%2Fgoogle-brotli-algorithm-2016-01-20-01.jpg&client=amp-blogside-v2&signature=e6f065ce925749f350b7ba5f73d80f12bb690325">
+<meta property="og:updated_time" content="2019-07-14T12:23:39.607Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="谈面试时从写一个单例开始究竟能问多深及终极解决方案">
-<meta name="twitter:description" content="转 http://www.cnblogs.com/xiexj/p/6845029.html 看了左潇龙的《回答阿里社招面试如何准备，顺便谈谈对于 Java 程序猿学习当中各个阶段的建议》这篇文章，在想一个问题，从一个最简单的问题入手究竟能把问题问多深？下面就模拟一场面试问答，要是我是面试官，大概就只能问到下面的深度了。">
+<meta name="twitter:title" content="一花一世界，一树一菩提：编码压缩探索与实践">
+<meta name="twitter:description" content="一花一世界，一树一菩提：编码压缩探索与实践前言你可曾面临这种问题，高并发条件下数据必须99%cache命中才能满足性能需求？ 你可曾面对这种场景，对cache集群不断扩容是否让你感到厌烦? 那么是否有一种办法在提高缓存命中率的同时，又能提高缓存集群键个数，甚至于提高整个集群的吞吐？ 本文将从实践出发，对编码方式及压缩算法进行介绍，并分享了在真实项目中使用缓存压缩对性能的影响。">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20150207113157954">
 
 
 
 
 
 
-  <link rel="canonical" href="https://stamwoo.github.io/421584197/">
+  <link rel="canonical" href="https://stamwoo.github.io/290549738/">
 
 
 
@@ -131,7 +138,7 @@
   };
 </script>
 
-  <title>谈面试时从写一个单例开始究竟能问多深及终极解决方案 | Blog of Woo</title>
+  <title>一花一世界，一树一菩提：编码压缩探索与实践 | Blog of Woo</title>
   
 
 
@@ -360,15 +367,17 @@
   
   
   
+    
+  
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://stamwoo.github.io/421584197/">
+    <link itemprop="mainEntityOfPage" href="https://stamwoo.github.io/290549738/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="woo">
@@ -385,7 +394,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">谈面试时从写一个单例开始究竟能问多深及终极解决方案
+          <h2 class="post-title" itemprop="name headline">一花一世界，一树一菩提：编码压缩探索与实践
 
               
             
@@ -411,7 +420,7 @@
                 
               
 
-              <time title="创建时间：2019-01-02 22:11:29" itemprop="dateCreated datePublished" datetime="2019-01-02T22:11:29+08:00">2019-01-02</time>
+              <time title="创建时间：2019-07-12 20:11:29" itemprop="dateCreated datePublished" datetime="2019-07-12T20:11:29+08:00">2019-07-12</time>
             
 
             
@@ -428,7 +437,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-05-07 00:00:31" itemprop="dateModified" datetime="2019-05-07T00:00:31+08:00">2019-05-07</time>
+                <time title="修改时间：2019-07-14 20:23:39" itemprop="dateModified" datetime="2019-07-14T20:23:39+08:00">2019-07-14</time>
               
             
           </span>
@@ -445,8 +454,8 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
             
-                <a href="/421584197/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count disqus-comment-count" data-disqus-identifier="421584197/" itemprop="commentCount"></span>
+                <a href="/290549738/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count disqus-comment-count" data-disqus-identifier="290549738/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -454,7 +463,7 @@
 
           
           
-            <span id="/421584197/" class="leancloud_visitors" data-flag-title="谈面试时从写一个单例开始究竟能问多深及终极解决方案">
+            <span id="/290549738/" class="leancloud_visitors" data-flag-title="一花一世界，一树一菩提：编码压缩探索与实践">
               <span class="post-meta-divider">|</span>
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -479,7 +488,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">5.2k</span>
+                <span title="本文字数">5k</span>
               
 
               
@@ -513,67 +522,168 @@
       
 
       
-        <p>转 <a href="http://www.cnblogs.com/xiexj/p/6845029.html" target="_blank" rel="noopener">http://www.cnblogs.com/xiexj/p/6845029.html</a></p>
-<p>看了左潇龙的《<a href="http://www.cnblogs.com/zuoxiaolong/p/life51.html" target="_blank" rel="noopener">回答阿里社招面试如何准备，顺便谈谈对于 Java 程序猿学习当中各个阶段的建议</a>》这篇文章，在想一个问题，从一个最简单的问题入手究竟能把问题问多深？下面就模拟一场面试问答，要是我是面试官，大概就只能问到下面的深度了。</p>
+        <h1 id="一花一世界，一树一菩提：编码压缩探索与实践"><a href="#一花一世界，一树一菩提：编码压缩探索与实践" class="headerlink" title="一花一世界，一树一菩提：编码压缩探索与实践"></a>一花一世界，一树一菩提：编码压缩探索与实践</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>你可曾面临这种问题，高并发条件下数据必须99%cache命中才能满足性能需求？</p>
+<p>你可曾面对这种场景，对cache集群不断扩容是否让你感到厌烦?</p>
+<p>那么是否有一种办法在提高缓存命中率的同时，又能提高缓存集群键个数，甚至于提高整个集群的吞吐？</p>
+<p>本文将从实践出发，对编码方式及压缩算法进行介绍，并分享了在真实项目中使用缓存压缩对性能的影响。</p>
 <a id="more"></a>
-<p>旁白：一般的面试都是从最简单基本的问题开始。</p>
-<p>面试官：请在黑板上写出一个线程安全的单例模式的例子。</p>
-<p>面试者：</p>
-<p>　　其实线程安全的实现有很多种，根据业务场景可以 new 一个实例作为私有静态成员变量，这样程序一启动，实例就生成，私有化构造函数，利用公用的静态函数 getInstance 返回实例。这种预加载的是能保证线程安全的但是如果不是确定会被使用，会造成内存的浪费，所以可以将实例放到私有静态类中作为成员变量。下面只写一种利用锁机制来保证的懒加载方法。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123; </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton singleton; </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span> <span class="params">()</span></span>&#123;&#125; </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getSingleton</span><span class="params">()</span> </span>&#123; </span><br><span class="line">    <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) &#123; </span><br><span class="line">        <span class="keyword">synchronized</span> (Singleton.class) &#123; </span><br><span class="line">        <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) &#123; </span><br><span class="line">            singleton = <span class="keyword">new</span> Singleton(); </span><br><span class="line">        &#125; </span><br><span class="line">        &#125; </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">return</span> singleton; </span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>或者</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singletoninstance = <span class="keyword">new</span> Singleton();</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>旁白：从这个例子上我能想到的知识点主要有三个</p>
-<p>　　   ☆　volatile 关键字，可深入到 Java VM 内存相关</p>
-<p>　　   ☆　synchronized 关键字，可深入到 Java 锁机制，高并发相关</p>
-<p>　　   ☆　new 关键字，可深入到 Java VM 类加载机制相关</p>
-<p>但是面试官一开始可能要先考察一下面试者是否真的理解自己写的代码</p>
-<p>面试官：你写的这个程序是怎么保证线程安全的？</p>
-<p>面试者：将类的构造方法私有起来，外部调用进行初始化的时候只能通过调用 getSingleton 这个静态方法来获得实例，静态方法是整个 Java 虚拟机中只有一个实例。在创建的时候首先进行非空判断，这时候如果实例不存在，对整个类进行加锁同步，为了避免过程中非空状态的改变，同步块内再进行一次判断，如果不存在实例则创建实例返回。使用 volatile 关键字，下次访问这个方法就能直接看到实例的最新非空状态，直接返回实例。</p>
-<p>面试官：volatile 起到了什么作用？</p>
-<p>面试者：volatile 这个英文单词意思是易变的，用在多线程中来同步变量。Java 的对象都是在内存堆中分配空间。但是 Java 有主内存和线程自己独有的内存拷贝。对于没有 volatile 修饰的局部变量，线程在运行过程中访问的是工作内存中的变量值，其修改对于主内存不是立即可见。而 volatile 修饰的值在线程独有的工作内存中无副本，线程直接和主内存交互，修改对主内存立即可见。</p>
-<p>面试官：synchronized 起到了什么作用？</p>
-<p>面试者：锁定对象，限制当前对象只能被一个线程访问。</p>
-<p>面试官：synchronized 里你传 Singleton.class 这个参数，起到什么作用，换成别的行不行？</p>
-<p>面试者：对当前类加锁，使得这个代码块一次只能被一个线程访问。这里 Singleton.class 可以换成一个常量字符串或者自己定义一个内部静态 Object。</p>
-<p>面试官：那传 Singleton.class，常量字符串，自己定义一个内部静态 Object 有区别吗？</p>
-<p>面试者：因为这是一个静态方法，相当于一个概念上的类锁，所以在这里起到的效果是一样的。但是如果是原型模式，或者直接每个类都是 new 出来的，实例不同的话，在一个非静态方法里加这三种锁，这时是一个对象锁，因为 Singleton.class 或者是静态的一个 Object 或者是 JVM 只存一份的字符串常量，这些对象线程间是共享的，会对所有的实例的同步块都加同一把锁，每个实例访问到此对象的同步代码块都会被阻塞。但是如果这时 synchronized 的参数是 this，或者是内部 new 出来的一个内部非静态 Object，则各个实例拥有不同的锁，访问同一个代码相同同步块也是互不干扰。只有实例内部使用了同一个对象锁才会同步等待。</p>
-<p>面试官：那你知道 synchronized 关键字实现同步的原理吗？</p>
-<p>面试者：synchronized 在 Java 虚拟机中使用监视器锁来实现。每个对象都有一个监视器锁，当监视器锁被占用时就会处于锁定状态。</p>
-<p>　　线程执行一条叫 monitorenter 的指令来获取监视器锁的所有权。如果此监视器锁的进入数为 0，则线程进入并将进入数设置为 1，成为线程所有者。如果线程已经拥有该锁，因为是可重入锁，可以重新进入，则进入数加 1. 如果线程的监视器锁被其他线程占用，则阻塞直到此监视器锁的进入数为 0 时才能进入该锁。</p>
-<p>　　线程执行一条叫 monitorexit 的指令来释放所有权。执行 monitorexit 的必须是线程的所有者。每次执行此指令，线程进入数减 1，直到进入数为 0。监视器锁被释放。</p>
-<p>面试官：你刚才提到的可重入锁是什么概念，有不可重入锁吗？</p>
-<p>面试者：我说的可重入锁是广义的可重入锁，当然 jdk1.5 引入了 concurrent 包，里面有 Lock 接口，它有一个实现叫 ReentrantLock。广义的可重入锁也叫递归锁，是指同一线程外层函数获得锁之后，内层还可以再次获得此锁。可重入锁的设计是为了避免死锁。sun 的 corba 里的 mutex 互斥锁是一种不可重入锁的实现。自旋锁也是一种不可重入锁，本质上是一种忙等锁，CPU 一直循环执行 “测试并设置” 直到可用并取得该锁，在递归的调用该锁时必然会引起死锁。另外，如果锁占用时间较长，自旋锁会过多的占用 CPU 资源，这时使用基于睡眠原理来实现的锁更加合适。</p>
-<p>面试官：你刚才提到了 concurrent 包，它里面有哪些锁的实现？</p>
-<p>面试者：常用的有 ReentrantLock, 它是一种独占锁。ReadWriteLock 接口也是一个锁接口，和 Lock 接口是一种关联关系，它返回一个只读的 Lock 和只写的 Lock。读写分离，在没有写锁的情况下，读锁是无阻塞的，提高了执行效率，它是一种共享锁。ReadWriteLock 的实现类为 ReentrantReadWriteLock。ReentrantLock 和 ReentrantReadWriteLock 实现都依赖于 AbstractQueuedSynchronizer 这种抽象队列同步器。</p>
-<p>面试官：锁还有其他维度的分类吗？</p>
-<p>面试者：还可以分为公平锁和非公平锁。非公平锁是如果一个线程尝试获取锁时可以获取锁，就直接成功获取。公平锁则在锁被释放后将锁分配给等待队列队首的线程。</p>
-<p>面试官：AQS 是什么？</p>
-<p>面试者：AQS 是一个简单的框架，这个框架为同步状态的原子性管理，线程的阻塞和非阻塞以及排队提供了一种通用机制。表现为一个同步器，主要支持获取锁和释放锁。获取锁的时候如果是独占锁就有可能阻塞，如果是共享锁就有可能失败。如果是阻塞，线程就要进入阻塞队列，当状态变成可获得锁就修改状态，已进入阻塞队列的要从阻塞队列中移除。释放锁时修改状态位及唤醒其他被阻塞的线程。</p>
-<p>AQS 本质是采用 CHL 模型完成了一个先进先出的队列。对于入队，采用 CAS 操作，每次比较尾节点是否一致，然后插入到尾节点中。对于出队列，因为每个节点缓存了一个状态位，不满足条件时自旋等待，直到满足条件时将头节点设置为下一个节点。</p>
-<p>面试官：那知道这个队列的数据结构吗？</p>
-<p>面试者：这个队列是用一个双向链表实现的。</p>
-<p>面试官：你刚才提到 AQS 是一种通用机制，那它还有哪些应用?</p>
-<p>面试者：AQS 除了刚才提到的可重入锁 ReentrantLock 和 ReentrantReadWriteLock 之外，还用于不可重入锁 Mutex 的实现。java 并发包中的同步器如：Semphore,CountDownLatch,FutureTask,CyclicBarrier 都是采用这个机制实现的。</p>
-<p>旁白：既然问到了并发工具包中的东西，每个都可以引出一堆，但是基本原理已经问出来了，其他的问下去没什么意思。转向下一个问题。</p>
-<p>面试官：你黑板上写的实例是通过 new 对象创建出来的，还可不可以采用别的方法来创建对象呢？</p>
-<p>面试者：还可以使用 class 类的 newInstance 方法，Constructor 构造器类的 newInstance 方法，克隆方法和反序列法方法。</p>
-<p>面试官：两种 newInstance 方法有没有区别？</p>
-<p>面试者：</p>
-<p>　　☆　Class 类位于 java 的 lang 包中，而构造器类是 java 反射机制的一部分。</p>
-<p>　　☆　Class 类的 newInstance 只能触发无参数的构造方法创建对象，而构造器类的 newInstance 能触发有参数或者任意参数的构造方法来创建对象。</p>
-<p>　　☆　Class 类的 newInstance 需要其构造方法是共有的或者对调用方法可见的，而构造器类的 newInstance 可以在特定环境下调用私有构造方法来创建对象。</p>
-<p>　　☆　Class 类的 newInstance 抛出类构造函数的异常，而构造器类的 newInstance 包装了一个 InvocationTargetException 异常。</p>
-<p>　　Class 类本质上调用了反射包构造器类中无参数的 newInstance 方法，捕获了 InvocationTargetException，将构造器本身的异常抛出。</p>
-<p>面试官：类加载的时候，自己定义了一个类和 java 自己的类类名和命名空间都一样，JVM 加载的是哪一个呢？</p>
-<p>面试者：调用的是 java 自身的，根据双亲委派模型，最委派 Bootstrap 的 ClassLoader 来加载，找不到才去使用 Extension 的 ClassLoader，还找不到才去用 Application 的 ClassLoader，这种机制利于保证 JVM 的安全。</p>
-<p>面试官：你刚才提到的 java 的反射机制是什么概念？</p>
-<p>面试者：java 的反射机制是在运行状态中，对于任何一个类，都能够知道它所有的属性和方法；对于任何一个对象，都能够调用它的任何一个方法和属性。这种动态的获取信息和动态调用对象的方法的功能就是 java 的反射机制。它是 jdk 动态代理的实现方法。</p>
-<p>面试官：java 还有没有其他的动态代理实现？</p>
-<p>面试者：还有 cglib 动态代理。</p>
-<p>面试官：这两种动态代理哪个比较好呢？</p>
-<p>面试者：AOP 源码中同时使用了这两种动态代理，因为他们各有优劣。jdk 动态代理是利用 java 内部的反射机制来实现，在生成类的过程中比较高效，cglib 动态代理则是借助 asm 来实现，可以利用 asm 将生成的类进行缓存，所以在类生成之后的相关执行过程中比较高效。但是 jdk 的动态代理前提是目标类必须基于统一的接口，所以有一定的局限性。</p>
-<p>旁白：面试者都已经提到 AOP 了，那么接下来横向，纵向，怎样都能问出一大堆问题，就不赘述。基于上面问题，读者也可以自己画出一棵知识树，然后就能找到能对答如流的终极方案：就是基本都没超过《深入理解 java 虚拟器》《java 并发编程实践》这两本书，大学学过的《数据结构与算法》《编译原理》掌握的好也可以在面试中加分哦。</p>
+<h2 id="探索篇"><a href="#探索篇" class="headerlink" title="探索篇"></a>探索篇</h2><p>提高缓存命中率有很多种方法：选择好的缓存淘汰算法。固然有一些本地缓存支持LFU或者更新的Tiny LFU算法。不过对于分布式缓存而言，memcached和redis底层都使用了LRU算法，并不支持淘汰算法的替换。</p>
+<p>由此，我们想到第二个思路：提升集群item数量。</p>
+<p>在不扩容、不拆分item的前提下，便理所应当的想到了对item进行压缩存储。</p>
+<p>那么接下来需要确定的就是具体的压缩方案：即对何种数据进行压缩才是最有效的？采用何种压缩算法才是最适合我们的系统的？</p>
+<h3 id="编码方式"><a href="#编码方式" class="headerlink" title="编码方式"></a>编码方式</h3><p>不同的压缩算法之间区别最大的即在于编码方式。所谓编码其本质即把信息进行某种方式的转换，以便让信息能够装载进目标载体。从信息论的角度来说，编码的本意并非改变信息的熵密度，而只是改变信息的表现形式。</p>
+<h4 id="游程编码：最易理解的编码方式"><a href="#游程编码：最易理解的编码方式" class="headerlink" title="游程编码：最易理解的编码方式"></a>游程编码：最易理解的编码方式</h4><p>该算法的实现是用当前数据元素以及该元素连续出现的次数来取代字符串中连续出现的数据部分。<br><img src="https://img-blog.csdn.net/20150207113157954" alt="游程编码示例"></p>
+<p><code>aaaaaaaaaabbbaxxxxyyyzyx</code></p>
+<p>字符串长度为24，使用游程算法，我们用较短的字符串后加一个计数值来替换游程对象。</p>
+<p><code>a10b3a1x4y3z1y1x1</code></p>
+<p>通过游程编码编码后的字符串长度为17，只有原先的71%,但仍有优化的余地，比如对于只出现一次的字符，不在后面追加1.</p>
+<p><code>a10b3ax4y3zyx</code></p>
+<p>这样编码得来的字符串只有13，只有原先的51%</p>
+<h4 id="熵编码"><a href="#熵编码" class="headerlink" title="熵编码"></a>熵编码</h4><p>熵编码被人所熟知的一种即是Huffman编码，它的原理是根据字符在原始串中出现的概率。通过构造一颗二叉树来为每个字符产生对应的码字，又称最佳编码。</p>
+<h5 id="算术编码"><a href="#算术编码" class="headerlink" title="算术编码"></a>算术编码</h5><p>算术编码同样是一种熵编码，它同样是基于字符在原始串中出现的概率。所不同的是Huffman编码对每个字符产生码字。而算术编码通常将原始串编码为一个介于0~1之间的小数。<br>比如说对于原始串<code>ARBER</code>，我们得出每个字符出现的概率表：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Symbol</th>
+<th style="text-align:center">Times</th>
+<th style="text-align:center">P</th>
+<th style="text-align:right">Interval</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">A</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0.2</td>
+<td style="text-align:right">0 - 0.2</td>
+</tr>
+<tr>
+<td style="text-align:left">B</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0.2</td>
+<td style="text-align:right">0.2 - 0.4</td>
+</tr>
+<tr>
+<td style="text-align:left">E</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0.2</td>
+<td style="text-align:right">0.4 - 0.6</td>
+</tr>
+<tr>
+<td style="text-align:left">R</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">0.4</td>
+<td style="text-align:right">0.6 - 1.0</td>
+</tr>
+</tbody>
+</table>
+<p>通过这张概率表，我们可以将0~1这个区间按照概率划分给不同的字符。</p>
+<p><img src="https://raw.githubusercontent.com/stamwoo/image/master/20190711150240.png" alt=""></p>
+<p>编码器将当前的区间分成若干子区间，每个子区间的长度与当前上下文下可能出现的对应符号的概率成正比。当前要编码的符号对应的子区间成为在下一步编码中的初始区间。</p>
+<p><img src="https://raw.githubusercontent.com/stamwoo/image/master/Picture1.png" alt=""></p>
+<p>以<code>ARBER</code>为例，由上图可以得到以下类推流：</p>
+<p>A的区间是(0,0.2),这个区间成为下一步编码的初始区间。R的区间是(0.6,1.0),那么在初始区间(0,0.2)中取相对的(0,6,1.0)区间即(0,12,0.2)做这一步编码结果，也即是下一步编码的子区间。以此类推，最终得到了(0.14432,0.14456)作为结果区间。</p>
+<p>这里我们只是介绍算术编码的思想，使用十进制也是为了方便理解。在实际算法实现中，概率以及区间的表示都是使用二进制的小数去表示。很可能不是一精确的小数值，这一定程度上也会影响算法的编码效率。</p>
+<p>从实用效果上，算术编码的压缩比一般要好于Huffman。但Huffman的性能要优于算术编码，两者都有自适应的算法，不必依赖全文进行概率统计，但毕竟算术编码还是需要更大的计算量。</p>
+<h4 id="字典编码"><a href="#字典编码" class="headerlink" title="字典编码"></a>字典编码</h4><p>字典编码是指用符号代替一串字符，在编码中仅仅把字符串看成是一个号码，而不去管它来表示什么意义。</p>
+<h5 id="LZ77编码"><a href="#LZ77编码" class="headerlink" title="LZ77编码"></a>LZ77编码</h5><p>LZ77是Abraham Lempel与Jacob Ziv在1977年以及1978年发表的论文中的一种无损压缩编码。</p>
+<p>它通过使用编码器或者解码器中已经出现过的相应匹配数据信息替换当前数据从而实现压缩功能。这个匹配信息使用称为<em>长度-距离对</em>的一对数据进行编码。</p>
+<p>编码器和解码器都必须保存一定数量的最近的数据，如最近2 KB、4 KB或者32 KB的数据。保存这些数据的结构叫作滑动窗口，因为这样所以LZ77有时也称作滑动窗口压缩。</p>
+<p>关于LZ77编码，还有一点需要了解的是它如何表示被压缩数据。它并非是对单个字符进行编码，而是对匹配的字符串进行编码。形式为(p,l,c).p表示匹配在滑动窗口的相对起始下标，l表示匹配到滑动窗口的字符串的长度，c表示第一个未匹配的字符。</p>
+<p>拿<code>ABABCBABABCAC</code>举例，使用长度为8byte的滑动窗口，长度为4byte的前向缓冲区。</p>
+<p><img src="https://raw.githubusercontent.com/stamwoo/image/master/20190711161905.png" alt=""></p>
+<h5 id="ANS编码"><a href="#ANS编码" class="headerlink" title="ANS编码"></a>ANS编码</h5><p>ANS是前两类编码算法战争的终结者。它在2014年被提出来，随后很快就得到了大量应用。本质上属于算术编码，但它成功地找到了一个用近似概率表示的表格，将原来的概率计算转换为查表。所以它是一个达到Huffman编码效率的算术编码方法。FSE(Finite State Entropy)是ANS最为著名的实现。</p>
+<p>实际上，大多数压缩算法的实现往往不会只基于一种特定的编码方式，而是将多种编码方式组合起来使用。关于压缩算法和编码方式的关系，可以简单将其考虑成排序算法和各种实现类比起来。</p>
+<h3 id="无损压缩算法实现"><a href="#无损压缩算法实现" class="headerlink" title="无损压缩算法实现"></a>无损压缩算法实现</h3><p>压缩算法可以按照特定的编码机制用比未经编码少的数据位元（或者其它信息相关的单位）表示信息。以下所讨论的压缩算法都是无损压缩算法，本质并不会减少信息熵。</p>
+<p>不同的压缩算法针对不同的测试集，在压缩比和吞吐率方向上有不同的变相。为了尽可能减小这种不同测试集带来的误差。Silesia压缩语料库提供了text, exe, pdf, html等常见的格式内容。因此，诸多的压缩算法都将Silesia语料库作为测试基准来测试其性能。</p>
+<p>但需要注意的是：<strong>通用的标准并不一定适合你的数据。一定要根据自己的数据进行实测后选择压缩算法。</strong></p>
+<h4 id="Deflate"><a href="#Deflate" class="headerlink" title="Deflate"></a>Deflate</h4><p>Deflate基于LZ77和Huffman编码方式的变形，因为历史原因，在很多地方得到了应用，比如zip,Gzip,png等处。</p>
+<h4 id="Gzip"><a href="#Gzip" class="headerlink" title="Gzip"></a>Gzip</h4><p>一种广为人知的压缩算法。其提供了不同的压缩级别，使用压缩比来交换吞吐率。但一般来说，Gzip的压缩比较高，响应的吞吐率较差。我们知道在http中，Accept-Encoding常常选择使用Gzip用来提高传输效率。</p>
+<h4 id="LZ4"><a href="#LZ4" class="headerlink" title="LZ4"></a>LZ4</h4><p>lz4最大特点是其<em>吞吐率特别高</em>，提供了单核500MB/s的压缩速度，解压速度更是上GB/s，已经基本达到了多核系统的内存速度的上限。</p>
+<h4 id="Snappy"><a href="#Snappy" class="headerlink" title="Snappy"></a>Snappy</h4><p>Google在2011年开源的通用压缩算法，使用C++实现。号称注重吞吐率但实际上跟lz4还有较大的差距。官方的意思大概是相比于Gzip有很大提升。</p>
+<h4 id="Zstandard"><a href="#Zstandard" class="headerlink" title="Zstandard"></a>Zstandard</h4><p><img src="https://raw.githubusercontent.com/facebook/zstd/dev/doc/images/zstd_logo86.png" alt=""></p>
+<p>Facebook推出的实时压缩算法，全称为Zstandard,使用C实现，基于FSE熵编码。最大的特点是对小数据使用了“<strong><em>字典训练</em></strong>”的模式，在使用字典的条件下，其压缩比和吞吐率会有很大幅度的提高。它同样提供了22种压缩级别，官方默认的压缩级别为3，但实测在最低压缩级别下，其表现已经十分优秀。</p>
+<h4 id="Brotli"><a href="#Brotli" class="headerlink" title="Brotli"></a>Brotli</h4><p><img src="https://o.aolcdn.com/images/dims?quality=85&amp;image_uri=http%3A%2F%2Fo.aolcdn.com%2Fhss%2Fstorage%2Fmidas%2F3f1949218744ebc17bb36898448546ed%2F203285287%2Fgoogle-brotli-algorithm-2016-01-20-01.jpg&amp;client=amp-blogside-v2&amp;signature=e6f065ce925749f350b7ba5f73d80f12bb690325" alt="Silicon Valley"></p>
+<p>Google出品的另一种压缩算法实现，基于通用的LZ77和Huffman编码，其比较特殊的地方是使用了二阶上下文建模，可以简单理解为根据上下文去判断下一个字符出现的概率从而实现压缩。在速度下和Deflate很接近，但却提供了更高的压缩比。目前主要的应用方向应该是web内容的压缩。</p>
+<p>另一个主要的特点的是brotli内置了常用词的字典，已被证明可以增加压缩比。</p>
+<h2 id="实践篇"><a href="#实践篇" class="headerlink" title="实践篇"></a>实践篇</h2><p>本次实践的对象是约1.1KB的pb字节对象。系统原先的存储方式是Java pojo类转为pb对象再转为pb字节对象存至memcached，读写比为35.这样一种场景其实也符合大部分互联网公司的实际业务场景，读多写少，开发人员更关心读的吞吐和CPU的占用率。</p>
+<p>因此，所使用的性能测试方案分为两步：在本地使用jmh测试诸多压缩算法的压缩比和吞吐率；线上使用memcached测试集群mock大量读请求，测试CPU占用和吞吐。</p>
+<h3 id="压缩比"><a href="#压缩比" class="headerlink" title="压缩比"></a>压缩比</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">Method</th>
+<th style="text-align:center">maxRatio</th>
+<th style="text-align:center">minRatio</th>
+<th style="text-align:right">averageRatio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">使用zstd进行压缩</td>
+<td style="text-align:center">2.43</td>
+<td style="text-align:center">1.19</td>
+<td style="text-align:right">1.72</td>
+</tr>
+<tr>
+<td style="text-align:left">使用同组数据训练得到的dict进行zstd压缩</td>
+<td style="text-align:center">7.22</td>
+<td style="text-align:center">1.87</td>
+<td style="text-align:right">4.58</td>
+</tr>
+<tr>
+<td style="text-align:left">使用不同组数据训练得到的dict进行zstd压缩</td>
+<td style="text-align:center">5.40</td>
+<td style="text-align:center">1.70</td>
+<td style="text-align:right">4.03</td>
+</tr>
+<tr>
+<td style="text-align:left">使用Gzip进行压缩</td>
+<td style="text-align:center">2.49</td>
+<td style="text-align:center">1.25</td>
+<td style="text-align:right">1.78</td>
+</tr>
+<tr>
+<td style="text-align:left">使用Brotli进行压缩</td>
+<td style="text-align:center">3.00</td>
+<td style="text-align:center">1.30</td>
+<td style="text-align:right">2.00</td>
+</tr>
+</tbody>
+</table>
+<h3 id="吞吐率"><a href="#吞吐率" class="headerlink" title="吞吐率"></a>吞吐率</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Benchmark                                   Mode  Cnt   Score    Error   Units</span><br><span class="line">CodecBenchmark.compressWithBrotli           thrpt    3   0.015 ±  0.001  ops/ms</span><br><span class="line">CodecBenchmark.compressWithGzip             thrpt    3   0.773 ±  0.463  ops/ms</span><br><span class="line">CodecBenchmark.compressWithDictZstd         thrpt    3   5.307 ±  1.827  ops/ms</span><br><span class="line">CodecBenchmark.compressWithZstd             thrpt    3   2.740 ±  0.161  ops/ms</span><br><span class="line">CodecBenchmark.decompressWithBrotli         thrpt    3   1.079 ±  0.154  ops/ms</span><br><span class="line">CodecBenchmark.decompressWithGzip           thrpt    3   3.187 ±  0.568  ops/ms</span><br><span class="line">CodecBenchmark.decompressWithDictZstd       thrpt    3   9.501 ±  2.447  ops/ms</span><br><span class="line">CodecBenchmark.decompressWithZstd           thrpt    3   6.482 ±  1.330  ops/ms</span><br><span class="line">CodecBenchmark.fromPbBytes                  thrpt    3  27.149 ± 14.017  ops/ms</span><br><span class="line">CodecBenchmark.toPbBytes                    thrpt    3  20.594 ±  9.530  ops/ms</span><br></pre></td></tr></table></figure>
+<h3 id="线上性能测试"><a href="#线上性能测试" class="headerlink" title="线上性能测试"></a>线上性能测试</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">操作</th>
+<th style="text-align:center">CPU平均使用率</th>
+<th style="text-align:center">memcached QPS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">无压缩读</td>
+<td style="text-align:center">431%</td>
+<td style="text-align:center">15.35k</td>
+</tr>
+<tr>
+<td style="text-align:left">zstd解压读</td>
+<td style="text-align:center">745%</td>
+<td style="text-align:center">17.42k</td>
+</tr>
+<tr>
+<td style="text-align:left">zstd带字典的解压读</td>
+<td style="text-align:center">695%</td>
+<td style="text-align:center">20.13k</td>
+</tr>
+</tbody>
+</table>
+<h3 id="结果分析"><a href="#结果分析" class="headerlink" title="结果分析"></a>结果分析</h3><ul>
+<li>zstd使用训练过的字典在压缩比和吞吐率变现都十分出色</li>
+<li>字典面对与训练集不同的输入发生了退化现象</li>
+<li>使用压缩后，单个对象体积变小也因此CPU等io的时间缩短。所以反而提高了qps</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>所以本文写到这里，可以得出结论只有一个，选择一个文本压缩算法最有效的方式是实验，不要轻人别人的测试结果。只能通过实验，才能得出一个更为有效的算法以及参数的选择。</p>
+<p>另外，在为实际生产环境选择开源项目时还有其他因素需要考虑。比如在笔者测试的过程中，不同压缩算法对于语言的支持也不相同。比如zstd就比较好，第三方的java binding库更新及时，对原生支持较好，封装的api注释清晰方便理解。而反观brotli，官方随提供了Java binding库，但只提供了解压，并未提供解压。性能测试所使用的jbrotli库已经数年未更新，且需要开发人员自己编译安装JNI库。</p>
 
       
     </div>
@@ -626,7 +736,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/interview/" rel="tag"># interview</a>
+            <a href="/tags/编码压缩/" rel="tag"># 编码压缩</a>
           
         </div>
       
@@ -639,8 +749,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/4205246882/" rel="next" title="EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE">
-                <i class="fa fa-chevron-left"></i> EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE
+              <a href="/2895591053/" rel="next" title="老家的两棵树">
+                <i class="fa fa-chevron-left"></i> 老家的两棵树
               </a>
             
           </div>
@@ -648,10 +758,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2207048324/" rel="prev" title="令牌桶限流算法(Token Bucket))">
-                令牌桶限流算法(Token Bucket)) <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -703,8 +809,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -839,6 +954,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一花一世界，一树一菩提：编码压缩探索与实践"><span class="nav-number">1.</span> <span class="nav-text">一花一世界，一树一菩提：编码压缩探索与实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#探索篇"><span class="nav-number">1.2.</span> <span class="nav-text">探索篇</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编码方式"><span class="nav-number">1.2.1.</span> <span class="nav-text">编码方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#游程编码：最易理解的编码方式"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">游程编码：最易理解的编码方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#熵编码"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">熵编码</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#算术编码"><span class="nav-number">1.2.1.2.1.</span> <span class="nav-text">算术编码</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字典编码"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">字典编码</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#LZ77编码"><span class="nav-number">1.2.1.3.1.</span> <span class="nav-text">LZ77编码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ANS编码"><span class="nav-number">1.2.1.3.2.</span> <span class="nav-text">ANS编码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无损压缩算法实现"><span class="nav-number">1.2.2.</span> <span class="nav-text">无损压缩算法实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Deflate"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">Deflate</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Gzip"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">Gzip</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LZ4"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">LZ4</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Snappy"><span class="nav-number">1.2.2.4.</span> <span class="nav-text">Snappy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Zstandard"><span class="nav-number">1.2.2.5.</span> <span class="nav-text">Zstandard</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Brotli"><span class="nav-number">1.2.2.6.</span> <span class="nav-text">Brotli</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实践篇"><span class="nav-number">1.3.</span> <span class="nav-text">实践篇</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#压缩比"><span class="nav-number">1.3.1.</span> <span class="nav-text">压缩比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#吞吐率"><span class="nav-number">1.3.2.</span> <span class="nav-text">吞吐率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线上性能测试"><span class="nav-number">1.3.3.</span> <span class="nav-text">线上性能测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结果分析"><span class="nav-number">1.3.4.</span> <span class="nav-text">结果分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -1015,9 +1147,9 @@
 
 <script>
   var disqus_config = function() {
-    this.page.url = "https://stamwoo.github.io/421584197/";
-    this.page.identifier = "421584197/";
-    this.page.title = '谈面试时从写一个单例开始究竟能问多深及终极解决方案';
+    this.page.url = "https://stamwoo.github.io/290549738/";
+    this.page.identifier = "290549738/";
+    this.page.title = '一花一世界，一树一菩提：编码压缩探索与实践';
     };
   function loadComments() {
     var d = document, s = d.createElement('script');
