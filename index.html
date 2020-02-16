@@ -369,6 +369,220 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://stamwoo.github.io/2927365539/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="woo">
+      <meta itemprop="description" content="愿你我能摆脱冷气，只是向上走，不必听自暴自弃者流的话。">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Woo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                  <span class="post-sticky-flag" title="置顶">
+                    <i class="fa fa-thumb-tack"></i>
+                  </span>
+                
+                
+                <a href="/2927365539/" class="post-title-link" itemprop="url">分布式系统中的重试机制</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-02-16 22:38:50 / 修改时间：16:27:45" itemprop="dateCreated datePublished" datetime="2020-02-16T22:38:50+08:00">2020-02-16</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/2927365539/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2927365539/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2927365539/" class="leancloud_visitors" data-flag-title="分布式系统中的重试机制">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">663</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">1 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="分布式系统中的重试机制"><a href="#分布式系统中的重试机制" class="headerlink" title="分布式系统中的重试机制"></a>分布式系统中的重试机制</h2><p>在分布式系统中，多个组件之间的网络通信随时可能发生故障。</p>
+<p>客户端应用程序通过实现重试来处理这些失败。</p>
+<p>常用的重试机制是在服务端程序抛出异常或超时时，客户端进行重试。重试次数可以由客户端或服务端指定，一般而言未指定重试间隔，或指定了固定时间间隔。</p>
+<p>上述简单的重试机制在大多数场景下都可以正常工作，比如分布式系统中，服务端节点挂掉一个或少数几个，这时重试到其他节点，得到正常相应。客户端程序的服务质量可以不受影响。</p>
+<p>而弊端在于：如果下游服务质量特别差，每次都有大量服务节点失效，此时的重试无疑加重了下游服务的压力，造成一定程度的雪崩效应。</p>
+<p><strong>指数回退</strong> 是处理失败网络调用重试的常用策略。简单地说，客户端在连续重试之间等待的时间间隔越来越长：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wait_interval = base * multiplier^n</span><br></pre></td></tr></table></figure>
+<p>指数回退在分布式系统中的一个主要缺点是，在同一时间开始回退的请求，也会在同一时间进行重试。这导致了请求簇的出现。那么，我们并没有减少每一轮进行竞争的客户端数量，而是引入了没有客户端竞争的时期。固定的指数退避并不能减少很多竞争，并会生成负载峰值。</p>
+<p><strong>抖动</strong> 就是为了减少请求簇而出现的，在重试的间隔中添加随机性，从而分摊了负载，避免了出现网络请求簇。</p>
+<h3 id="重试中的几个点"><a href="#重试中的几个点" class="headerlink" title="重试中的几个点"></a>重试中的几个点</h3><ol>
+<li>重试用来解决瞬时性故障，例如网络拥塞，数据库过载，是一种在有足够的冷却周期之后也许能自己恢复的故障。</li>
+<li>重试前添加延迟，以解决初始化连接或网络包阻塞造成的故障</li>
+<li>如果采用指数回退，记得添加最多重试次数</li>
+<li><strong>一定一定考虑可重试调用是否幂等</strong></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+    
+  
+
+  
+
+  <article class="post post-type-normal post-sticky" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://stamwoo.github.io/290549738/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -435,7 +649,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-14 20:27:42" itemprop="dateModified" datetime="2019-07-14T20:27:42+08:00">2019-07-14</time>
+                <time title="修改时间：2019-07-14 20:34:03" itemprop="dateModified" datetime="2019-07-14T20:34:03+08:00">2019-07-14</time>
               
             
           </span>
@@ -2282,218 +2496,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://stamwoo.github.io/3538858214/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="woo">
-      <meta itemprop="description" content="愿你我能摆脱冷气，只是向上走，不必听自暴自弃者流的话。">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Woo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/3538858214/" class="post-title-link" itemprop="url">Lost in Europe 2.Tromso</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-03-12 22:10:57" itemprop="dateCreated datePublished" datetime="2019-03-12T22:10:57+08:00">2019-03-12</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-05-06 23:45:10" itemprop="dateModified" datetime="2019-05-06T23:45:10+08:00">2019-05-06</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <a href="/3538858214/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count disqus-comment-count" data-disqus-identifier="3538858214/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/3538858214/" class="leancloud_visitors" data-flag-title="Lost in Europe 2.Tromso">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">1.3k</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">1 分钟</span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          民宿上空的极光
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/3538858214/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2541,7 +2543,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-count">36</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2682,7 +2684,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -2694,7 +2696,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">81k</span>
+    <span title="站点总字数">82k</span>
   
 
   
